@@ -1,0 +1,26 @@
+{
+  "name": "pvc-card-studio",
+  "version": "1.0.0",
+  "description": "PVC Card Design and Product Maker Application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.6.4"
+  },
+  "build": {
+    "appId": "com.pvccard.studio",
+    "productName": "PVC Card Studio",
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  }
+}

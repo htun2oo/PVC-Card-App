@@ -1,5 +1,4 @@
 const { app, BrowserWindow } = require('electron');
-const path = require('path');
 
 function createWindow () {
   const win = new BrowserWindow({
@@ -12,11 +11,7 @@ function createWindow () {
     }
   });
 
-  // Load index.html
   win.loadFile('index.html');
-  
-  // Menu bar ဖျောက်လိုပါက အောက်ပါလိုင်းကို ဖွင့်ပါ
-  // win.setMenu(null);
 }
 
 app.whenReady().then(() => {

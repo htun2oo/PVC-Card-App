@@ -28,4 +28,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: PVC-Card-Studio-Setup
-        path: dist/*.exe
+        path: |
+          dist/*.exe
+          dist/sq-default/*.exe
+        if-no-files-found: ignore

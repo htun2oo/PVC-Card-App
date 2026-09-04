@@ -3,75 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Datacard ID Works Intro Designer - Sample</title>
+    <title>Datacard ID Works Intro Designer</title>
+    <!-- Fabric.js Canvas Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #d4d0c8; color: #000; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        body { background-color: #808080; color: #000; height: 100vh; display: flex; overflow: hidden; padding: 10px; }
 
-        /* Top Menu Bar */
-        .navbar {
-            background: #ece9d8; border-bottom: 1px solid #999; display: flex;
-            user-select: none; font-size: 12px; z-index: 1000; padding-left: 5px;
-        }
-        .menu-item { position: relative; padding: 3px 8px; cursor: pointer; }
-        .menu-item:hover { background-color: #316ac5; color: white; }
-        
-        /* Dropdown Menu */
-        .dropdown {
-            display: none; position: absolute; top: 100%; left: 0;
-            background: #ffffff; border: 1px solid #716f64; box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            min-width: 220px; z-index: 1001; padding: 2px 0; color: #000;
-        }
-        .menu-item:hover .dropdown { display: block; }
-        .dropdown-item {
-            padding: 4px 25px 4px 15px; display: flex; justify-content: space-between;
-            font-size: 11px; white-space: nowrap;
-        }
-        .dropdown-item:hover { background-color: #316ac5; color: white; }
-        .dropdown-item .shortcut { color: #666; font-size: 10px; margin-left: 20px; }
-        .dropdown-item:hover .shortcut { color: #fff; }
-        .divider { height: 1px; background-color: #aca899; margin: 3px 1px; }
-
-        /* MDI Workspace Desktop */
+        /* MDI Workspace Layout */
         .workspace-desktop {
-            flex: 1; background-color: #808080; position: relative;
-            overflow: auto; padding: 15px; display: flex; gap: 15px; align-items: flex-start;
+            flex: 1; display: flex; gap: 10px; height: 100%; position: relative;
         }
 
-        /* Sub-Window Styling */
+        /* Sub-Window Windows Classic Styling */
         .sub-window {
             background: #ece9d8; border: 2px solid #ffffff;
             border-right-color: #404040; border-bottom-color: #404040;
             box-shadow: 2px 2px 5px rgba(0,0,0,0.4); display: flex; flex-direction: column;
-            min-height: 480px; position: relative;
+            position: relative;
         }
 
-        /* Window Title Bar */
+        /* Left Side Production Form - Full Height */
+        .win-production { width: 45%; height: 100%; }
+
+        /* Right Side Cards Stack Layout */
+        .right-stack { width: 55%; display: flex; flex-direction: column; gap: 10px; height: 100%; }
+        .win-card { width: 100%; flex: 1; }
+
+        /* Window Title Bar Styling */
         .window-titlebar {
             background: linear-gradient(90deg, #0a246a, #a6caf0); color: white;
-            padding: 3px 6px; font-size: 11px; font-weight: bold;
+            padding: 3px 6px; font-size: 12px; font-weight: bold;
             display: flex; justify-content: space-between; align-items: center;
         }
         .window-controls { display: flex; gap: 2px; }
         .win-btn {
-            width: 14px; height: 14px; background: #ece9d8; border: 1px solid #fff;
+            width: 16px; height: 14px; background: #ece9d8; border: 1px solid #fff;
             border-right-color: #404040; border-bottom-color: #404040;
             font-size: 9px; line-height: 10px; text-align: center; color: #000; cursor: pointer; font-weight: bold;
         }
 
-        /* Specific Window Sizes */
-        .win-production { width: 320px; }
-        .win-card { width: 440px; }
-
-        .window-body { padding: 10px; flex: 1; background: #808080; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
-        .form-body { background: #ece9d8; padding: 15px; align-items: stretch; justify-content: flex-start; }
+        .window-body { padding: 10px; flex: 1; background: #808080; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: auto; }
+        .form-body { background: #ece9d8; padding: 20px; align-items: stretch; justify-content: flex-start; }
 
         /* Form Inputs Inside Production Form */
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 11px; margin-bottom: 3px; font-weight: bold; }
-        .form-group input, .form-group select { width: 100%; padding: 4px; font-size: 11px; border: 1px solid #7f9db9; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 12px; margin-bottom: 5px; font-weight: bold; color: #333; }
+        .form-group input, .form-group select { width: 100%; padding: 6px; font-size: 12px; border: 1px solid #7f9db9; background: #fff; }
 
         /* Card Ruler Area */
         .canvas-with-ruler { position: relative; padding-top: 20px; padding-left: 20px; background: #d4d0c8; border: 1px solid #999; }
@@ -83,30 +61,10 @@
 </head>
 <body>
 
-    <div class="navbar">
-        <div class="menu-item">File</div>
-        <div class="menu-item">Edit</div>
-        <div class="menu-item">View</div>
-        <div class="menu-item">Insert</div>
-        <div class="menu-item">Format</div>
-        <div class="menu-item">Tools</div>
-        <div class="menu-item">
-            Window
-            <div class="dropdown">
-                <div class="dropdown-item">Tile Horizontally</div>
-                <div class="dropdown-item">Tile Vertically</div>
-                <div class="dropdown-item">Cascade</div>
-                <div class="divider"></div>
-                <div class="dropdown-item">1 Production Form</div>
-                <div class="dropdown-item">2 Card (Front Side)</div>
-                <div class="dropdown-item">3 Card (Back Side)</div>
-            </div>
-        </div>
-        <div class="menu-item">Help</div>
-    </div>
-
+    <!-- MDI DESKTOP WORKSPACE -->
     <div class="workspace-desktop">
 
+        <!-- LEFT WINDOW: Production Form (Full Height) -->
         <div class="sub-window win-production">
             <div class="window-titlebar">
                 <span>Production Form</span>
@@ -137,44 +95,51 @@
                         <option>VIP Access</option>
                     </select>
                 </div>
-                <button style="margin-top: 15px; padding: 6px; font-size: 11px; cursor: pointer;" onclick="alert('Card Saved Successfully!')">Save Data</button>
+                <button style="margin-top: 10px; padding: 6px 12px; font-size: 11px; cursor: pointer; align-self: flex-start;" onclick="alert('Card Saved Successfully!')">Save Data</button>
             </div>
         </div>
 
-        <div class="sub-window win-card">
-            <div class="window-titlebar">
-                <span>Card (Front Side)</span>
-                <div class="window-controls">
-                    <div class="win-btn">_</div>
-                    <div class="win-btn">□</div>
-                    <div class="win-btn">×</div>
-                </div>
-            </div>
-            <div class="window-body">
-                <div class="canvas-with-ruler">
-                    <div class="ruler-top"><span>| 1</span><span>| 2</span><span>| 3</span></div>
-                    <div class="ruler-left"><span>1 -</span><span>2 -</span></div>
-                    <canvas id="frontCanvas" width="380" height="240"></canvas>
-                </div>
-            </div>
-        </div>
+        <!-- RIGHT STACK: Card Front & Card Back -->
+        <div class="right-stack">
 
-        <div class="sub-window win-card">
-            <div class="window-titlebar">
-                <span>Card (Back Side)</span>
-                <div class="window-controls">
-                    <div class="win-btn">_</div>
-                    <div class="win-btn">□</div>
-                    <div class="win-btn">×</div>
+            <!-- TOP RIGHT WINDOW: Card (Front Side) -->
+            <div class="sub-window win-card">
+                <div class="window-titlebar">
+                    <span>Card (Front Side)</span>
+                    <div class="window-controls">
+                        <div class="win-btn">_</div>
+                        <div class="win-btn">□</div>
+                        <div class="win-btn">×</div>
+                    </div>
+                </div>
+                <div class="window-body">
+                    <div class="canvas-with-ruler">
+                        <div class="ruler-top"><span>| 1</span><span>| 2</span><span>| 3</span></div>
+                        <div class="ruler-left"><span>1 -</span><span>2 -</span></div>
+                        <canvas id="frontCanvas" width="340" height="200"></canvas>
+                    </div>
                 </div>
             </div>
-            <div class="window-body">
-                <div class="canvas-with-ruler">
-                    <div class="ruler-top"><span>| 1</span><span>| 2</span><span>| 3</span></div>
-                    <div class="ruler-left"><span>1 -</span><span>2 -</span></div>
-                    <canvas id="backCanvas" width="380" height="240"></canvas>
+
+            <!-- BOTTOM RIGHT WINDOW: Card (Back Side) -->
+            <div class="sub-window win-card">
+                <div class="window-titlebar">
+                    <span>Card (Back Side)</span>
+                    <div class="window-controls">
+                        <div class="win-btn">_</div>
+                        <div class="win-btn">□</div>
+                        <div class="win-btn">×</div>
+                    </div>
+                </div>
+                <div class="window-body">
+                    <div class="canvas-with-ruler">
+                        <div class="ruler-top"><span>| 1</span><span>| 2</span><span>| 3</span></div>
+                        <div class="ruler-left"><span>1 -</span><span>2 -</span></div>
+                        <canvas id="backCanvas" width="340" height="200"></canvas>
+                    </div>
                 </div>
             </div>
+
         </div>
 
     </div>
@@ -184,15 +149,14 @@
         const frontCanvas = new fabric.Canvas('frontCanvas');
         frontCanvas.setBackgroundColor('#ffffff', frontCanvas.renderAll.bind(frontCanvas));
 
-        // Front Side Elements
-        const frontHeader = new fabric.Rect({ left: 0, top: 0, fill: '#1e3799', width: 380, height: 50 });
-        const companyTitle = new fabric.IText('COMPANY NAME', { left: 15, top: 15, fill: '#ffffff', fontSize: 16, fontWeight: 'bold' });
+        const frontHeader = new fabric.Rect({ left: 0, top: 0, fill: '#1e3799', width: 340, height: 40 });
+        const companyTitle = new fabric.IText('COMPANY NAME', { left: 12, top: 10, fill: '#ffffff', fontSize: 14, fontWeight: 'bold' });
         
-        const photoBox = new fabric.Rect({ left: 15, top: 65, fill: '#e0e0e0', stroke: '#aaa', strokeWidth: 1, width: 90, height: 110, rx: 4, ry: 4 });
+        const photoBox = new fabric.Rect({ left: 12, top: 50, fill: '#e0e0e0', stroke: '#aaa', strokeWidth: 1, width: 80, height: 100, rx: 4, ry: 4 });
         
-        const cardName = new fabric.IText('John Doe', { left: 125, top: 75, fill: '#000000', fontSize: 15, fontWeight: 'bold' });
-        const cardTitle = new fabric.IText('Software Engineer', { left: 125, top: 100, fill: '#555555', fontSize: 12 });
-        const cardId = new fabric.IText('ID: EMP-10024', { left: 125, top: 125, fill: '#333333', fontSize: 11 });
+        const cardName = new fabric.IText('John Doe', { left: 105, top: 60, fill: '#000000', fontSize: 14, fontWeight: 'bold' });
+        const cardTitle = new fabric.IText('Software Engineer', { left: 105, top: 82, fill: '#555555', fontSize: 11 });
+        const cardId = new fabric.IText('ID: EMP-10024', { left: 105, top: 104, fill: '#333333', fontSize: 10 });
 
         frontCanvas.add(frontHeader, companyTitle, photoBox, cardName, cardTitle, cardId);
 
@@ -200,14 +164,13 @@
         const backCanvas = new fabric.Canvas('backCanvas');
         backCanvas.setBackgroundColor('#ffffff', backCanvas.renderAll.bind(backCanvas));
 
-        // Back Side Elements
-        const magStripe = new fabric.Rect({ left: 0, top: 20, fill: '#111111', width: 380, height: 40 });
-        const termsText = new fabric.IText('This card is non-transferable and remains\nthe property of the issuing organization.', { left: 20, top: 80, fill: '#666666', fontSize: 10 });
-        const barcode = new fabric.Rect({ left: 20, top: 140, fill: '#000000', width: 220, height: 35 });
+        const magStripe = new fabric.Rect({ left: 0, top: 15, fill: '#111111', width: 340, height: 35 });
+        const termsText = new fabric.IText('This card is non-transferable and remains\nthe property of the issuing organization.', { left: 15, top: 65, fill: '#666666', fontSize: 9 });
+        const barcode = new fabric.Rect({ left: 15, top: 120, fill: '#000000', width: 200, height: 30 });
 
         backCanvas.add(magStripe, termsText, barcode);
 
-        // Real-time synchronization from Production Form to Card
+        // Dynamic Form Updates
         function updateCardText() {
             cardName.set('text', document.getElementById('inputName').value || 'Name');
             cardTitle.set('text', document.getElementById('inputTitle').value || 'Designation');

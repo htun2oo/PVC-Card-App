@@ -3,52 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PVC Card Studio & Product Builder</title>
+    <title>Datacard ID Works Intro Designer - Sample - [Card (back side)]</title>
     <!-- Fabric.js Canvas Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <!-- jsPDF Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f4f6f9; color: #333; height: 100vh; display: flex; flex-direction: column; }
+        body { background-color: #f0f0f0; color: #333; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-        /* Main Container */
+        /* Top Menu Bar Styling */
+        .navbar {
+            background: #f0f0f0; border-bottom: 1px solid #ccc; display: flex;
+            user-select: none; font-size: 13px; z-index: 1000;
+        }
+        .menu-item { position: relative; padding: 4px 10px; cursor: pointer; }
+        .menu-item:hover { background-color: #e0e0e0; }
+        
+        /* Dropdown Menu Styling */
+        .dropdown {
+            display: none; position: absolute; top: 100%; left: 0;
+            background: #ffffff; border: 1px solid #a0a0a0; box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            min-width: 220px; z-index: 1001; padding: 2px 0;
+        }
+        .menu-item:hover .dropdown { display: block; }
+        .dropdown-item {
+            padding: 5px 25px 5px 15px; display: flex; justify-content: space-between;
+            color: #222; font-size: 12px; white-space: nowrap;
+        }
+        .dropdown-item:hover { background-color: #0078d7; color: white; }
+        .dropdown-item .shortcut { color: #888; font-size: 11px; margin-left: 20px; }
+        .dropdown-item:hover .shortcut { color: #e0e0e0; }
+        .divider { height: 1px; background-color: #d0d0d0; margin: 3px 0; }
+        .checked::before { content: "✓ "; font-weight: bold; position: absolute; left: 5px; }
+
+        /* Main Container Layout */
         .container { display: flex; flex: 1; overflow: hidden; }
         
-        /* Sidebar Tools */
-        .sidebar { width: 320px; background: white; border-right: 1px solid #ddd; padding: 20px; overflow-y: auto; }
-        .sidebar h3 { margin-bottom: 12px; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; font-size: 16px; margin-top: 15px; }
+        /* Left Sidebar Tools */
+        .sidebar { width: 300px; background: white; border-right: 1px solid #ccc; padding: 15px; overflow-y: auto; }
+        .sidebar h3 { margin-bottom: 10px; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 4px; font-size: 14px; margin-top: 15px; }
         .sidebar h3:first-child { margin-top: 0; }
-        .control-group { margin-bottom: 15px; }
-        .control-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px; }
-        .control-group input[type="text"], .control-group input[type="number"], .control-group select {
-            width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px;
+        .control-group { margin-bottom: 12px; }
+        .control-group label { display: block; margin-bottom: 4px; font-weight: bold; font-size: 12px; }
+        .control-group input[type="text"], .control-group input[type="number"] {
+            width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px;
         }
         .btn {
-            width: 100%; padding: 9px; border: none; border-radius: 4px; background-color: #3498db;
-            color: white; font-weight: bold; cursor: pointer; margin-top: 5px; transition: 0.2s;
+            width: 100%; padding: 8px; border: none; border-radius: 3px; background-color: #3498db;
+            color: white; font-weight: bold; cursor: pointer; margin-top: 5px; transition: 0.2s; font-size: 12px;
         }
         .btn:hover { background-color: #2980b9; }
         .btn-success { background-color: #2ecc71; }
-        .btn-success:hover { background-color: #27ae60; }
         .btn-danger { background-color: #e74c3c; }
-        .btn-danger:hover { background-color: #c0392b; }
 
         /* Workspace Area */
-        .workspace { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #eef2f5; padding: 20px; }
-        .canvas-container-wrapper { box-shadow: 0 10px 25px rgba(0,0,0,0.15); border-radius: 8px; overflow: hidden; background: white; }
-        .canvas-controls { margin-top: 15px; display: flex; gap: 10px; }
+        .workspace { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #e5e5e5; padding: 20px; }
+        .canvas-container-wrapper { box-shadow: 0 5px 15px rgba(0,0,0,0.2); border-radius: 4px; overflow: hidden; background: white; }
 
-        /* Product Gallery */
-        .product-panel { width: 280px; background: white; border-left: 1px solid #ddd; padding: 20px; overflow-y: auto; }
-        .product-card { border: 1px solid #eee; border-radius: 6px; padding: 10px; margin-bottom: 15px; background: #fafafa; }
-        .product-card img { width: 100%; border-radius: 4px; border: 1px solid #ddd; }
-        .product-card h4 { margin: 5px 0; color: #2c3e50; font-size: 14px; }
-        .product-card p { font-size: 12px; color: #666; }
+        /* Right Product Panel */
+        .product-panel { width: 260px; background: white; border-left: 1px solid #ccc; padding: 15px; overflow-y: auto; }
+        .product-card { border: 1px solid #eee; border-radius: 4px; padding: 8px; margin-bottom: 12px; background: #fafafa; }
+        .product-card img { width: 100%; border-radius: 3px; border: 1px solid #ddd; }
+        .product-card h4 { margin: 4px 0; color: #2c3e50; font-size: 13px; }
+        .product-card p { font-size: 11px; color: #666; }
     </style>
 </head>
 <body>
 
+    <!-- TOP MENU BAR -->
+    <div class="navbar">
+        <!-- FILE MENU -->
+        <div class="menu-item">
+            File
+            <div class="dropdown">
+                <div class="dropdown-item" onclick="newProject()">New Project... <span class="shortcut">Ctrl+N</span></div>
+                <div class="dropdown-item" onclick="openProject()">Open Project... <span class="shortcut">Ctrl+O</span></div>
+                <div class="dropdown-item" onclick="closeProject()">Close Project</div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="saveProject()">Save Project <span class="shortcut">Ctrl+S</span></div>
+                <div class="dropdown-item" onclick="saveProjectAs()">Save Project As...</div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="projectProperties()">Project Properties... <span class="shortcut">F7</span></div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="exportPDF()">Print Sample Card... <span class="shortcut">Ctrl+P</span></div>
+                <div class="divider"></div>
+                <div class="dropdown-item" style="color: #666;">1 C:\Users\...\Sample\Sample.iwp</div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="exitApp()">Exit</div>
+            </div>
+        </div>
+
+        <!-- EDIT MENU -->
+        <div class="menu-item">
+            Edit
+            <div class="dropdown">
+                <div class="dropdown-item" onclick="undoAction()">Undo <span class="shortcut">Ctrl+Z</span></div>
+                <div class="dropdown-item" onclick="redoAction()">Redo <span class="shortcut">Ctrl+Y</span></div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="cutFields()">Cut Fields <span class="shortcut">Ctrl+X</span></div>
+                <div class="dropdown-item" onclick="copyFields()">Copy Fields <span class="shortcut">Ctrl+C</span></div>
+                <div class="dropdown-item" onclick="pasteFields()">Paste Fields <span class="shortcut">Ctrl+V</span></div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="selectFields()">Select Fields...</div>
+                <div class="dropdown-item" onclick="selectAllFields()">Select All Fields <span class="shortcut">Ctrl+A</span></div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="fieldProperties()">Field Properties... <span class="shortcut">Ctrl+F</span></div>
+                <div class="dropdown-item" onclick="cardProperties()">Card Properties... <span class="shortcut">F6</span></div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="deleteSelected()">Delete Selected Fields <span class="shortcut">Del</span></div>
+            </div>
+        </div>
+
+        <!-- VIEW MENU -->
+        <div class="menu-item">
+            View
+            <div class="dropdown">
+                <div class="dropdown-item">Toolbars</div>
+                <div class="divider"></div>
+                <div class="dropdown-item">Field Names <span class="shortcut">Ctrl+H</span></div>
+                <div class="dropdown-item checked">Sample Data <span class="shortcut">Ctrl+M</span></div>
+                <div class="divider"></div>
+                <div class="dropdown-item">Card</div>
+                <div class="dropdown-item">Production Form</div>
+                <div class="dropdown-item">Field Connector</div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="switchCardSide('front')">Front of Card</div>
+                <div class="dropdown-item checked" onclick="switchCardSide('back')">Back of Card</div>
+                <div class="divider"></div>
+                <div class="dropdown-item checked">Ruler for Selected Card Side</div>
+                <div class="divider"></div>
+                <div class="dropdown-item checked">Show Welcome on startup</div>
+            </div>
+        </div>
+
+        <!-- INSERT MENU -->
+        <div class="menu-item">
+            Insert
+            <div class="dropdown">
+                <div class="dropdown-item" onclick="addText()">Text Field <span class="shortcut">Ctrl+T</span></div>
+                <div class="dropdown-item" onclick="triggerPhotoUpload()">Photo Field <span class="shortcut">Ctrl+J</span></div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="addBarcode()">Bar Code Field</div>
+                <div class="dropdown-item" onclick="addMagneticStripe()">Magnetic Stripe Field</div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="addText()">Static Text Field <span class="shortcut">Ctrl+E</span></div>
+                <div class="dropdown-item" onclick="triggerPhotoUpload()">Static Graphic Field <span class="shortcut">Ctrl+G</span></div>
+            </div>
+        </div>
+
+        <!-- FORMAT MENU -->
+        <div class="menu-item">
+            Format
+            <div class="dropdown">
+                <div class="dropdown-item">Align Fields</div>
+                <div class="dropdown-item">Center Field(s)</div>
+                <div class="dropdown-item">Space Fields Evenly</div>
+                <div class="dropdown-item">Make Fields Same Size</div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="bringToFront()">Bring Field to Front</div>
+                <div class="dropdown-item" onclick="bringForward()">Bring Field Forward</div>
+                <div class="dropdown-item" onclick="sendToBack()">Send Field to Back</div>
+                <div class="dropdown-item" onclick="sendBackward()">Send Field Backward</div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="rotateField()">Rotate Field on Card</div>
+                <div class="divider"></div>
+                <div class="dropdown-item">Keep Fields Proportional when Dragging Corner</div>
+                <div class="dropdown-item checked">Do Not Keep Fields Proportional when Dragging Corner</div>
+                <div class="divider"></div>
+                <div class="dropdown-item">Orientation of Selected Card Side</div>
+            </div>
+        </div>
+
+        <!-- TOOLS MENU -->
+        <div class="menu-item">
+            Tools
+            <div class="dropdown">
+                <div class="dropdown-item">Add Card Fields to Production Form...</div>
+                <div class="divider"></div>
+                <div class="dropdown-item">Add Production Form Fields to Database...</div>
+            </div>
+        </div>
+
+        <!-- WINDOW MENU -->
+        <div class="menu-item">
+            Window
+            <div class="dropdown">
+                <div class="dropdown-item">Tile Horizontally</div>
+                <div class="dropdown-item">Tile Vertically</div>
+                <div class="dropdown-item">Cascade</div>
+                <div class="divider"></div>
+                <div class="dropdown-item">1 Card</div>
+                <div class="dropdown-item">2 Production Form</div>
+                <div class="dropdown-item checked">3 Card (back side)</div>
+            </div>
+        </div>
+
+        <!-- HELP MENU -->
+        <div class="menu-item">
+            Help
+            <div class="dropdown">
+                <div class="dropdown-item" onclick="alert('Datacard ID Works Help Guidelines')">Online Help... <span class="shortcut">F1</span></div>
+                <div class="divider"></div>
+                <div class="dropdown-item" onclick="alert('Datacard ID Works Intro Designer v1.0')">About...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP CONTAINER -->
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
@@ -60,10 +222,10 @@
 
             <h3>Add Elements</h3>
             <div class="control-group">
-                <button class="btn" onclick="addText()">+ Add Text</button>
+                <button class="btn" onclick="addText()">+ Add Text Field</button>
             </div>
             <div class="control-group">
-                <label>Upload Image / Logo</label>
+                <label>Upload Image / Photo</label>
                 <input type="file" id="imageLoader" accept="image/*" onchange="uploadImage(event)">
             </div>
 
@@ -93,68 +255,71 @@
             <div class="canvas-container-wrapper">
                 <canvas id="cardCanvas" width="646" height="408"></canvas>
             </div>
-
-            <div class="canvas-controls">
-                <button class="btn" style="background:#555;" onclick="exportImage()">Download PNG (High-Res)</button>
-                <button class="btn" style="background:#555;" onclick="exportPDF()">Download PDF</button>
-            </div>
         </div>
 
         <!-- Saved Products Panel -->
         <div class="product-panel">
-            <h3 style="margin-bottom: 15px; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; font-size: 16px;">Saved Products</h3>
+            <h3 style="margin-bottom: 12px; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 4px; font-size: 14px;">Saved Products</h3>
             <div id="productList">
-                <p style="color: #888; font-size: 13px;">No products saved yet.</p>
+                <p style="color: #888; font-size: 12px;">No products saved yet.</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Initialize Fabric Canvas
+        // Initialize Canvas
         const canvas = new fabric.Canvas('cardCanvas');
         canvas.setBackgroundColor('#ffffff', canvas.renderAll.bind(canvas));
 
-        // Load Initial Layout Template
         function loadDefaultTemplate() {
             const header = new fabric.Rect({
-                left: 0, top: 0, fill: '#1e3799',
-                width: 646, height: 80, selectable: true
+                left: 0, top: 0, fill: '#1e3799', width: 646, height: 80, selectable: true
             });
             canvas.add(header);
 
             const title = new fabric.IText('COMPANY NAME', {
-                left: 30, top: 25, fill: '#ffffff',
-                fontSize: 24, fontWeight: 'bold', fontFamily: 'Arial'
+                left: 30, top: 25, fill: '#ffffff', fontSize: 24, fontWeight: 'bold', fontFamily: 'Arial'
             });
             canvas.add(title);
 
             const name = new fabric.IText('CARD HOLDER NAME', {
-                left: 200, top: 140, fill: '#333333',
-                fontSize: 20, fontWeight: 'bold', fontFamily: 'Arial'
+                left: 200, top: 140, fill: '#333333', fontSize: 20, fontWeight: 'bold', fontFamily: 'Arial'
             });
             canvas.add(name);
 
             const photoBox = new fabric.Rect({
-                left: 30, top: 110, fill: '#e0e0e0', stroke: '#cccccc',
-                strokeWidth: 2, width: 140, height: 180, rx: 8, ry: 8
+                left: 30, top: 110, fill: '#e0e0e0', stroke: '#cccccc', strokeWidth: 2, width: 140, height: 180, rx: 8, ry: 8
             });
             canvas.add(photoBox);
         }
 
         loadDefaultTemplate();
 
-        // ---------------- SIDEBAR FUNCTIONS ----------------
+        // Menu Actions Functions
+        function newProject() { if(confirm("Start a new project?")) canvas.clear(); loadDefaultTemplate(); }
+        function openProject() { alert("Open project dialog"); }
+        function closeProject() { canvas.clear(); }
+        function saveProject() { alert("Project Saved Successfully!"); }
+        function saveProjectAs() { alert("Save Project As..."); }
+        function projectProperties() { alert("Project Properties: PVC Standard CR80 Size (85.6mm x 53.9mm)"); }
+        function exitApp() { window.close(); }
 
-        function changeBgColor(color) {
-            canvas.setBackgroundColor(color, canvas.renderAll.bind(canvas));
-        }
+        function triggerPhotoUpload() { document.getElementById('imageLoader').click(); }
+        function changeBgColor(color) { canvas.setBackgroundColor(color, canvas.renderAll.bind(canvas)); }
 
         function addText() {
-            const text = new fabric.IText('Double click to edit', {
-                left: 100, top: 100, fill: '#000000', fontSize: 20, fontFamily: 'Arial'
-            });
-            canvas.add(text);
-            canvas.setActiveObject(text);
+            const text = new fabric.IText('Double click to edit', { left: 100, top: 100, fill: '#000000', fontSize: 20, fontFamily: 'Arial' });
+            canvas.add(text); canvas.setActiveObject(text);
+        }
+
+        function addBarcode() {
+            const rect = new fabric.Rect({ left: 200, top: 250, fill: '#000', width: 200, height: 40 });
+            canvas.add(rect); canvas.setActiveObject(rect);
+        }
+
+        function addMagneticStripe() {
+            const stripe = new fabric.Rect({ left: 0, top: 30, fill: '#111111', width: 646, height: 60 });
+            canvas.add(stripe); canvas.setActiveObject(stripe);
         }
 
         function uploadImage(e) {
@@ -166,8 +331,7 @@
                     const image = new fabric.Image(imgObj);
                     image.scaleToWidth(120);
                     image.set({ left: 50, top: 50 });
-                    canvas.add(image);
-                    canvas.setActiveObject(image);
+                    canvas.add(image); canvas.setActiveObject(image);
                 }
             }
             if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
@@ -175,10 +339,7 @@
 
         function changeObjectColor(color) {
             const activeObject = canvas.getActiveObject();
-            if (activeObject) {
-                activeObject.set('fill', color);
-                canvas.renderAll();
-            }
+            if (activeObject) { activeObject.set('fill', color); canvas.renderAll(); }
         }
 
         function deleteSelected() {
@@ -186,15 +347,11 @@
             if (activeObject) canvas.remove(activeObject);
         }
 
-        // ---------------- EXPORT & PRODUCT FUNCTIONS ----------------
-
-        function exportImage() {
-            const dataURL = canvas.toDataURL({ format: 'png', multiplier: 3 });
-            const link = document.createElement('a');
-            link.download = 'pvc-card-design.png';
-            link.href = dataURL;
-            link.click();
-        }
+        function bringToFront() { const active = canvas.getActiveObject(); if (active) { canvas.bringToFront(active); canvas.renderAll(); } }
+        function bringForward() { const active = canvas.getActiveObject(); if (active) { canvas.bringForward(active); canvas.renderAll(); } }
+        function sendToBack() { const active = canvas.getActiveObject(); if (active) { canvas.sendToBack(active); canvas.renderAll(); } }
+        function sendBackward() { const active = canvas.getActiveObject(); if (active) { canvas.sendBackwards(active); canvas.renderAll(); } }
+        function rotateField() { const active = canvas.getActiveObject(); if (active) { active.rotate((active.angle || 0) + 90); canvas.renderAll(); } }
 
         function exportPDF() {
             const { jsPDF } = window.jspdf;
@@ -209,10 +366,7 @@
             const title = document.getElementById('prodTitle').value;
             const price = document.getElementById('prodPrice').value;
 
-            if (!title || !price) {
-                alert('Please enter product title and price!');
-                return;
-            }
+            if (!title || !price) { alert('Please enter product title and price!'); return; }
 
             const dataURL = canvas.toDataURL({ format: 'png', multiplier: 1 });
             products.push({ id: Date.now(), title, price, image: dataURL });
@@ -229,6 +383,14 @@
             document.getElementById('prodTitle').value = '';
             document.getElementById('prodPrice').value = '';
         }
+
+        // Global Keyboard Shortcuts (Ctrl+N, Ctrl+S, Ctrl+P, Del)
+        window.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'n') { e.preventDefault(); newProject(); }
+            if (e.ctrlKey && e.key === 's') { e.preventDefault(); saveProject(); }
+            if (e.ctrlKey && e.key === 'p') { e.preventDefault(); exportPDF(); }
+            if (e.key === 'Delete') { deleteSelected(); }
+        });
     </script>
 </body>
 </html>

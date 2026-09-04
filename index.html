@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Datacard ID Works Intro Designer</title>
-    <!-- Fabric.js Canvas Library -->
+    <title>Datacard ID Works - Interactive MDI Window</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -20,7 +19,7 @@
             background: #ece9d8; border: 2px solid #ffffff;
             border-right-color: #404040; border-bottom-color: #404040;
             box-shadow: 2px 2px 5px rgba(0,0,0,0.4); display: flex; flex-direction: column;
-            position: relative;
+            position: relative; transition: all 0.2s ease-in-out;
         }
 
         /* Left Side Production Form - Full Height */
@@ -34,13 +33,16 @@
         .window-titlebar {
             background: linear-gradient(90deg, #0a246a, #a6caf0); color: white;
             padding: 3px 6px; font-size: 12px; font-weight: bold;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex; justify-content: space-between; align-items: center; user-select: none;
         }
         .window-controls { display: flex; gap: 2px; }
         .win-btn {
             width: 16px; height: 14px; background: #ece9d8; border: 1px solid #fff;
             border-right-color: #404040; border-bottom-color: #404040;
             font-size: 9px; line-height: 10px; text-align: center; color: #000; cursor: pointer; font-weight: bold;
+        }
+        .win-btn:active {
+            border: 1px solid #404040; border-right-color: #fff; border-bottom-color: #fff;
         }
 
         .window-body { padding: 10px; flex: 1; background: #808080; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: auto; }
@@ -57,59 +59,77 @@
         .ruler-left { position: absolute; top: 20px; left: 0; bottom: 0; width: 20px; background: #ece9d8; border-right: 1px solid #808080; font-size: 9px; display: flex; flex-direction: column; justify-content: space-around; align-items: center; }
 
         canvas { background: #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.3); }
+
+        /* Minimized & Maximized States */
+        .sub-window.minimized {
+            height: 26px !important; min-height: 26px !important; flex: none !important; overflow: hidden;
+        }
+        .sub-window.minimized .window-body { display: none; }
+
+        .sub-window.maximized {
+            position: absolute !important; top: 0; left: 0; width: 100% !important; height: 100% !important; z-index: 100;
+        }
+
+        .sub-window.closed { display: none !important; }
+
+        /* Restore bar for closed windows */
+        .restore-bar {
+            position: absolute; bottom: 5px; left: 5px; display: flex; gap: 5px; z-index: 200;
+        }
+        .restore-btn {
+            background: #ece9d8; border: 2px solid #fff; border-right-color: #404040; border-bottom-color: #404040;
+            padding: 3px 8px; font-size: 11px; cursor: pointer; font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-    <!-- MDI DESKTOP WORKSPACE -->
-    <div class="workspace-desktop">
+    <div class="workspace-desktop" id="workspace">
 
-        <!-- LEFT WINDOW: Production Form (Full Height) -->
-        <div class="sub-window win-production">
+        <div class="sub-window win-production" id="win-production">
             <div class="window-titlebar">
                 <span>Production Form</span>
                 <div class="window-controls">
-                    <div class="win-btn">_</div>
-                    <div class="win-btn">□</div>
-                    <div class="win-btn">×</div>
+                    <div class="win-btn" onclick="toggleMinimize('win-production')">_</div>
+                    <div class="win-btn" onclick="toggleMaximize('win-production')">□</div>
+                    <div class="win-btn" onclick="closeWindow('win-production')">×</div>
                 </div>
             </div>
             <div class="window-body form-body">
                 <div class="form-group">
                     <label>Full Name:</label>
-                    <input type="text" id="inputName" value="John Doe" oninput="updateCardText()">
+                    <input type="text" id="inputName" value="" placeholder="Enter name..." oninput="updateCardText()">
                 </div>
                 <div class="form-group">
                     <label>Designation / Title:</label>
-                    <input type="text" id="inputTitle" value="Software Engineer" oninput="updateCardText()">
+                    <input type="text" id="inputTitle" value="" placeholder="Enter title..." oninput="updateCardText()">
                 </div>
                 <div class="form-group">
                     <label>ID Number:</label>
-                    <input type="text" id="inputId" value="EMP-10024" oninput="updateCardText()">
+                    <input type="text" id="inputId" value="" placeholder="Enter ID..." oninput="updateCardText()">
                 </div>
                 <div class="form-group">
                     <label>Card Type:</label>
                     <select>
+                        <option value="">-- Select Type --</option>
                         <option>Employee Pass</option>
                         <option>Visitor Pass</option>
                         <option>VIP Access</option>
                     </select>
                 </div>
-                <button style="margin-top: 10px; padding: 6px 12px; font-size: 11px; cursor: pointer; align-self: flex-start;" onclick="alert('Card Saved Successfully!')">Save Data</button>
+                <button style="margin-top: 10px; padding: 6px 12px; font-size: 11px; cursor: pointer; align-self: flex-start;" onclick="alert('Form Saved!')">Save Data</button>
             </div>
         </div>
 
-        <!-- RIGHT STACK: Card Front & Card Back -->
-        <div class="right-stack">
+        <div class="right-stack" id="rightStack">
 
-            <!-- TOP RIGHT WINDOW: Card (Front Side) -->
-            <div class="sub-window win-card">
+            <div class="sub-window win-card" id="win-front">
                 <div class="window-titlebar">
                     <span>Card (Front Side)</span>
                     <div class="window-controls">
-                        <div class="win-btn">_</div>
-                        <div class="win-btn">□</div>
-                        <div class="win-btn">×</div>
+                        <div class="win-btn" onclick="toggleMinimize('win-front')">_</div>
+                        <div class="win-btn" onclick="toggleMaximize('win-front')">□</div>
+                        <div class="win-btn" onclick="closeWindow('win-front')">×</div>
                     </div>
                 </div>
                 <div class="window-body">
@@ -121,14 +141,13 @@
                 </div>
             </div>
 
-            <!-- BOTTOM RIGHT WINDOW: Card (Back Side) -->
-            <div class="sub-window win-card">
+            <div class="sub-window win-card" id="win-back">
                 <div class="window-titlebar">
                     <span>Card (Back Side)</span>
                     <div class="window-controls">
-                        <div class="win-btn">_</div>
-                        <div class="win-btn">□</div>
-                        <div class="win-btn">×</div>
+                        <div class="win-btn" onclick="toggleMinimize('win-back')">_</div>
+                        <div class="win-btn" onclick="toggleMaximize('win-back')">□</div>
+                        <div class="win-btn" onclick="closeWindow('win-back')">×</div>
                     </div>
                 </div>
                 <div class="window-body">
@@ -144,7 +163,48 @@
 
     </div>
 
+    <div class="restore-bar" id="restoreBar"></div>
+
     <script>
+        // Window Control Interactive Functions
+        function toggleMinimize(winId) {
+            const win = document.getElementById(winId);
+            win.classList.toggle('minimized');
+            if(win.classList.contains('maximized')) win.classList.remove('maximized');
+        }
+
+        function toggleMaximize(winId) {
+            const win = document.getElementById(winId);
+            win.classList.toggle('maximized');
+            if(win.classList.contains('minimized')) win.classList.remove('minimized');
+        }
+
+        function closeWindow(winId) {
+            const win = document.getElementById(winId);
+            win.classList.add('closed');
+            createRestoreButton(winId);
+        }
+
+        function restoreWindow(winId, btnElement) {
+            const win = document.getElementById(winId);
+            win.classList.remove('closed', 'minimized', 'maximized');
+            btnElement.remove();
+        }
+
+        function createRestoreButton(winId) {
+            const restoreBar = document.getElementById('restoreBar');
+            let name = "";
+            if (winId === 'win-production') name = "Production Form";
+            else if (winId === 'win-front') name = "Card (Front Side)";
+            else if (winId === 'win-back') name = "Card (Back Side)";
+
+            const btn = document.createElement('button');
+            btn.className = 'restore-btn';
+            btn.innerText = "Reopen " + name;
+            btn.onclick = function() { restoreWindow(winId, btn); };
+            restoreBar.appendChild(btn);
+        }
+
         // Initialize Front Canvas
         const frontCanvas = new fabric.Canvas('frontCanvas');
         frontCanvas.setBackgroundColor('#ffffff', frontCanvas.renderAll.bind(frontCanvas));
@@ -154,9 +214,9 @@
         
         const photoBox = new fabric.Rect({ left: 12, top: 50, fill: '#e0e0e0', stroke: '#aaa', strokeWidth: 1, width: 80, height: 100, rx: 4, ry: 4 });
         
-        const cardName = new fabric.IText('John Doe', { left: 105, top: 60, fill: '#000000', fontSize: 14, fontWeight: 'bold' });
-        const cardTitle = new fabric.IText('Software Engineer', { left: 105, top: 82, fill: '#555555', fontSize: 11 });
-        const cardId = new fabric.IText('ID: EMP-10024', { left: 105, top: 104, fill: '#333333', fontSize: 10 });
+        const cardName = new fabric.IText('', { left: 105, top: 60, fill: '#000000', fontSize: 14, fontWeight: 'bold' });
+        const cardTitle = new fabric.IText('', { left: 105, top: 82, fill: '#555555', fontSize: 11 });
+        const cardId = new fabric.IText('', { left: 105, top: 104, fill: '#333333', fontSize: 10 });
 
         frontCanvas.add(frontHeader, companyTitle, photoBox, cardName, cardTitle, cardId);
 
@@ -172,9 +232,9 @@
 
         // Dynamic Form Updates
         function updateCardText() {
-            cardName.set('text', document.getElementById('inputName').value || 'Name');
-            cardTitle.set('text', document.getElementById('inputTitle').value || 'Designation');
-            cardId.set('text', 'ID: ' + (document.getElementById('inputId').value || 'ID'));
+            cardName.set('text', document.getElementById('inputName').value);
+            cardTitle.set('text', document.getElementById('inputTitle').value);
+            cardId.set('text', document.getElementById('inputId').value ? 'ID: ' + document.getElementById('inputId').value : '');
             frontCanvas.renderAll();
         }
     </script>

@@ -33,6 +33,7 @@
             font-size: 12px;
             user-select: none;
             z-index: 2000000;
+            -webkit-app-region: drag; /* Window ကို Drag ဆွဲရန် */
         }
 
         .app-title-text { font-weight: 500; color: #e5e7eb; }
@@ -41,6 +42,7 @@
             display: flex;
             align-items: center;
             gap: 2px;
+            -webkit-app-region: no-drag; /* ခလုတ်များ နှိပ်၍ရအောင် Fix လုပ်ထားသည် */
         }
 
         .win-control-btn {
@@ -66,6 +68,44 @@
             height: calc(100vh - 32px);
             overflow: hidden;
         }
+
+        /* ---------------- LOGIN PAGE ---------------- */
+        #login-screen {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #7026b9 0%, #4a1582 100%);
+            display: flex; /* ပထမဆုံး စဖွင့်ချိန် Login ပေါ်စေရန် */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000000;
+        }
+
+        .app-title {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .login-card {
+            background-color: rgba(255, 255, 255, 0.95);
+            width: 440px;
+            border-radius: 12px;
+            padding: 35px 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group-login { width: 100%; margin-bottom: 20px; }
+        .form-group-login label { display: block; font-size: 14px; color: #666; margin-bottom: 8px; }
+        .form-group-login input { width: 100%; padding: 12px; border: 1px solid #9aa0a6; border-radius: 6px; font-size: 15px; outline: none; }
+
+        .forgot-password { color: #fff; font-size: 14px; text-decoration: underline; margin-top: 20px; margin-bottom: 15px; cursor: pointer; }
+        .btn-signin { background-color: #00b0eb; color: #fff; border: none; padding: 10px 26px; font-size: 15px; font-weight: bold; border-radius: 4px; cursor: pointer; }
 
         /* ---------------- TOP NAVBAR ---------------- */
         #top-navbar {
@@ -94,12 +134,11 @@
             font-weight: 500; 
             padding: 8px 10px;
             border-radius: 3px;
-            position: relative;
         }
         
         .nav-right { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #333; }
         
-        /* DROPDOWN STYLES */
+        /* DROPDOWNS */
         .dropdown-wrapper { position: relative; display: inline-block; }
         .dropdown-trigger { cursor: pointer; padding: 6px 10px; border-radius: 3px 3px 0 0; display: flex; align-items: center; gap: 4px; user-select: none; font-weight: 500; }
         .dropdown-wrapper.active .dropdown-trigger { background-color: #e5e7eb; border: 1px solid #9ca3af; border-bottom: none; }
@@ -108,21 +147,17 @@
         .dropdown-item { padding: 8px 14px; color: #1f2937; text-decoration: none; display: block; font-size: 12px; border-bottom: 1px solid #d1d5db; cursor: pointer; }
         .dropdown-item:hover { background-color: #d1d5db; }
 
-        .badge-container { position: relative; display: inline-block; cursor: pointer; }
-        .notification-badge { position: absolute; top: -5px; right: -6px; background-color: #ef4444; color: white; font-size: 9px; font-weight: bold; border-radius: 50%; width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; }
-
-        /* ---------------- WORKSPACE VIEWS ---------------- */
-        #main-workspace { display: flex; flex-direction: column; width: 100%; height: 100%; }
+        /* WORKSPACE VIEWS */
+        #main-workspace { display: none; flex-direction: column; width: 100%; height: 100%; }
         .page-view { display: none; flex-direction: column; flex: 1; width: 100%; height: calc(100% - 48px); }
         .page-view.active { display: flex; }
 
-        /* ---------------- PAGE 1: MANAGE CREDENTIAL DESIGNS ---------------- */
+        /* MANAGE DESIGNS PAGE */
         .page-banner { background-color: #5c2483; color: #ffffff; padding: 10px 15px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
         .sub-tab-bar-light { background-color: #e5e7eb; border-bottom: 1px solid #d1d5db; padding-left: 15px; display: flex; align-items: flex-end; height: 38px; }
         .tab-btn-light { background: #f3f4f6; color: #374151; padding: 8px 16px; font-size: 12px; border: 1px solid #d1d5db; border-bottom: none; border-top-left-radius: 4px; border-top-right-radius: 4px; font-weight: 600; }
         .content-body-grey { background-color: #d1d5db; flex: 1; padding: 15px; display: flex; flex-direction: column; }
         .btn-create { background-color: #2563eb; color: white; border: none; padding: 6px 16px; font-size: 12px; border-radius: 3px; cursor: pointer; align-self: flex-start; margin-bottom: 12px; }
-        .btn-create:hover { background-color: #1d4ed8; }
         .filter-section { background-color: #e5e7eb; padding: 8px 12px; display: flex; justify-content: flex-end; align-items: center; gap: 10px; font-size: 12px; color: #374151; border: 1px solid #9ca3af; border-bottom: none; }
         .filter-input { padding: 4px 8px; border: 1px solid #9ca3af; border-radius: 2px; outline: none; width: 160px; }
         .data-table-container { background-color: #e5e7eb; border: 1px solid #9ca3af; }
@@ -132,258 +167,99 @@
         .pagination-bar { background-color: #e5e7eb; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #4b5563; border: 1px solid #9ca3af; border-top: none; }
         .pagination-links { display: flex; gap: 12px; color: #6b7280; }
 
-        /* ---------------- PAGE 2: CARD DESIGN STUDIO (SECOND IMAGE) ---------------- */
+        /* STUDIO PAGE */
         .studio-banner { background-color: #5c2483; color: #ffffff; padding: 8px 15px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
-        .studio-banner .edit-icon { cursor: pointer; opacity: 0.8; font-size: 11px; }
-
-        /* DESIGN TOOLBAR */
-        .design-toolbar {
-            background-color: #e5e7eb;
-            border-bottom: 1px solid #b0b5bc;
-            padding: 4px 10px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
-
-        .tool-btn {
-            min-width: 26px;
-            height: 26px;
-            padding: 0 4px;
-            background-color: #f3f4f6;
-            border: 1px solid #9ca3af;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 12px;
-            color: #374151;
-            user-select: none;
-        }
-
-        .tool-btn:hover { background-color: #d1d5db; }
+        .design-toolbar { background-color: #e5e7eb; border-bottom: 1px solid #b0b5bc; padding: 4px 10px; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+        .tool-btn { min-width: 26px; height: 26px; padding: 0 4px; background-color: #f3f4f6; border: 1px solid #9ca3af; border-radius: 2px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; color: #374151; }
         .tool-divider { width: 1px; height: 20px; background-color: #9ca3af; margin: 0 4px; }
-        .zoom-select { font-size: 11px; padding: 2px 4px; border: 1px solid #9ca3af; border-radius: 2px; background: #fff; }
-
-        /* STUDIO WORKSPACE (CANVAS + SIDEBAR) */
-        .studio-workspace {
-            flex: 1;
-            display: flex;
-            background-color: #d1d5db;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .canvas-area {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            gap: 20px;
-            overflow: auto;
-            justify-content: center;
-            align-items: flex-start;
-        }
-
-        .card-container-wrapper {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card-title-header {
-            font-size: 12px;
-            font-weight: bold;
-            color: #1f2937;
-            margin-bottom: 10px;
-        }
-
-        .active-layer-indicator {
-            font-size: 11px;
-            font-weight: bold;
-            color: #1f2937;
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .card-canvas-outer {
-            width: 320px;
-            height: 250px;
-            background-color: #808080;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #6b7280;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        }
-
-        .id-card {
-            width: 220px;
-            height: 140px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            border: 1px solid #4b5563;
-            box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
-            position: relative;
-        }
-
-        /* PROPERTIES SIDEBAR */
-        .properties-sidebar {
-            width: 240px;
-            background-color: #f3f4f6;
-            border-left: 1px solid #b0b5bc;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar-tabs {
-            display: flex;
-            background-color: #e5e7eb;
-            border-bottom: 1px solid #b0b5bc;
-        }
-
-        .sidebar-tab {
-            flex: 1;
-            padding: 6px;
-            text-align: center;
-            font-size: 11px;
-            color: #4b5563;
-            cursor: pointer;
-            border-right: 1px solid #b0b5bc;
-        }
-
-        .sidebar-tab.active {
-            background-color: #f3f4f6;
-            font-weight: bold;
-            color: #1f2937;
-        }
-
-        .sidebar-content {
-            padding: 12px;
-            font-size: 12px;
-            color: #374151;
-        }
-
-        .section-header {
-            font-weight: bold;
-            font-size: 11px;
-            margin-bottom: 10px;
-            color: #1f2937;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: flex-start;
-            gap: 6px;
-            margin-bottom: 8px;
-            font-size: 11px;
-            color: #4b5563;
-        }
-
-        .checkbox-group input { margin-top: 2px; }
-
-        .studio-footer {
-            height: 24px;
-            background-color: #e5e7eb;
-            border-top: 1px solid #b0b5bc;
-            display: flex;
-            align-items: center;
-            padding: 0 10px;
-            font-size: 11px;
-            color: #4b5563;
-            gap: 15px;
-        }
-
+        .studio-workspace { flex: 1; display: flex; background-color: #d1d5db; overflow: hidden; position: relative; }
+        .canvas-area { flex: 1; padding: 20px; display: flex; gap: 20px; overflow: auto; justify-content: center; align-items: flex-start; }
+        .card-container-wrapper { display: flex; flex-direction: column; }
+        .card-title-header { font-size: 12px; font-weight: bold; color: #1f2937; margin-bottom: 10px; }
+        .card-canvas-outer { width: 320px; height: 250px; background-color: #808080; display: flex; align-items: center; justify-content: center; border: 1px solid #6b7280; }
+        .id-card { width: 220px; height: 140px; background-color: #ffffff; border-radius: 12px; border: 1px solid #4b5563; }
+        .properties-sidebar { width: 240px; background-color: #f3f4f6; border-left: 1px solid #b0b5bc; display: flex; flex-direction: column; }
+        .sidebar-tabs { display: flex; background-color: #e5e7eb; border-bottom: 1px solid #b0b5bc; }
+        .sidebar-tab { flex: 1; padding: 6px; text-align: center; font-size: 11px; color: #4b5563; cursor: pointer; }
+        .sidebar-tab.active { background-color: #f3f4f6; font-weight: bold; color: #1f2937; }
+        .sidebar-content { padding: 12px; font-size: 12px; }
+        .studio-footer { height: 24px; background-color: #e5e7eb; border-top: 1px solid #b0b5bc; display: flex; align-items: center; padding: 0 10px; font-size: 11px; gap: 15px; }
         .footer-btn { cursor: pointer; text-decoration: underline; }
     </style>
 </head>
 <body>
 
-    <!-- GLOBAL TITLEBAR -->
+    <!-- TITLEBAR -->
     <div id="global-titlebar">
         <div class="app-title-text">ENTRUST Adaptive Issuance Instant ID</div>
         <div class="global-window-controls">
-            <div class="win-control-btn">&#8722;</div>
-            <div class="win-control-btn">&#9633;</div>
-            <div class="win-control-btn close-btn">&#10005;</div>
+            <div class="win-control-btn" onclick="appMinimize()">&#8722;</div>
+            <div class="win-control-btn" onclick="appMaximize()">&#9633;</div>
+            <div class="win-control-btn close-btn" onclick="appClose()">&#10005;</div>
         </div>
     </div>
 
     <div id="app-container">
-        <!-- TOP NAVBAR -->
-        <div id="top-navbar">
-            <div class="nav-left">
-                <div class="brand-logo">
-                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                    <span>ENTRUST</span>
+        <!-- LOGIN SCREEN -->
+        <div id="login-screen">
+            <div class="app-title">Adaptive Issuance<br>Instant ID</div>
+            <div class="login-card">
+                <div class="form-group-login">
+                    <label for="userId">User ID</label>
+                    <input type="text" id="userId" value="admin">
                 </div>
-                <div class="brand-title">Adaptive Issuance™<br><b>Instant ID</b></div>
-                <div class="nav-menu">
-                    <a class="nav-item">Home</a>
-                    
-                    <div class="dropdown-wrapper" id="dropdown-design">
-                        <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-design')">
-                            Design <span style="font-size: 10px;">▲</span>
-                        </div>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item">Quick Start</a>
-                            <a class="dropdown-item" onclick="navigateTo('credential-designs')">Credentials</a>
-                            <a class="dropdown-item">Workflows</a>
-                            <a class="dropdown-item">Reports</a>
-                        </div>
-                    </div>
-
-                    <a class="nav-item">Printer Queues</a>
+                <div class="form-group-login">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" value="1234">
                 </div>
             </div>
-
-            <div class="nav-right">
-                <div class="dropdown-wrapper" id="dropdown-admin">
-                    <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-admin')">
-                        admin <span style="font-size: 10px;">▲</span>
-                    </div>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item">Preferences</a>
-                        <a class="dropdown-item">Sign Out</a>
-                    </div>
-                </div>
-
-                <div class="dropdown-wrapper" id="dropdown-gear">
-                    <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-gear')">⚙ <span style="font-size: 10px;">▼</span></div>
-                </div>
-
-                <div class="badge-container">
-                    <span style="font-size: 15px;">🔔</span>
-                    <span class="notification-badge">2</span>
-                </div>
-                <span style="font-size: 15px;">❓</span>
-                <span style="font-size: 15px;">ℹ️</span>
-            </div>
+            <a class="forgot-password" onclick="alert('Password reset link sent!')">Forgot Password?</a>
+            <button class="btn-signin" onclick="handleLogin()">Sign In</button>
         </div>
 
+        <!-- MAIN WORKSPACE -->
         <div id="main-workspace">
-            <!-- PAGE 1: MANAGE YOUR CREDENTIAL DESIGNS (FIRST IMAGE) -->
-            <div id="page-credential-designs" class="page-view active">
-                <div class="page-banner">
-                    <span>⚙</span>
-                    <span>Manage Your Credential Designs</span>
-                </div>
-
-                <div class="sub-tab-bar-light">
-                    <div class="tab-btn-light">Credential Designs</div>
-                </div>
-
-                <div class="content-body-grey">
-                    <!-- CREATE BUTTON THAT NAVIGATES TO SECOND IMAGE VIEW -->
-                    <button class="btn-create" onclick="navigateTo('card-studio')">Create</button>
-
-                    <div class="filter-section">
-                        <label for="filterInput">Filter</label>
-                        <input type="text" id="filterInput" class="filter-input">
+            <div id="top-navbar">
+                <div class="nav-left">
+                    <div class="brand-logo">
+                        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        <span>ENTRUST</span>
                     </div>
+                    <div class="brand-title">Adaptive Issuance™<br><b>Instant ID</b></div>
+                    <div class="nav-menu">
+                        <a class="nav-item">Home</a>
+                        <div class="dropdown-wrapper" id="dropdown-design">
+                            <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-design')">
+                                Design <span style="font-size: 10px;">▲</span>
+                            </div>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" onclick="navigateTo('credential-designs')">Credentials</a>
+                            </div>
+                        </div>
+                        <a class="nav-item">Printer Queues</a>
+                    </div>
+                </div>
 
+                <div class="nav-right">
+                    <div class="dropdown-wrapper" id="dropdown-admin">
+                        <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-admin')">admin ▲</div>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" onclick="handleSignOut()">Sign Out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 1: CREDENTIAL DESIGNS (FIRST IMAGE) -->
+            <div id="page-credential-designs" class="page-view active">
+                <div class="page-banner">⚙ Manage Your Credential Designs</div>
+                <div class="sub-tab-bar-light"><div class="tab-btn-light">Credential Designs</div></div>
+                <div class="content-body-grey">
+                    <button class="btn-create" onclick="navigateTo('card-studio')">Create</button>
+                    <div class="filter-section">
+                        <label>Filter</label>
+                        <input type="text" class="filter-input">
+                    </div>
                     <div class="data-table-container">
                         <table class="data-table">
                             <thead>
@@ -394,157 +270,99 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td colspan="3" class="no-data">No data is available</td>
-                                </tr>
+                                <tr><td colspan="3" class="no-data">No data is available</td></tr>
                             </tbody>
                         </table>
                     </div>
-
                     <div class="pagination-bar">
                         <div>Showing 0 - 0 of 0 entries</div>
                         <div class="pagination-links">
-                            <span>First</span>
-                            <span>Previous</span>
-                            <span>Next</span>
-                            <span>Last</span>
+                            <span>First</span><span>Previous</span><span>Next</span><span>Last</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- PAGE 2: CARD DESIGN STUDIO (SECOND IMAGE) -->
+            <!-- PAGE 2: CARD STUDIO (SECOND IMAGE) -->
             <div id="page-card-studio" class="page-view">
-                <div class="studio-banner">
-                    <span>Credential Design 1</span>
-                    <span class="edit-icon">✏️</span>
-                </div>
-
-                <!-- DESIGN TOOLBAR -->
+                <div class="studio-banner">Credential Design 1 ✏️</div>
                 <div class="design-toolbar">
-                    <div class="tool-btn" title="Undo">↩</div>
-                    <div class="tool-btn" title="Redo">↪</div>
+                    <div class="tool-btn">↩</div><div class="tool-btn">↪</div>
                     <div class="tool-divider"></div>
-                    <div class="tool-btn" title="Cut">✂</div>
-                    <div class="tool-btn" title="Copy">📋</div>
-                    <div class="tool-divider"></div>
-                    <div class="tool-btn" title="Text"><b>T</b></div>
-                    <div class="tool-btn" title="Dynamic Text">T̅</div>
-                    <div class="tool-btn" title="Image">🖼</div>
-                    <div class="tool-btn" title="Photo Slot">👤</div>
-                    <div class="tool-divider"></div>
-                    <div class="tool-btn" title="Barcode">||||</div>
-                    <div class="tool-btn" title="Magnetic Stripe">💳</div>
-                    <div class="tool-btn" title="Smart Card Module">🔲</div>
-                    <div class="tool-divider"></div>
-                    <div class="tool-btn" title="Line">/</div>
-                    <div class="tool-btn" title="Rectangle">☐</div>
-                    <div class="tool-btn" title="Circle">◯</div>
-                    <div class="tool-divider"></div>
-                    <div class="tool-btn" title="Grid">▦</div>
-                    <div class="tool-divider"></div>
-                    <div class="tool-btn" title="Zoom In">🔍+</div>
-                    <div class="tool-btn" title="Zoom Out">🔍-</div>
-                    <span style="font-size: 11px; margin-left: 2px;">Zoom:</span>
-                    <select class="zoom-select">
-                        <option>100%</option>
-                        <option>75%</option>
-                        <option>50%</option>
-                    </select>
-                    <div class="tool-divider"></div>
-                    <div class="tool-btn" title="Align Layout">📑</div>
+                    <div class="tool-btn"><b>T</b></div><div class="tool-btn">👤</div><div class="tool-btn">🖼</div>
                 </div>
-
-                <!-- MAIN STUDIO WORKSPACE -->
                 <div class="studio-workspace">
-                    <div class="active-layer-indicator">Active Design Layer: Color</div>
-
                     <div class="canvas-area">
-                        <!-- FRONT SIDE CARD -->
                         <div class="card-container-wrapper">
                             <div class="card-title-header">Front Side</div>
-                            <div class="card-canvas-outer">
-                                <div class="id-card"></div>
-                            </div>
+                            <div class="card-canvas-outer"><div class="id-card"></div></div>
                         </div>
-
-                        <!-- BACK SIDE CARD -->
                         <div class="card-container-wrapper">
                             <div class="card-title-header">Back Side</div>
-                            <div class="card-canvas-outer">
-                                <div class="id-card"></div>
-                            </div>
+                            <div class="card-canvas-outer"><div class="id-card"></div></div>
                         </div>
                     </div>
-
-                    <!-- PROPERTIES / LAYERS SIDEBAR -->
                     <div class="properties-sidebar">
-                        <div class="sidebar-tabs">
-                            <div class="sidebar-tab active">Properties</div>
-                            <div class="sidebar-tab">Layers</div>
-                        </div>
-                        <div class="sidebar-content">
-                            <div class="section-header">- Front Side Properties</div>
-                            
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="rotate180">
-                                <label for="rotate180">Rotate print orientation 180 degrees</label>
-                            </div>
-
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="tactileModule">
-                                <label for="tactileModule">Tactile impression Module</label>
-                            </div>
-                        </div>
+                        <div class="sidebar-tabs"><div class="sidebar-tab active">Properties</div></div>
+                        <div class="sidebar-content">- Front Side Properties</div>
                     </div>
                 </div>
-
-                <!-- FOOTER -->
                 <div class="studio-footer">
                     <span class="footer-btn">Save</span>
                     <span class="footer-btn" onclick="navigateTo('credential-designs')">Close</span>
-                    <span class="footer-btn">Front Sample</span>
                 </div>
             </div>
-
         </div>
     </div>
 
     <script>
-        // Toggle Dropdown menus
-        function toggleDropdown(dropdownId) {
-            const element = document.getElementById(dropdownId);
-            const isActive = element.classList.contains('active');
-            
-            document.querySelectorAll('.dropdown-wrapper').forEach(wrapper => {
-                wrapper.classList.remove('active');
-            });
+        // LOGIN LOGIC
+        function handleLogin() {
+            const u = document.getElementById('userId').value.trim();
+            const p = document.getElementById('password').value.trim();
 
-            if (!isActive) {
-                element.classList.add('active');
+            if (u === "admin" && p === "1234") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-workspace').style.display = 'flex';
+            } else {
+                alert('User ID သို့မဟုတ် Password မှားယွင်းနေပါသည်။ (Default: admin / 1234)');
             }
         }
 
-        // Close dropdown when clicking outside
-        window.onclick = function(event) {
-            if (!event.target.closest('.dropdown-wrapper')) {
-                document.querySelectorAll('.dropdown-wrapper').forEach(wrapper => {
-                    wrapper.classList.remove('active');
-                });
-            }
-        };
+        function handleSignOut() {
+            document.getElementById('main-workspace').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
+        }
 
-        // Navigation Function
+        // NAVIGATION LOGIC
         function navigateTo(pageName) {
-            document.querySelectorAll('.page-view').forEach(page => {
-                page.classList.remove('active');
-            });
-
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
             if (pageName === 'credential-designs') {
                 document.getElementById('page-credential-designs').classList.add('active');
             } else if (pageName === 'card-studio') {
                 document.getElementById('page-card-studio').classList.add('active');
             }
+        }
+
+        function toggleDropdown(id) {
+            const el = document.getElementById(id);
+            const active = el.classList.contains('active');
+            document.querySelectorAll('.dropdown-wrapper').forEach(w => w.classList.remove('active'));
+            if (!active) el.classList.add('active');
+        }
+
+        // WINDOW CONTROLS (Electron/Browser support)
+        function appMinimize() {
+            if (window.electronAPI && window.electronAPI.minimize) window.electronAPI.minimize();
+            else alert("Minimize Clicked");
+        }
+        function appMaximize() {
+            if (window.electronAPI && window.electronAPI.maximize) window.electronAPI.maximize();
+            else alert("Maximize Clicked");
+        }
+        function appClose() {
+            if (window.electronAPI && window.electronAPI.close) window.electronAPI.close();
+            else if (confirm("အပလီကေးရှင်း ပိတ်မည်မှာ သေချာပါသလား?")) window.close();
         }
     </script>
 </body>

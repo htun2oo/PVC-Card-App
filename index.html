@@ -157,7 +157,6 @@
         .page-banner { background-color: #5c2483; color: #ffffff; padding: 10px 15px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
         .content-body-grey { background-color: #d1d5db; flex: 1; padding: 15px; display: flex; flex-direction: column; }
         .btn-create { background-color: #2563eb; color: white; border: none; padding: 6px 16px; font-size: 12px; border-radius: 3px; cursor: pointer; align-self: flex-start; margin-bottom: 12px; }
-        .btn-create:hover { background-color: #1d4ed8; }
 
         /* CREDENTIAL DESIGNS PAGE */
         .sub-tab-bar-light { background-color: #e5e7eb; border-bottom: 1px solid #d1d5db; padding-left: 15px; display: flex; align-items: flex-end; height: 38px; }
@@ -171,23 +170,54 @@
         .pagination-bar { background-color: #e5e7eb; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #4b5563; border: 1px solid #9ca3af; border-top: none; }
         .pagination-links { display: flex; gap: 12px; color: #6b7280; }
 
-        /* STUDIO PAGE */
+        /* STUDIO PAGE & FULL TOOLBAR */
         .studio-banner { background-color: #5c2483; color: #ffffff; padding: 8px 15px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
-        .design-toolbar { background-color: #e5e7eb; border-bottom: 1px solid #b0b5bc; padding: 4px 10px; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-        .tool-btn { min-width: 26px; height: 26px; padding: 0 4px; background-color: #f3f4f6; border: 1px solid #9ca3af; border-radius: 2px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; color: #374151; }
-        .tool-btn:hover { background-color: #d1d5db; }
-        .tool-divider { width: 1px; height: 20px; background-color: #9ca3af; margin: 0 4px; }
+        
+        /* ---------------- TOOLBAR STYLES ---------------- */
+        .design-toolbar { 
+            background-color: #e5e7eb; 
+            border-bottom: 1px solid #b0b5bc; 
+            padding: 4px 8px; 
+            display: flex; 
+            align-items: center; 
+            gap: 3px; 
+            flex-wrap: wrap; 
+        }
+        
+        .tool-btn { 
+            width: 28px; 
+            height: 28px; 
+            background-color: #f3f4f6; 
+            border: 1px solid #9ca3af; 
+            border-radius: 2px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            font-size: 13px; 
+            color: #374151; 
+        }
+        
+        .tool-btn:hover { background-color: #d1d5db; border-color: #6b7280; }
+        .tool-divider { width: 1px; height: 22px; background-color: #9ca3af; margin: 0 3px; }
+        .zoom-select { height: 28px; font-size: 12px; border: 1px solid #9ca3af; padding: 0 4px; border-radius: 2px; outline: none; background: #fff; }
+
+        /* STUDIO WORKSPACE */
         .studio-workspace { flex: 1; display: flex; background-color: #d1d5db; overflow: hidden; position: relative; }
         .canvas-area { flex: 1; padding: 20px; display: flex; gap: 20px; overflow: auto; justify-content: center; align-items: flex-start; }
         .card-container-wrapper { display: flex; flex-direction: column; }
         .card-title-header { font-size: 12px; font-weight: bold; color: #1f2937; margin-bottom: 10px; }
-        .card-canvas-outer { width: 320px; height: 250px; background-color: #808080; display: flex; align-items: center; justify-content: center; border: 1px solid #6b7280; }
-        .id-card { width: 220px; height: 140px; background-color: #ffffff; border-radius: 12px; border: 1px solid #4b5563; }
-        .properties-sidebar { width: 240px; background-color: #f3f4f6; border-left: 1px solid #b0b5bc; display: flex; flex-direction: column; }
+        .card-canvas-outer { width: 340px; height: 260px; background-color: #808080; display: flex; align-items: center; justify-content: center; border: 1px solid #6b7280; }
+        .id-card { width: 240px; height: 150px; background-color: #ffffff; border-radius: 12px; border: 1px solid #4b5563; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        
+        /* RIGHT SIDEBAR */
+        .properties-sidebar { width: 260px; background-color: #f3f4f6; border-left: 1px solid #b0b5bc; display: flex; flex-direction: column; }
         .sidebar-tabs { display: flex; background-color: #e5e7eb; border-bottom: 1px solid #b0b5bc; }
-        .sidebar-tab { flex: 1; padding: 6px; text-align: center; font-size: 11px; color: #4b5563; cursor: pointer; }
+        .sidebar-tab { flex: 1; padding: 8px; text-align: center; font-size: 12px; color: #4b5563; cursor: pointer; }
         .sidebar-tab.active { background-color: #f3f4f6; font-weight: bold; color: #1f2937; }
-        .sidebar-content { padding: 12px; font-size: 12px; }
+        .sidebar-content { padding: 15px; font-size: 12px; }
+        .sidebar-group { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+        
         .studio-footer { height: 24px; background-color: #e5e7eb; border-top: 1px solid #b0b5bc; display: flex; align-items: center; padding: 0 10px; font-size: 11px; gap: 15px; }
         .footer-btn { cursor: pointer; text-decoration: underline; }
     </style>
@@ -232,9 +262,7 @@
                     </div>
                     <div class="brand-title">Adaptive Issuance™<br><b>Instant ID</b></div>
                     <div class="nav-menu">
-                        <!-- HOME BUTTON WITH NAVIGATION -->
                         <a class="nav-item" onclick="navigateTo('home')">Home</a>
-
                         <div class="dropdown-wrapper" id="dropdown-design">
                             <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-design')">
                                 Design <span style="font-size: 10px;">▲</span>
@@ -257,8 +285,8 @@
                 </div>
             </div>
 
-            <!-- PAGE 0: HOME PAGE (HOME DASHBOARD) -->
-            <div id="page-home" class="page-view active">
+            <!-- PAGE 0: HOME PAGE -->
+            <div id="page-home" class="page-view">
                 <div class="page-banner">🏠 Home Dashboard</div>
                 <div class="content-body-grey" style="justify-content: center; align-items: center;">
                     <div style="background: white; padding: 40px; border-radius: 8px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 500px;">
@@ -271,7 +299,7 @@
                 </div>
             </div>
 
-            <!-- PAGE 1: CREDENTIAL DESIGNS (FIRST IMAGE) -->
+            <!-- PAGE 1: CREDENTIAL DESIGNS -->
             <div id="page-credential-designs" class="page-view">
                 <div class="page-banner">⚙ Manage Your Credential Designs</div>
                 <div class="sub-tab-bar-light"><div class="tab-btn-light">Credential Designs</div></div>
@@ -304,30 +332,99 @@
                 </div>
             </div>
 
-            <!-- PAGE 2: CARD STUDIO (SECOND IMAGE) -->
-            <div id="page-card-studio" class="page-view">
+            <!-- PAGE 2: CARD STUDIO (COMPLETE TOOLBAR FROM IMAGE) -->
+            <div id="page-card-studio" class="page-view active">
                 <div class="studio-banner">Credential Design 1 ✏️</div>
+                
+                <!-- FULL TOOLBAR ATTACHED TO SCREENSHOT -->
                 <div class="design-toolbar">
-                    <div class="tool-btn">↩</div><div class="tool-btn">↪</div>
+                    <!-- 1. Undo / Redo -->
+                    <div class="tool-btn" title="Undo">↶</div>
+                    <div class="tool-btn" title="Redo">↷</div>
                     <div class="tool-divider"></div>
-                    <div class="tool-btn"><b>T</b></div><div class="tool-btn">👤</div><div class="tool-btn">🖼</div>
+
+                    <!-- 2. Copy / Cut / Paste -->
+                    <div class="tool-btn" title="Copy">📋</div>
+                    <div class="tool-btn" title="Cut">✂</div>
+                    <div class="tool-btn" title="Paste">📄</div>
+                    <div class="tool-divider"></div>
+
+                    <!-- 3. Text Tools -->
+                    <div class="tool-btn" title="Static Text"><b>T</b></div>
+                    <div class="tool-btn" title="Dynamic Text"><b>T_</b></div>
+                    <div class="tool-divider"></div>
+
+                    <!-- 4. Image & Photo Tools -->
+                    <div class="tool-btn" title="Portrait Photo">👤</div>
+                    <div class="tool-btn" title="Static Graphic">🖼</div>
+                    <div class="tool-btn" title="Dynamic Graphic">🖼_</div>
+                    <div class="tool-divider"></div>
+
+                    <!-- 5. Barcode & Smartcard Elements -->
+                    <div class="tool-btn" title="Barcode">║▌</div>
+                    <div class="tool-btn" title="2D Barcode / QR">🏁</div>
+                    <div class="tool-btn" title="Magnetic Stripe">💳</div>
+                    <div class="tool-divider"></div>
+
+                    <!-- 6. Shapes & Lines -->
+                    <div class="tool-btn" title="Line">╱</div>
+                    <div class="tool-btn" title="Rectangle">▭</div>
+                    <div class="tool-btn" title="Circle">○</div>
+                    <div class="tool-divider"></div>
+
+                    <!-- 7. Smartcard & Grid Alignment -->
+                    <div class="tool-btn" title="Smartcard Chip">📟</div>
+                    <div class="tool-btn" title="Grid Lines">▦</div>
+                    <div class="tool-divider"></div>
+
+                    <!-- 8. Zoom Controls -->
+                    <div class="tool-btn" title="Zoom In">🔍+</div>
+                    <div class="tool-btn" title="Zoom Out">🔍-</div>
+                    <select class="zoom-select" title="Zoom Level">
+                        <option>100%</option>
+                        <option>75%</option>
+                        <option>50%</option>
+                        <option>150%</option>
+                    </select>
+                    <div class="tool-btn" title="Fit to Screen">⤢</div>
                 </div>
+
                 <div class="studio-workspace">
                     <div class="canvas-area">
                         <div class="card-container-wrapper">
-                            <div class="card-title-header">Front Side</div>
-                            <div class="card-canvas-outer"><div class="id-card"></div></div>
+                            <div class="card-title-header">Front Side <span style="font-weight: normal; color: #6b7280; margin-left: 20px;">Active Design Layer: Color</span></div>
+                            <div class="card-canvas-outer">
+                                <div class="id-card"></div>
+                            </div>
                         </div>
                         <div class="card-container-wrapper">
                             <div class="card-title-header">Back Side</div>
-                            <div class="card-canvas-outer"><div class="id-card"></div></div>
+                            <div class="card-canvas-outer">
+                                <div class="id-card"></div>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- RIGHT SIDEBAR (PROPERTIES / LAYERS) -->
                     <div class="properties-sidebar">
-                        <div class="sidebar-tabs"><div class="sidebar-tab active">Properties</div></div>
-                        <div class="sidebar-content">- Front Side Properties</div>
+                        <div class="sidebar-tabs">
+                            <div class="sidebar-tab active">Properties</div>
+                            <div class="sidebar-tab">Layers</div>
+                        </div>
+                        <div class="sidebar-content">
+                            <b style="color: #374151;">- Front Side Properties</b>
+                            <div class="sidebar-group">
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                    <input type="checkbox"> Rotate print orientation 180 degrees
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                    <input type="checkbox"> Tactile Impression Module
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
                 <div class="studio-footer">
                     <span class="footer-btn">Save</span>
                     <span class="footer-btn" onclick="navigateTo('credential-designs')">Close</span>
@@ -345,7 +442,7 @@
             if (u === "admin" && p === "1234") {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-workspace').style.display = 'flex';
-                navigateTo('home');
+                navigateTo('card-studio');
             } else {
                 alert('User ID သို့မဟုတ် Password မှားယွင်းနေပါသည်။ (Default: admin / 1234)');
             }
@@ -356,7 +453,7 @@
             document.getElementById('login-screen').style.display = 'flex';
         }
 
-        // NAVIGATION LOGIC (Home / Credentials / Studio)
+        // NAVIGATION LOGIC
         function navigateTo(pageName) {
             document.querySelectorAll('.dropdown-wrapper').forEach(w => w.classList.remove('active'));
             document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));

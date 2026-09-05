@@ -64,10 +64,6 @@
             border-radius: 6px;
             font-size: 15px;
             outline: none;
-            transition: border-color 0.2s;
-        }
-        .form-group input:focus {
-            border-color: #6200ee;
         }
 
         .forgot-password {
@@ -88,9 +84,100 @@
             font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-        .btn-signin:hover { background-color: #0088b8; }
+
+        /* ---------------- WELCOME DIALOG (QUICK START WIZARD) ---------------- */
+        #welcome-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 900;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .welcome-dialog {
+            background: #ffffff;
+            width: 520px;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border: 1px solid #7026b9;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .welcome-header {
+            background-color: #5c2483;
+            color: #ffffff;
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-close {
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .welcome-body {
+            padding: 20px;
+            color: #333333;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .welcome-body p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+
+        .welcome-footer {
+            background-color: #f0f0f0;
+            padding: 12px 20px;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn-wizard {
+            padding: 6px 20px;
+            font-size: 13px;
+            border: 1px solid #adadad;
+            background: #e1e1e1;
+            cursor: pointer;
+        }
+
+        .btn-wizard-primary {
+            background: #337ab7;
+            color: white;
+            border-color: #2e6da4;
+        }
+
+        .btn-wizard:hover {
+            opacity: 0.9;
+        }
 
         /* ---------------- MDI WORKSPACE STYLES ---------------- */
         #main-workspace {
@@ -151,7 +238,7 @@
 </head>
 <body>
 
-    <!-- 1. LOGIN SCREEN CONTAINER -->
+    <!-- 1. LOGIN SCREEN -->
     <div id="login-screen">
         <div class="app-title">Adaptive Issuance<br>Instant ID</div>
 
@@ -171,7 +258,39 @@
         <button class="btn-signin" onclick="handleLogin()">Sign In</button>
     </div>
 
-    <!-- 2. MAIN APPLICATION WORKSPACE -->
+    <!-- 2. WELCOME POPUP DIALOG (QUICK START WIZARD) -->
+    <div id="welcome-modal-overlay">
+        <div class="welcome-dialog">
+            <div class="welcome-header">
+                <span>Welcome</span>
+                <span class="welcome-close" onclick="closeWelcomeWizard()">✖</span>
+            </div>
+            <div class="welcome-body">
+                <p>The Quick Start wizard helps you create and print a credential</p>
+                
+                <div class="radio-option">
+                    <input type="radio" id="opt1" name="wizardOpt" checked>
+                    <label for="opt1">Let Quick Start generate a workflow and field connections (recommended)</label>
+                </div>
+
+                <div class="radio-option">
+                    <input type="radio" id="opt2" name="wizardOpt">
+                    <label for="opt2">I will customize my workflow and field connections</label>
+                </div>
+
+                <div class="checkbox-option">
+                    <input type="checkbox" id="chkAlways" checked>
+                    <label for="chkAlways">Always show Quick Start on sign in</label>
+                </div>
+            </div>
+            <div class="welcome-footer">
+                <button class="btn-wizard btn-wizard-primary" onclick="closeWelcomeWizard()">Next</button>
+                <button class="btn-wizard" onclick="closeWelcomeWizard()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. MAIN APPLICATION WORKSPACE -->
     <div id="main-workspace">
         <div class="workspace-desktop">
 
@@ -230,18 +349,24 @@
     </div>
 
     <script>
-        // Authentication Logic
+        // Login Logic
         function handleLogin() {
             const user = document.getElementById('userId').value.trim();
             const pass = document.getElementById('password').value.trim();
 
             if (user === "admin" && pass === "1234") {
                 document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('main-workspace').style.display = 'flex';
-                initCanvases();
+                document.getElementById('welcome-modal-overlay').style.display = 'flex';
             } else {
                 alert('User ID သို့မဟုတ် Password မှားယွင်းနေပါသည်။ (Default: admin / 1234)');
             }
+        }
+
+        // Close Welcome Modal and Load Main Workspace
+        function closeWelcomeWizard() {
+            document.getElementById('welcome-modal-overlay').style.display = 'none';
+            document.getElementById('main-workspace').style.display = 'flex';
+            initCanvases();
         }
 
         // MDI Window Controls

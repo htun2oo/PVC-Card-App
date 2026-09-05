@@ -3,87 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adaptive Issuance Instant ID - Login</title>
+    <title>Adaptive Issuance Instant ID</title>
+    <!-- Fabric.js Canvas Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         
-        /* Purple Gradient Background Setup */
-        body {
-            height: 100vh;
+        body, html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #808080;
+        }
+
+        /* ---------------- LOGIN PAGE STYLES ---------------- */
+        #login-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, #7026b9 0%, #4a1582 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            z-index: 1000;
         }
 
-        /* App Title Header */
         .app-title {
             color: #ffffff;
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 600;
             text-align: center;
             margin-bottom: 25px;
             letter-spacing: 0.5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        /* Login Card Container */
         .login-card {
             background-color: rgba(255, 255, 255, 0.95);
-            width: 480px;
+            width: 440px;
             border-radius: 12px;
-            padding: 30px;
+            padding: 35px 30px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
-            align-items: center;
         }
 
-        /* Yellow Warning Banner */
-        .warning-banner {
-            background-color: #e5a043;
-            color: #2c1a00;
-            width: 100%;
-            padding: 10px 14px;
-            border-radius: 6px;
-            font-size: 13px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .warning-text {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 380px;
-        }
-        .banner-icons {
-            display: flex;
-            gap: 10px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Form Group Inputs */
         .form-group {
             width: 100%;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
         .form-group label {
             display: block;
             font-size: 14px;
-            color: #555555;
-            margin-bottom: 6px;
+            color: #666666;
+            margin-bottom: 8px;
         }
         .form-group input {
             width: 100%;
             padding: 12px;
-            border: 1px solid #7c8ba1;
+            border: 1px solid #9aa0a6;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 15px;
             outline: none;
             transition: border-color 0.2s;
         }
@@ -91,81 +70,232 @@
             border-color: #6200ee;
         }
 
-        /* Forgot Password Link */
         .forgot-password {
             color: #ffffff;
             font-size: 14px;
             text-decoration: underline;
-            margin-top: 18px;
+            margin-top: 20px;
             margin-bottom: 15px;
             cursor: pointer;
         }
-        .forgot-password:hover {
-            color: #e0e0e0;
-        }
 
-        /* Sign In Button */
         .btn-signin {
             background-color: #00b0eb;
             color: #ffffff;
             border: none;
-            padding: 10px 24px;
-            font-size: 14px;
+            padding: 10px 26px;
+            font-size: 15px;
             font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: background-color 0.2s;
         }
-        .btn-signin:hover {
-            background-color: #0088b8;
+        .btn-signin:hover { background-color: #0088b8; }
+
+        /* ---------------- MDI WORKSPACE STYLES ---------------- */
+        #main-workspace {
+            display: none;
+            height: 100vh;
+            padding: 10px;
         }
+
+        .workspace-desktop {
+            flex: 1; display: flex; gap: 10px; height: 100%; position: relative;
+        }
+
+        .sub-window {
+            background: #ece9d8; border: 2px solid #ffffff;
+            border-right-color: #404040; border-bottom-color: #404040;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.4); display: flex; flex-direction: column;
+            position: relative; transition: all 0.2s ease-in-out;
+        }
+
+        .win-production { width: 45%; height: 100%; }
+        .right-stack { width: 55%; display: flex; flex-direction: column; gap: 10px; height: 100%; }
+        .win-card { width: 100%; flex: 1; }
+
+        .window-titlebar {
+            background: linear-gradient(90deg, #0a246a, #a6caf0); color: white;
+            padding: 3px 6px; font-size: 12px; font-weight: bold;
+            display: flex; justify-content: space-between; align-items: center; user-select: none;
+        }
+        .window-controls { display: flex; gap: 2px; }
+        .win-btn {
+            width: 16px; height: 14px; background: #ece9d8; border: 1px solid #fff;
+            border-right-color: #404040; border-bottom-color: #404040;
+            font-size: 9px; line-height: 10px; text-align: center; color: #000; cursor: pointer; font-weight: bold;
+        }
+
+        .window-body { padding: 10px; flex: 1; background: #808080; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: auto; }
+        .form-body { background: #ece9d8; }
+
+        .canvas-with-ruler { position: relative; padding-top: 20px; padding-left: 20px; background: #d4d0c8; border: 1px solid #999; }
+        .ruler-top { position: absolute; top: 0; left: 20px; right: 0; height: 20px; background: #ece9d8; border-bottom: 1px solid #808080; font-size: 9px; display: flex; justify-content: space-around; align-items: center; }
+        .ruler-left { position: absolute; top: 20px; left: 0; bottom: 0; width: 20px; background: #ece9d8; border-right: 1px solid #808080; font-size: 9px; display: flex; flex-direction: column; justify-content: space-around; align-items: center; }
+
+        canvas { background: #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.3); }
+
+        .sub-window.minimized { height: 26px !important; min-height: 26px !important; flex: none !important; overflow: hidden; }
+        .sub-window.minimized .window-body { display: none; }
+
+        .win-production.maximized { position: absolute !important; top: 0; left: 0; width: 100% !important; height: 100% !important; z-index: 100; }
+        .win-card.maximized {
+            position: absolute !important; top: 50% !important; left: 50% !important;
+            transform: translate(-50%, -50%) !important; width: 520px !important; height: 360px !important; z-index: 100;
+            box-shadow: 0 0 15px rgba(0,0,0,0.6);
+        }
+        .sub-window.closed { display: none !important; }
+        .restore-bar { position: absolute; bottom: 5px; left: 5px; display: flex; gap: 5px; z-index: 200; }
+        .restore-btn { background: #ece9d8; border: 2px solid #fff; border-right-color: #404040; border-bottom-color: #404040; padding: 3px 8px; font-size: 11px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <!-- Header Title -->
-    <div class="app-title">Adaptive Issuance<br>Instant ID</div>
+    <!-- 1. LOGIN SCREEN CONTAINER -->
+    <div id="login-screen">
+        <div class="app-title">Adaptive Issuance<br>Instant ID</div>
 
-    <!-- Login Box Panel -->
-    <div class="login-card">
-        
-        <!-- Expired Warning Notification -->
-        <div class="warning-banner" id="warningBanner">
-            <span class="warning-text">Your session expired due to inactivity. You will n ...</span>
-            <div class="banner-icons">
-                <span title="Details">+</span>
-                <span title="Close" onclick="document.getElementById('warningBanner').style.display='none'">×</span>
+        <div class="login-card">
+            <div class="form-group">
+                <label for="userId">User ID</label>
+                <input type="text" id="userId" value="admin" autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" value="1234">
             </div>
         </div>
 
-        <!-- Input Fields -->
-        <div class="form-group">
-            <label for="userId">User ID</label>
-            <input type="text" id="userId" autocomplete="off">
-        </div>
-
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password">
-        </div>
-
+        <a class="forgot-password" onclick="alert('Password reset link sent!')">Forgot Password?</a>
+        <button class="btn-signin" onclick="handleLogin()">Sign In</button>
     </div>
 
-    <!-- Actions Below Card -->
-    <a class="forgot-password" onclick="alert('Forgot Password Link Clicked')">Forgot Password?</a>
-    <button class="btn-signin" onclick="handleLogin()">Sign In</button>
+    <!-- 2. MAIN APPLICATION WORKSPACE -->
+    <div id="main-workspace">
+        <div class="workspace-desktop">
+
+            <div class="sub-window win-production" id="win-production">
+                <div class="window-titlebar">
+                    <span>Production Form</span>
+                    <div class="window-controls">
+                        <div class="win-btn" onclick="toggleMinimize('win-production')">_</div>
+                        <div class="win-btn" onclick="toggleMaximize('win-production')">□</div>
+                        <div class="win-btn" onclick="closeWindow('win-production')">×</div>
+                    </div>
+                </div>
+                <div class="window-body form-body"></div>
+            </div>
+
+            <div class="right-stack">
+                <div class="sub-window win-card" id="win-front">
+                    <div class="window-titlebar">
+                        <span>Card (Front Side)</span>
+                        <div class="window-controls">
+                            <div class="win-btn" onclick="toggleMinimize('win-front')">_</div>
+                            <div class="win-btn" onclick="toggleMaximize('win-front')">□</div>
+                            <div class="win-btn" onclick="closeWindow('win-front')">×</div>
+                        </div>
+                    </div>
+                    <div class="window-body">
+                        <div class="canvas-with-ruler">
+                            <div class="ruler-top"><span>| 1</span><span>| 2</span><span>| 3</span></div>
+                            <div class="ruler-left"><span>1 -</span><span>2 -</span></div>
+                            <canvas id="frontCanvas" width="340" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sub-window win-card" id="win-back">
+                    <div class="window-titlebar">
+                        <span>Card (Back Side)</span>
+                        <div class="window-controls">
+                            <div class="win-btn" onclick="toggleMinimize('win-back')">_</div>
+                            <div class="win-btn" onclick="toggleMaximize('win-back')">□</div>
+                            <div class="win-btn" onclick="closeWindow('win-back')">×</div>
+                        </div>
+                    </div>
+                    <div class="window-body">
+                        <div class="canvas-with-ruler">
+                            <div class="ruler-top"><span>| 1</span><span>| 2</span><span>| 3</span></div>
+                            <div class="ruler-left"><span>1 -</span><span>2 -</span></div>
+                            <canvas id="backCanvas" width="340" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="restore-bar" id="restoreBar"></div>
+    </div>
 
     <script>
+        // Authentication Logic
         function handleLogin() {
-            const user = document.getElementById('userId').value;
-            const pass = document.getElementById('password').value;
-            
-            if (!user || !pass) {
-                alert('ကျေးဇူးပြု၍ User ID နှင့် Password ထည့်သွင်းပါ။');
-                return;
+            const user = document.getElementById('userId').value.trim();
+            const pass = document.getElementById('password').value.trim();
+
+            if (user === "admin" && pass === "1234") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-workspace').style.display = 'flex';
+                initCanvases();
+            } else {
+                alert('User ID သို့မဟုတ် Password မှားယွင်းနေပါသည်။ (Default: admin / 1234)');
             }
-            alert('Login MDI Application သို့ ဝင်ရောက်နေပါသည်...');
+        }
+
+        // MDI Window Controls
+        function toggleMinimize(winId) {
+            const win = document.getElementById(winId);
+            win.classList.toggle('minimized');
+            if(win.classList.contains('maximized')) win.classList.remove('maximized');
+        }
+
+        function toggleMaximize(winId) {
+            const win = document.getElementById(winId);
+            win.classList.toggle('maximized');
+            if(win.classList.contains('minimized')) win.classList.remove('minimized');
+        }
+
+        function closeWindow(winId) {
+            const win = document.getElementById(winId);
+            win.classList.add('closed');
+            createRestoreButton(winId);
+        }
+
+        function createRestoreButton(winId) {
+            const restoreBar = document.getElementById('restoreBar');
+            let name = winId === 'win-production' ? "Production Form" : (winId === 'win-front' ? "Card Front" : "Card Back");
+            const btn = document.createElement('button');
+            btn.className = 'restore-btn';
+            btn.innerText = "Reopen " + name;
+            btn.onclick = function() {
+                document.getElementById(winId).classList.remove('closed', 'minimized', 'maximized');
+                btn.remove();
+            };
+            restoreBar.appendChild(btn);
+        }
+
+        // Canvas Initialization
+        let frontCanvas, backCanvas;
+        function initCanvases() {
+            if (frontCanvas) return;
+
+            frontCanvas = new fabric.Canvas('frontCanvas');
+            frontCanvas.setBackgroundColor('#ffffff', frontCanvas.renderAll.bind(frontCanvas));
+            frontCanvas.add(
+                new fabric.Rect({ left: 0, top: 0, fill: '#1e3799', width: 340, height: 40 }),
+                new fabric.IText('COMPANY NAME', { left: 12, top: 10, fill: '#ffffff', fontSize: 14, fontWeight: 'bold' }),
+                new fabric.Rect({ left: 12, top: 50, fill: '#e0e0e0', stroke: '#aaa', strokeWidth: 1, width: 80, height: 100, rx: 4, ry: 4 })
+            );
+
+            backCanvas = new fabric.Canvas('backCanvas');
+            backCanvas.setBackgroundColor('#ffffff', backCanvas.renderAll.bind(backCanvas));
+            backCanvas.add(
+                new fabric.Rect({ left: 0, top: 15, fill: '#111111', width: 340, height: 35 }),
+                new fabric.IText('This card is non-transferable.', { left: 15, top: 65, fill: '#666666', fontSize: 9 }),
+                new fabric.Rect({ left: 15, top: 110, fill: '#000000', width: 200, height: 30 })
+            );
         }
     </script>
 </body>

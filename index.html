@@ -158,24 +158,44 @@
             font-weight: bold; 
         }
 
-        /* ---------------- ACTION BAR ---------------- */
+        /* ---------------- ACTION BAR & VIEW TOGGLE BUTTONS ---------------- */
         #action-bar {
-            height: 36px;
+            height: 38px;
             background-color: #e5e7eb;
             border-bottom: 1px solid #ccc;
             display: flex;
             align-items: center;
             padding: 0 10px;
-            gap: 5px;
         }
 
-        .action-btn { 
-            background: #d1d5db; 
-            border: 1px solid #b0b5bc; 
-            padding: 4px 8px; 
-            border-radius: 3px; 
-            cursor: pointer; 
-            font-size: 12px; 
+        .view-toggle-group {
+            display: flex;
+            border: 1px solid #9aa0a6;
+            border-radius: 2px;
+            overflow: hidden;
+            background: #d1d5db;
+        }
+
+        .view-btn {
+            background: #d1d5db;
+            border: none;
+            padding: 5px 9px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            outline: none;
+        }
+
+        .view-btn.active {
+            background: #9aa0a6;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .view-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: #333;
         }
 
         /* ---------------- MAIN WORKSPACE ---------------- */
@@ -190,7 +210,7 @@
             display: none;
             flex: 1;
             width: 100%;
-            height: calc(100% - 122px);
+            height: calc(100% - 124px);
             position: relative;
         }
 
@@ -198,7 +218,7 @@
             display: flex;
         }
 
-        /* CREDENTIALS BLANK VIEW (MATCHING SECOND IMAGE) */
+        /* CREDENTIALS VIEW */
         .credentials-view {
             background-color: #e5e7eb;
             width: 100%;
@@ -206,7 +226,6 @@
             position: relative;
         }
 
-        /* Bottom Right Printer Queue Status Widget */
         .printer-queue-status {
             position: absolute;
             bottom: 0;
@@ -221,96 +240,123 @@
             border-top-left-radius: 3px;
         }
 
-        /* REPORTS VIEW */
+        /* REPORTS VIEW SWITCHING CONTAINER */
         .reports-view {
-            padding: 15px;
-            background-color: #eef2f5;
-            flex-direction: column;
-            gap: 15px;
+            padding: 20px;
+            background-color: #e5e7eb;
             width: 100%;
             overflow-y: auto;
+            flex-direction: column;
         }
 
-        .report-card {
-            background: #ffffff;
-            border: 1px solid #d1d5db;
-            border-radius: 4px;
-            padding: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        /* --- 1. GRID VIEW LAYOUT (Image 1) --- */
+        #report-grid-view {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
-        .filter-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px 20px;
-            margin-bottom: 15px;
-        }
-
-        .filter-group {
+        .report-card-item {
+            width: 240px;
+            background-color: #4b5563;
+            border-radius: 6px;
+            padding: 12px;
+            color: #ffffff;
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
         }
 
-        .filter-group label {
-            font-size: 12px;
-            color: #374151;
-            font-weight: 500;
-        }
-
-        .filter-group select, .filter-group input {
-            padding: 6px 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 12px;
-            outline: none;
-            background: #fff;
-        }
-
-        .filter-actions {
+        .report-card-preview {
+            background-color: #ffffff;
+            border-radius: 4px;
+            height: 110px;
             display: flex;
-            justify-content: flex-end;
-            gap: 10px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin-bottom: 12px;
         }
 
-        .btn-clear {
-            background: #ffffff;
-            border: 1px solid #ccc;
-            padding: 6px 16px;
-            font-size: 12px;
-            border-radius: 3px;
+        .chart-placeholder {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            height: 50px;
+        }
+
+        .bar { background-color: #22c55e; width: 14px; }
+
+        .chart-date {
+            font-size: 10px;
+            color: #9ca3af;
+            margin-top: 6px;
+        }
+
+        .report-card-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .report-card-action {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
             cursor: pointer;
-        }
-
-        .btn-search {
-            background: #00b0eb;
-            color: #ffffff;
-            border: none;
-            padding: 6px 20px;
             font-size: 12px;
-            font-weight: bold;
-            border-radius: 3px;
-            cursor: pointer;
         }
 
-        .reports-table {
+        .play-icon {
+            width: 20px;
+            height: 20px;
+            background: #9ca3af;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #374151;
+            font-size: 10px;
+            padding-left: 2px;
+        }
+
+        /* --- 2. LIST VIEW LAYOUT (Image 2) --- */
+        #report-list-view {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            background: #e5e7eb;
+        }
+
+        .list-table {
             width: 100%;
             border-collapse: collapse;
-            background: #ffffff;
-            border: 1px solid #d1d5db;
         }
 
-        .reports-table th, .reports-table td {
-            border: 1px solid #e5e7eb;
-            padding: 8px 12px;
+        .list-table th, .list-table td {
+            padding: 10px 12px;
             text-align: left;
             font-size: 12px;
+            border-bottom: 1px solid #d1d5db;
         }
 
-        .reports-table th {
-            background-color: #f3f4f6;
-            color: #4b5563;
+        .list-table th {
             font-weight: 600;
+            color: #374151;
+            border-top: 1px solid #d1d5db;
+        }
+
+        .list-table td {
+            color: #1f2937;
+        }
+
+        .entries-count {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #374151;
         }
     </style>
 </head>
@@ -380,104 +426,100 @@
                 <button class="tab-btn" id="tab-reports-btn" onclick="switchTab('reports')">Reports</button>
             </div>
 
+            <!-- ACTION BAR (WITH WORKING GRID & LIST VIEW TOGGLE BUTTONS) -->
             <div id="action-bar">
-                <button class="action-btn">🔲</button>
-                <button class="action-btn">☰</button>
+                <div class="view-toggle-group">
+                    <!-- Grid View Button -->
+                    <button class="view-btn active" id="btn-grid-view" onclick="switchReportView('grid')" title="Grid View">
+                        <svg viewBox="0 0 16 16">
+                            <path d="M1 1h6v6H1V1zm8 0h6v6H9V1zM1 9h6v6H1V9zm8 0h6v6H9V9z"/>
+                        </svg>
+                    </button>
+                    <!-- List View Button -->
+                    <button class="view-btn" id="btn-list-view" onclick="switchReportView('list')" title="List View">
+                        <svg viewBox="0 0 16 16">
+                            <path d="M1 2h14v2H1V2zm0 5h14v2H1V7zm0 5h14v2H1v-2z"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
-            <!-- CREDENTIALS TAB VIEW (BLANK BACKGROUND) -->
+            <!-- CREDENTIALS TAB VIEW -->
             <div id="credentials-tab" class="tab-content credentials-view active">
                 <div class="printer-queue-status">Printer Queue Status</div>
             </div>
 
             <!-- REPORTS TAB VIEW -->
             <div id="reports-tab" class="tab-content reports-view">
-                <div class="report-card">
-                    <div class="filter-grid">
-                        <div class="filter-group">
-                            <label>Report Type *</label>
-                            <select id="reportType">
-                                <option>Production Audit Trail</option>
-                                <option>System Audit Trail</option>
-                                <option>Card Issuance Summary</option>
-                            </select>
+                
+                <!-- 1. GRID VIEW DISPLAY (Matching Image 1) -->
+                <div id="report-grid-view">
+                    <!-- Card 1 -->
+                    <div class="report-card-item">
+                        <div class="report-card-preview">
+                            <div class="chart-placeholder">
+                                <div class="bar" style="height: 25px;"></div>
+                                <div class="bar" style="height: 35px;"></div>
+                                <div class="bar" style="height: 45px;"></div>
+                                <div class="bar" style="height: 50px;"></div>
+                                <div class="bar" style="height: 48px;"></div>
+                            </div>
+                            <div class="chart-date">Week 30, 2013</div>
                         </div>
-
-                        <div class="filter-group">
-                            <label>Format</label>
-                            <select id="reportFormat">
-                                <option>PDF</option>
-                                <option>CSV</option>
-                                <option>Excel</option>
-                            </select>
-                        </div>
-
-                        <div class="filter-group">
-                            <label>Start Date</label>
-                            <input type="date" value="2026-09-01">
-                        </div>
-
-                        <div class="filter-group">
-                            <label>End Date</label>
-                            <input type="date" value="2026-09-05">
-                        </div>
-
-                        <div class="filter-group">
-                            <label>Processed By</label>
-                            <select id="processedBy">
-                                <option>All Users</option>
-                                <option>admin</option>
-                                <option>operator1</option>
-                            </select>
-                        </div>
-
-                        <div class="filter-group">
-                            <label>Status</label>
-                            <select id="processStatus">
-                                <option>All</option>
-                                <option>Successful</option>
-                                <option>Failed</option>
-                                <option>Pending</option>
-                            </select>
+                        <div class="report-card-title">Credentials Issued</div>
+                        <div class="report-card-action" onclick="alert('Running Credentials Issued Report...')">
+                            <span class="play-icon">▶</span>
+                            <span>Run</span>
                         </div>
                     </div>
 
-                    <div class="filter-actions">
-                        <button class="btn-clear" onclick="clearReportFilters()">Clear</button>
-                        <button class="btn-search" onclick="runReportSearch()">Search</button>
+                    <!-- Card 2 -->
+                    <div class="report-card-item">
+                        <div class="report-card-preview">
+                            <div class="chart-placeholder">
+                                <div class="bar" style="height: 25px;"></div>
+                                <div class="bar" style="height: 35px;"></div>
+                                <div class="bar" style="height: 45px;"></div>
+                                <div class="bar" style="height: 50px;"></div>
+                                <div class="bar" style="height: 48px;"></div>
+                            </div>
+                            <div class="chart-date">Week 30, 2013</div>
+                        </div>
+                        <div class="report-card-title">Credentials Printed</div>
+                        <div class="report-card-action" onclick="alert('Running Credentials Printed Report...')">
+                            <span class="play-icon">▶</span>
+                            <span>Run</span>
+                        </div>
                     </div>
                 </div>
 
-                <div>
-                    <div style="font-size: 13px; font-weight: bold; color: #374151; margin-bottom: 8px;">Search Results</div>
-                    <table class="reports-table">
+                <!-- 2. LIST VIEW DISPLAY (Matching Image 2) -->
+                <div id="report-list-view">
+                    <table class="list-table">
                         <thead>
                             <tr>
-                                <th>Timestamp</th>
-                                <th>Report Name</th>
-                                <th>Generated By</th>
-                                <th>Format</th>
-                                <th>Status</th>
+                                <th>Name</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>2026-09-05 10:15:22</td>
-                                <td>Production Audit Trail</td>
-                                <td>admin</td>
-                                <td>PDF</td>
-                                <td style="color: #16a34a; font-weight: 500;">Successful</td>
+                                <td>Credentials Issued</td>
+                            </tr>
+                            <tr>
+                                <td>Credentials Printed</td>
                             </tr>
                         </tbody>
                     </table>
+                    <div class="entries-count">Showing 1 - 2 of 2 entries</div>
                 </div>
+
             </div>
 
         </div>
     </div>
 
     <script>
-        // Tab Switcher Logic
+        // Main Tab Switcher
         function switchTab(tabName) {
             document.getElementById('tab-credentials-btn').classList.remove('active');
             document.getElementById('tab-reports-btn').classList.remove('active');
@@ -493,16 +535,24 @@
             }
         }
 
-        // Report Filter Functions
-        function clearReportFilters() {
-            document.getElementById('reportType').selectedIndex = 0;
-            document.getElementById('reportFormat').selectedIndex = 0;
-            document.getElementById('processedBy').selectedIndex = 0;
-            document.getElementById('processStatus').selectedIndex = 0;
-        }
+        // View Mode Switcher (Grid View vs List View)
+        function switchReportView(viewMode) {
+            const gridBtn = document.getElementById('btn-grid-view');
+            const listBtn = document.getElementById('btn-list-view');
+            const gridDisplay = document.getElementById('report-grid-view');
+            const listDisplay = document.getElementById('report-list-view');
 
-        function runReportSearch() {
-            alert('Searching reports...');
+            if (viewMode === 'grid') {
+                gridBtn.classList.add('active');
+                listBtn.classList.remove('active');
+                gridDisplay.style.display = 'flex';
+                listDisplay.style.display = 'none';
+            } else if (viewMode === 'list') {
+                listBtn.classList.add('active');
+                gridBtn.classList.remove('active');
+                gridDisplay.style.display = 'none';
+                listDisplay.style.display = 'flex';
+            }
         }
 
         // IPC Control Functions

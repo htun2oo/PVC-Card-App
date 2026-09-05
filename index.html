@@ -4,139 +4,307 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ENTRUST Adaptive Issuance Instant ID</title>
+    <!-- Fabric.js Canvas Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body, html { height: 100%; width: 100%; overflow: hidden; background-color: #808080; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+        }
+        
+        html, body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #eef2f5;
+        }
 
-        /* Custom Drag Title Bar for Frameless Desktop Window */
-        .window-drag-bar {
-            height: 30px;
-            background-color: #3b1756;
+        /* ---------------- LOGIN PAGE STYLES ---------------- */
+        #login-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, #7026b9 0%, #4a1582 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000000;
+        }
+
+        .app-title {
             color: #ffffff;
+            font-size: 28px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .login-card {
+            background-color: rgba(255, 255, 255, 0.95);
+            width: 440px;
+            border-radius: 12px;
+            padding: 35px 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group { width: 100%; margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 14px; color: #666; margin-bottom: 8px; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #9aa0a6; border-radius: 6px; font-size: 15px; outline: none; }
+
+        .forgot-password { color: #fff; font-size: 14px; text-decoration: underline; margin-top: 20px; margin-bottom: 15px; cursor: pointer; }
+        .btn-signin { background-color: #00b0eb; color: #fff; border: none; padding: 10px 26px; font-size: 15px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+
+        /* ---------------- ENTRUST TOP HEADER ---------------- */
+        #top-navbar {
+            height: 48px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #dcdcdc;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 10px;
-            font-size: 12px;
-            -webkit-app-region: drag; /* Window ကို ဆွဲရွှေ့နိုင်ရန် */
+            padding: 0 15px;
+            font-size: 13px;
         }
-        .window-drag-bar .no-drag { -webkit-app-region: no-drag; }
-        .window-control-btn {
-            background: transparent;
-            border: none;
-            color: #fff;
-            padding: 2px 8px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .window-control-btn:hover { background: rgba(255,255,255,0.2); }
 
-        /* Login Screen */
-        #login-screen {
-            position: fixed; top: 30px; left: 0; width: 100vw; height: calc(100vh - 30px);
-            background: linear-gradient(135deg, #7026b9 0%, #4a1582 100%);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000;
-        }
-        .app-title { color: #ffffff; font-size: 28px; font-weight: 600; text-align: center; margin-bottom: 25px; }
-        .login-card { background-color: rgba(255, 255, 255, 0.95); width: 440px; border-radius: 12px; padding: 35px 30px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-size: 14px; color: #666; margin-bottom: 8px; }
-        .form-group input { width: 100%; padding: 12px; border: 1px solid #9aa0a6; border-radius: 6px; font-size: 15px; outline: none; }
-        .forgot-password { color: #ffffff; font-size: 14px; text-decoration: underline; margin-top: 20px; cursor: pointer; }
-        .btn-signin { background-color: #00b0eb; color: #ffffff; border: none; padding: 10px 26px; font-size: 15px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px; }
-
-        /* Main App Workspace */
-        #main-workspace { display: none; flex-direction: column; height: calc(100vh - 30px); }
-        #top-navbar { height: 48px; background-color: #ffffff; border-bottom: 1px solid #dcdcdc; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; font-size: 13px; }
         .nav-left { display: flex; align-items: center; gap: 25px; }
-        .brand-title { font-size: 12px; color: #555; border-left: 1px solid #ccc; padding-left: 10px; }
-        #sub-navbar { height: 38px; background-color: #5c2483; display: flex; align-items: flex-end; padding-left: 20px; }
-        .tab-btn { background: rgba(255, 255, 255, 0.2); color: #fff; padding: 8px 16px; font-size: 12px; border: none; border-radius: 4px 4px 0 0; margin-right: 4px; cursor: pointer; }
-        .tab-btn.active { background: #fff; color: #333; font-weight: bold; }
-        #action-bar { height: 36px; background-color: #e0e0e0; border-bottom: 1px solid #ccc; display: flex; align-items: center; padding: 0 10px; gap: 5px; }
-        .workspace-content { flex: 1; display: flex; gap: 10px; padding: 10px; background-color: #f4f4f4; overflow: hidden; }
-        .sub-window { background: #ece9d8; border: 2px solid #fff; border-right-color: #404040; border-bottom-color: #404040; display: flex; flex-direction: column; }
-        .win-production { width: 45%; height: 100%; }
-        .right-stack { width: 55%; display: flex; flex-direction: column; gap: 10px; height: 100%; }
-        .win-card { width: 100%; flex: 1; }
-        .window-titlebar { background: linear-gradient(90deg, #0a246a, #a6caf0); color: white; padding: 3px 6px; font-size: 12px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
-        .window-body { padding: 10px; flex: 1; background: #808080; display: flex; align-items: center; justify-content: center; }
+        .brand-logo { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #2c1a00; }
+        .brand-logo svg { width: 22px; height: 22px; fill: #5c2483; }
+        .brand-title { font-size: 12px; color: #555; border-left: 1px solid #ccc; padding-left: 10px; line-height: 1.2; }
+        .nav-menu { display: flex; gap: 20px; }
+        .nav-item { color: #333; text-decoration: none; cursor: pointer; font-weight: 500; }
+        .nav-right { display: flex; align-items: center; gap: 15px; font-size: 11px; color: #666; }
+        .user-profile { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+
+        /* ---------------- SUB TAB BAR ---------------- */
+        #sub-navbar {
+            height: 38px;
+            background-color: #5c2483;
+            display: flex;
+            align-items: flex-end;
+            padding-left: 20px;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 8px 16px;
+            font-size: 12px;
+            border: none;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            margin-right: 4px;
+            cursor: pointer;
+        }
+
+        .tab-btn.active { background: #ffffff; color: #333333; font-weight: bold; }
+
+        /* ---------------- ACTION BAR ---------------- */
+        #action-bar {
+            height: 36px;
+            background-color: #e0e0e0;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            gap: 5px;
+        }
+
+        .action-btn { background: #ffffff; border: 1px solid #bbb; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 12px; }
+
+        /* ---------------- FRAMELESS MAIN WORKSPACE ---------------- */
+        #main-workspace {
+            display: none;
+            flex-direction: column;
+            height: 100vh; width: 100vw;
+            position: fixed; top: 0; left: 0;
+            z-index: 999999;
+        }
+
+        .workspace-content {
+            flex: 1;
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background-color: #d1d5db;
+            overflow: hidden;
+        }
+
+        /* Window Frame များနှင့် Title Bar များကို လုံးဝ ဖယ်ထုတ်ထားသော Container များ */
+        .panel-container {
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .win-production {
+            width: 45%;
+            height: 100%;
+            background-color: #e5e5dc; /* Original Production Form Background */
+            border-radius: 4px;
+        }
+
+        .right-stack {
+            width: 55%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 100%;
+        }
+
+        .win-card {
+            width: 100%;
+            flex: 1;
+            background-color: #6b7280; /* Original Canvas Workspace Background */
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        canvas {
+            background: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Custom Window Title Bar -->
-    <div class="window-drag-bar">
-        <span>ENTRUST Adaptive Issuance Instant ID</span>
-        <div class="no-drag">
-            <button class="window-control-btn" onclick="window.close()">✕</button>
-        </div>
-    </div>
-
-    <!-- Login Screen -->
+    <!-- 1. LOGIN SCREEN -->
     <div id="login-screen">
         <div class="app-title">Adaptive Issuance<br>Instant ID</div>
+
         <div class="login-card">
             <div class="form-group">
-                <label>User ID</label>
-                <input type="text" id="userId" value="admin">
+                <label for="userId">User ID</label>
+                <input type="text" id="userId" value="admin" autocomplete="off">
             </div>
+
             <div class="form-group">
-                <label>Password</label>
+                <label for="password">Password</label>
                 <input type="password" id="password" value="1234">
             </div>
         </div>
-        <a class="forgot-password">Forgot Password?</a>
+
+        <a class="forgot-password" onclick="alert('Password reset link sent!')">Forgot Password?</a>
         <button class="btn-signin" onclick="handleLogin()">Sign In</button>
     </div>
 
-    <!-- Main Application -->
+    <!-- 2. FRAMELESS MAIN WORKSPACE -->
     <div id="main-workspace">
+        
+        <!-- Top Header -->
         <div id="top-navbar">
             <div class="nav-left">
-                <strong>ENTRUST</strong>
+                <div class="brand-logo">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    <span>ENTRUST</span>
+                </div>
                 <div class="brand-title">Adaptive Issuance™<br><b>Instant ID</b></div>
+                <div class="nav-menu">
+                    <a class="nav-item">Home</a>
+                    <a class="nav-item">Design ▾</a>
+                    <a class="nav-item">Printer Queues</a>
+                </div>
             </div>
-            <div>Last Login: Sat Sep 05 2026 | User: admin</div>
+
+            <div class="nav-right">
+                <span id="login-timestamp">Last Login at Sat Sep 05 10:11:53 MMT 2026 from IP 192.168.56.1</span>
+                <div class="user-profile">
+                    <span>admin ▾</span>
+                    <span>⚙</span>
+                    <span>🔔</span>
+                    <span>👤</span>
+                </div>
+            </div>
         </div>
+
+        <!-- Sub Tabs -->
         <div id="sub-navbar">
             <button class="tab-btn active">Credentials</button>
             <button class="tab-btn">Reports</button>
         </div>
-        <div id="action-bar"><button>🔲</button><button>☰</button></div>
+
+        <!-- Action Bar -->
+        <div id="action-bar">
+            <button class="action-btn">🔲</button>
+            <button class="action-btn">☰</button>
+        </div>
+
+        <!-- Main Workspace (No Window Frames & Title Bars) -->
         <div class="workspace-content">
-            <div class="sub-window win-production">
-                <div class="window-titlebar"><span>Production Form</span></div>
-                <div class="window-body" style="background:#ece9d8;"></div>
+            <!-- Left Production Form Panel -->
+            <div class="panel-container win-production" id="panel-production">
+                <!-- Frame/Title Bar မပါဝင်သော Form Container -->
             </div>
+
+            <!-- Right Card Display Panels -->
             <div class="right-stack">
-                <div class="sub-window win-card">
-                    <div class="window-titlebar"><span>Card (Front Side)</span></div>
-                    <div class="window-body"><canvas id="frontCanvas" width="340" height="200"></canvas></div>
+                <!-- Front Side Panel -->
+                <div class="panel-container win-card" id="panel-front">
+                    <canvas id="frontCanvas" width="340" height="200"></canvas>
                 </div>
-                <div class="sub-window win-card">
-                    <div class="window-titlebar"><span>Card (Back Side)</span></div>
-                    <div class="window-body"><canvas id="backCanvas" width="340" height="200"></canvas></div>
+
+                <!-- Back Side Panel -->
+                <div class="panel-container win-card" id="panel-back">
+                    <canvas id="backCanvas" width="340" height="200"></canvas>
                 </div>
             </div>
         </div>
+
     </div>
 
     <script>
-        function handleLogin() {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('main-workspace').style.display = 'flex';
-            initCanvases();
+        function triggerFullScreen() {
+            const doc = document.documentElement;
+            if (doc.requestFullscreen) doc.requestFullscreen().catch(() => {});
+            else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
+            else if (doc.msRequestFullscreen) doc.msRequestFullscreen();
         }
-        function initCanvases() {
-            const front = new fabric.Canvas('frontCanvas');
-            front.setBackgroundColor('#ffffff', front.renderAll.bind(front));
-            front.add(new fabric.Rect({ left: 10, top: 10, fill: '#1e3799', width: 320, height: 30 }));
 
-            const back = new fabric.Canvas('backCanvas');
-            back.setBackgroundColor('#ffffff', back.renderAll.bind(back));
-            back.add(new fabric.Rect({ left: 10, top: 10, fill: '#111111', width: 320, height: 30 }));
+        function handleLogin() {
+            const user = document.getElementById('userId').value.trim();
+            const pass = document.getElementById('password').value.trim();
+
+            if (user === "admin" && pass === "1234") {
+                triggerFullScreen();
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-workspace').style.display = 'flex';
+                initCanvases();
+            } else {
+                alert('User ID သို့မဟုတ် Password မှားယွင်းနေပါသည်။ (Default: admin / 1234)');
+            }
+        }
+
+        let frontCanvas, backCanvas;
+        function initCanvases() {
+            if (frontCanvas) return;
+
+            frontCanvas = new fabric.Canvas('frontCanvas');
+            frontCanvas.setBackgroundColor('#ffffff', frontCanvas.renderAll.bind(frontCanvas));
+            frontCanvas.add(
+                new fabric.Rect({ left: 0, top: 0, fill: '#1e3799', width: 340, height: 40 }),
+                new fabric.IText('COMPANY NAME', { left: 12, top: 10, fill: '#ffffff', fontSize: 14, fontWeight: 'bold' }),
+                new fabric.Rect({ left: 12, top: 50, fill: '#e0e0e0', stroke: '#aaa', strokeWidth: 1, width: 80, height: 100, rx: 4, ry: 4 })
+            );
+
+            backCanvas = new fabric.Canvas('backCanvas');
+            backCanvas.setBackgroundColor('#ffffff', backCanvas.renderAll.bind(backCanvas));
+            backCanvas.add(
+                new fabric.Rect({ left: 0, top: 15, fill: '#111111', width: 340, height: 35 }),
+                new fabric.IText('This card is non-transferable.', { left: 15, top: 65, fill: '#666666', fontSize: 9 }),
+                new fabric.Rect({ left: 15, top: 110, fill: '#000000', width: 200, height: 30 })
+            );
         }
     </script>
 </body>

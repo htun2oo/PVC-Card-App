@@ -117,18 +117,111 @@
             justify-content: space-between;
             padding: 0 15px;
             font-size: 13px;
+            position: relative;
+            z-index: 1000;
         }
 
-        .nav-left { display: flex; align-items: center; gap: 25px; }
+        .nav-left { display: flex; align-items: center; gap: 20px; }
         .brand-logo { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #2c1a00; }
         .brand-logo svg { width: 22px; height: 22px; fill: #5c2483; }
         .brand-title { font-size: 12px; color: #555; border-left: 1px solid #ccc; padding-left: 10px; line-height: 1.2; }
-        .nav-menu { display: flex; gap: 20px; }
-        .nav-item { color: #333; text-decoration: none; cursor: pointer; font-weight: 500; }
+        .nav-menu { display: flex; gap: 15px; align-items: center; }
         
-        .nav-right { display: flex; align-items: center; gap: 15px; font-size: 11px; color: #666; }
-        .last-login-info { color: #6b7280; font-size: 11px; }
-        .user-profile { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .nav-item { 
+            color: #333; 
+            text-decoration: none; 
+            cursor: pointer; 
+            font-weight: 500; 
+            padding: 8px 10px;
+            border-radius: 3px;
+            position: relative;
+        }
+        
+        .nav-right { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #333; }
+        
+        /* ---------------- DROPDOWN STYLES (EXACTLY MATCHING IMAGES) ---------------- */
+        .dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-trigger {
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 3px 3px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            user-select: none;
+            font-weight: 500;
+        }
+
+        .dropdown-wrapper.active .dropdown-trigger {
+            background-color: #e5e7eb;
+            border: 1px solid #9ca3af;
+            border-bottom: none;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #e5e7eb;
+            border: 1px solid #9ca3af;
+            border-radius: 0 3px 3px 3px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            min-width: 170px;
+            z-index: 10000;
+        }
+
+        .dropdown-wrapper.active .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 8px 14px;
+            color: #1f2937;
+            text-decoration: none;
+            display: block;
+            font-size: 12px;
+            font-weight: 400;
+            border-bottom: 1px solid #d1d5db;
+            cursor: pointer;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: #d1d5db;
+            color: #000;
+        }
+
+        /* Notification Badge */
+        .badge-container {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -6px;
+            background-color: #ef4444;
+            color: white;
+            font-size: 9px;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         /* ---------------- SUB TAB BAR ---------------- */
         #sub-navbar {
@@ -158,7 +251,7 @@
             font-weight: bold; 
         }
 
-        /* ---------------- ACTION BAR & VIEW TOGGLE BUTTONS ---------------- */
+        /* ---------------- ACTION BAR ---------------- */
         #action-bar {
             height: 38px;
             background-color: #e5e7eb;
@@ -192,11 +285,7 @@
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
         }
 
-        .view-btn svg {
-            width: 14px;
-            height: 14px;
-            fill: #333;
-        }
+        .view-btn svg { width: 14px; height: 14px; fill: #333; }
 
         /* ---------------- MAIN WORKSPACE ---------------- */
         #main-workspace {
@@ -214,11 +303,8 @@
             position: relative;
         }
 
-        .tab-content.active {
-            display: flex;
-        }
+        .tab-content.active { display: flex; }
 
-        /* CREDENTIALS VIEW */
         .credentials-view {
             background-color: #e5e7eb;
             width: 100%;
@@ -240,7 +326,6 @@
             border-top-left-radius: 3px;
         }
 
-        /* REPORTS VIEW SWITCHING CONTAINER */
         .reports-view {
             padding: 20px;
             background-color: #e5e7eb;
@@ -249,7 +334,7 @@
             flex-direction: column;
         }
 
-        /* --- 1. GRID VIEW LAYOUT (Image 1) --- */
+        /* GRID VIEW LAYOUT */
         #report-grid-view {
             display: flex;
             gap: 20px;
@@ -287,20 +372,9 @@
         }
 
         .bar { background-color: #22c55e; width: 14px; }
-
-        .chart-date {
-            font-size: 10px;
-            color: #9ca3af;
-            margin-top: 6px;
-        }
-
-        .report-card-title {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
+        .chart-date { font-size: 10px; color: #9ca3af; margin-top: 6px; }
+        .report-card-title { font-size: 13px; font-weight: 600; margin-bottom: 15px; text-align: center; }
+        
         .report-card-action {
             display: flex;
             justify-content: center;
@@ -323,7 +397,7 @@
             padding-left: 2px;
         }
 
-        /* --- 2. LIST VIEW LAYOUT (Image 2) --- */
+        /* LIST VIEW LAYOUT */
         #report-list-view {
             display: none;
             width: 100%;
@@ -343,21 +417,9 @@
             border-bottom: 1px solid #d1d5db;
         }
 
-        .list-table th {
-            font-weight: 600;
-            color: #374151;
-            border-top: 1px solid #d1d5db;
-        }
-
-        .list-table td {
-            color: #1f2937;
-        }
-
-        .entries-count {
-            margin-top: 15px;
-            font-size: 12px;
-            color: #374151;
-        }
+        .list-table th { font-weight: 600; color: #374151; border-top: 1px solid #d1d5db; }
+        .list-table td { color: #1f2937; }
+        .entries-count { margin-top: 15px; font-size: 12px; color: #374151; }
     </style>
 </head>
 <body>
@@ -404,42 +466,77 @@
                     <div class="brand-title">Adaptive Issuance™<br><b>Instant ID</b></div>
                     <div class="nav-menu">
                         <a class="nav-item">Home</a>
-                        <a class="nav-item">Design ▾</a>
+                        
+                        <!-- 1. DESIGN DROPDOWN MENU (Matching Image 1) -->
+                        <div class="dropdown-wrapper" id="dropdown-design">
+                            <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-design')">
+                                Design <span style="font-size: 10px;">▲</span>
+                            </div>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item">Quick Start</a>
+                                <a class="dropdown-item">Credentials</a>
+                                <a class="dropdown-item">Workflows</a>
+                                <a class="dropdown-item">Reports</a>
+                                <a class="dropdown-item">Smart Card Workflows</a>
+                                <a class="dropdown-item">Field Connections</a>
+                            </div>
+                        </div>
+
                         <a class="nav-item">Printer Queues</a>
                     </div>
                 </div>
 
                 <div class="nav-right">
-                    <span class="last-login-info">Last Login at Sat Sep 05 11:48:16 MMT 2026 from IP 192.168.56.1</span>
-                    <div class="user-profile">
-                        <span>admin ▾</span>
-                        <span>⚙</span>
-                        <span>🔔</span>
-                        <span>👤</span>
+                    <!-- 2. ADMIN USER DROPDOWN MENU (Matching Image 2) -->
+                    <div class="dropdown-wrapper" id="dropdown-admin">
+                        <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-admin')">
+                            admin <span style="font-size: 10px;">▲</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item">Preferences</a>
+                            <a class="dropdown-item">Change Your Password</a>
+                            <a class="dropdown-item" onclick="handleSignOut()">Sign Out</a>
+                        </div>
                     </div>
+
+                    <!-- 3. GEAR (SETTINGS) DROPDOWN MENU (Matching Image 3) -->
+                    <div class="dropdown-wrapper" id="dropdown-gear">
+                        <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-gear')">
+                            ⚙ <span style="font-size: 10px;">▼</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item">Settings</a>
+                            <a class="dropdown-item">Tools</a>
+                            <a class="dropdown-item">User Management</a>
+                            <a class="dropdown-item">System Dashboard</a>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Badge -->
+                    <div class="badge-container">
+                        <span style="font-size: 15px;">🔔</span>
+                        <span class="notification-badge">2</span>
+                    </div>
+
+                    <span style="font-size: 15px; cursor: pointer;">❓</span>
+                    <span style="font-size: 15px; cursor: pointer;">ℹ️</span>
                 </div>
             </div>
 
-            <!-- TAB NAVIGATION BAR -->
+            <!-- SUB TAB BAR -->
             <div id="sub-navbar">
                 <button class="tab-btn active" id="tab-credentials-btn" onclick="switchTab('credentials')">Credentials</button>
                 <button class="tab-btn" id="tab-reports-btn" onclick="switchTab('reports')">Reports</button>
             </div>
 
-            <!-- ACTION BAR (WITH WORKING GRID & LIST VIEW TOGGLE BUTTONS) -->
+            <!-- ACTION BAR -->
             <div id="action-bar">
                 <div class="view-toggle-group">
-                    <!-- Grid View Button -->
                     <button class="view-btn active" id="btn-grid-view" onclick="switchReportView('grid')" title="Grid View">
-                        <svg viewBox="0 0 16 16">
-                            <path d="M1 1h6v6H1V1zm8 0h6v6H9V1zM1 9h6v6H1V9zm8 0h6v6H9V9z"/>
-                        </svg>
+                        <svg viewBox="0 0 16 16"><path d="M1 1h6v6H1V1zm8 0h6v6H9V1zM1 9h6v6H1V9zm8 0h6v6H9V9z"/></svg>
                     </button>
-                    <!-- List View Button -->
                     <button class="view-btn" id="btn-list-view" onclick="switchReportView('list')" title="List View">
-                        <svg viewBox="0 0 16 16">
-                            <path d="M1 2h14v2H1V2zm0 5h14v2H1V7zm0 5h14v2H1v-2z"/>
-                        </svg>
+                        <svg viewBox="0 0 16 16"><path d="M1 2h14v2H1V2zm0 5h14v2H1V7zm0 5h14v2H1v-2z"/></svg>
                     </button>
                 </div>
             </div>
@@ -451,10 +548,7 @@
 
             <!-- REPORTS TAB VIEW -->
             <div id="reports-tab" class="tab-content reports-view">
-                
-                <!-- 1. GRID VIEW DISPLAY (Matching Image 1) -->
                 <div id="report-grid-view">
-                    <!-- Card 1 -->
                     <div class="report-card-item">
                         <div class="report-card-preview">
                             <div class="chart-placeholder">
@@ -473,7 +567,6 @@
                         </div>
                     </div>
 
-                    <!-- Card 2 -->
                     <div class="report-card-item">
                         <div class="report-card-preview">
                             <div class="chart-placeholder">
@@ -493,32 +586,49 @@
                     </div>
                 </div>
 
-                <!-- 2. LIST VIEW DISPLAY (Matching Image 2) -->
                 <div id="report-list-view">
                     <table class="list-table">
                         <thead>
-                            <tr>
-                                <th>Name</th>
-                            </tr>
+                            <tr><th>Name</th></tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Credentials Issued</td>
-                            </tr>
-                            <tr>
-                                <td>Credentials Printed</td>
-                            </tr>
+                            <tr><td>Credentials Issued</td></tr>
+                            <tr><td>Credentials Printed</td></tr>
                         </tbody>
                     </table>
                     <div class="entries-count">Showing 1 - 2 of 2 entries</div>
                 </div>
-
             </div>
 
         </div>
     </div>
 
     <script>
+        // Dropdown Toggle Logic
+        function toggleDropdown(dropdownId) {
+            const element = document.getElementById(dropdownId);
+            const isActive = element.classList.contains('active');
+            
+            // Close all open dropdowns first
+            document.querySelectorAll('.dropdown-wrapper').forEach(wrapper => {
+                wrapper.classList.remove('active');
+            });
+
+            // Toggle current dropdown
+            if (!isActive) {
+                element.classList.add('active');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        window.onclick = function(event) {
+            if (!event.target.closest('.dropdown-wrapper')) {
+                document.querySelectorAll('.dropdown-wrapper').forEach(wrapper => {
+                    wrapper.classList.remove('active');
+                });
+            }
+        };
+
         // Main Tab Switcher
         function switchTab(tabName) {
             document.getElementById('tab-credentials-btn').classList.remove('active');
@@ -535,7 +645,7 @@
             }
         }
 
-        // View Mode Switcher (Grid View vs List View)
+        // View Switcher (Grid / List)
         function switchReportView(viewMode) {
             const gridBtn = document.getElementById('btn-grid-view');
             const listBtn = document.getElementById('btn-list-view');
@@ -555,25 +665,7 @@
             }
         }
 
-        // IPC Control Functions
-        function appMinimize() {
-            if (window.electronAPI && window.electronAPI.minimize) {
-                window.electronAPI.minimize();
-            }
-        }
-
-        function appMaximize() {
-            if (window.electronAPI && window.electronAPI.maximize) {
-                window.electronAPI.maximize();
-            }
-        }
-
-        function appClose() {
-            if (window.electronAPI && window.electronAPI.close) {
-                window.electronAPI.close();
-            }
-        }
-
+        // Authentication & Window Logic
         function handleLogin() {
             const user = document.getElementById('userId').value.trim();
             const pass = document.getElementById('password').value.trim();
@@ -584,6 +676,23 @@
             } else {
                 alert('User ID သို့မဟုတ် Password မှားယွင်းနေပါသည်။ (Default: admin / 1234)');
             }
+        }
+
+        function handleSignOut() {
+            document.getElementById('main-workspace').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
+        }
+
+        function appMinimize() {
+            if (window.electronAPI && window.electronAPI.minimize) window.electronAPI.minimize();
+        }
+
+        function appMaximize() {
+            if (window.electronAPI && window.electronAPI.maximize) window.electronAPI.maximize();
+        }
+
+        function appClose() {
+            if (window.electronAPI && window.electronAPI.close) window.electronAPI.close();
         }
     </script>
 </body>

@@ -101,9 +101,9 @@
             flex-direction: column;
         }
 
-        .form-group { width: 100%; margin-bottom: 20px; }
-        .form-group label { display: block; font-size: 14px; color: #666; margin-bottom: 8px; }
-        .form-group input { width: 100%; padding: 12px; border: 1px solid #9aa0a6; border-radius: 6px; font-size: 15px; outline: none; }
+        .form-group-login { width: 100%; margin-bottom: 20px; }
+        .form-group-login label { display: block; font-size: 14px; color: #666; margin-bottom: 8px; }
+        .form-group-login input { width: 100%; padding: 12px; border: 1px solid #9aa0a6; border-radius: 6px; font-size: 15px; outline: none; }
 
         .forgot-password { color: #fff; font-size: 14px; text-decoration: underline; margin-top: 20px; margin-bottom: 15px; cursor: pointer; }
         .btn-signin { background-color: #00b0eb; color: #fff; border: none; padding: 10px 26px; font-size: 15px; font-weight: bold; border-radius: 4px; cursor: pointer; }
@@ -189,7 +189,7 @@
             display: flex;
         }
 
-        /* Credentials Workspace View */
+        /* CREDENTIALS VIEW */
         .credentials-view {
             gap: 10px;
             padding: 10px;
@@ -223,41 +223,108 @@
             border-radius: 2px;
         }
 
-        /* Reports Workspace View */
+        /* REPORTS VIEW (MATCHING THE UPLOADED DESIGN) */
         .reports-view {
-            padding: 20px;
-            background-color: #f3f4f6;
+            padding: 15px;
+            background-color: #eef2f5;
             flex-direction: column;
             gap: 15px;
             width: 100%;
             overflow-y: auto;
         }
 
-        .reports-header {
-            font-size: 18px;
+        .report-card {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px 20px;
+            margin-bottom: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-size: 12px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .filter-group select, .filter-group input {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 12px;
+            outline: none;
+            background: #fff;
+        }
+
+        .filter-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-clear {
+            background: #ffffff;
+            border: 1px solid #ccc;
+            padding: 6px 16px;
+            font-size: 12px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .btn-search {
+            background: #00b0eb;
+            color: #ffffff;
+            border: none;
+            padding: 6px 20px;
+            font-size: 12px;
             font-weight: bold;
-            color: #1f2937;
-            border-bottom: 2px solid #5c2483;
-            padding-bottom: 8px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        /* RESULTS TABLE */
+        .results-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .results-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #374151;
         }
 
         .reports-table {
             width: 100%;
             border-collapse: collapse;
             background: #ffffff;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #d1d5db;
         }
 
         .reports-table th, .reports-table td {
             border: 1px solid #e5e7eb;
-            padding: 10px 12px;
+            padding: 8px 12px;
             text-align: left;
-            font-size: 13px;
+            font-size: 12px;
         }
 
         .reports-table th {
-            background-color: #f9fafb;
-            color: #374151;
+            background-color: #f3f4f6;
+            color: #4b5563;
             font-weight: 600;
         }
 
@@ -269,7 +336,6 @@
 </head>
 <body>
 
-    <!-- APP TITLEBAR -->
     <div id="global-titlebar">
         <div class="app-title-text">ENTRUST Adaptive Issuance Instant ID</div>
         <div class="global-window-controls">
@@ -280,17 +346,16 @@
     </div>
 
     <div id="app-container">
-        <!-- LOGIN SCREEN -->
         <div id="login-screen">
             <div class="app-title">Adaptive Issuance<br>Instant ID</div>
 
             <div class="login-card">
-                <div class="form-group">
+                <div class="form-group-login">
                     <label for="userId">User ID</label>
                     <input type="text" id="userId" value="admin" autocomplete="off">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group-login">
                     <label for="password">Password</label>
                     <input type="password" id="password" value="1234">
                 </div>
@@ -300,7 +365,6 @@
             <button class="btn-signin" onclick="handleLogin()">Sign In</button>
         </div>
 
-        <!-- MAIN WORKSPACE -->
         <div id="main-workspace">
             <div id="top-navbar">
                 <div class="nav-left">
@@ -326,7 +390,6 @@
                 </div>
             </div>
 
-            <!-- TAB NAVIGATION BAR -->
             <div id="sub-navbar">
                 <button class="tab-btn active" id="tab-credentials-btn" onclick="switchTab('credentials')">Credentials</button>
                 <button class="tab-btn" id="tab-reports-btn" onclick="switchTab('reports')">Reports</button>
@@ -337,7 +400,6 @@
                 <button class="action-btn">☰</button>
             </div>
 
-            <!-- CREDENTIALS TAB VIEW -->
             <div id="credentials-tab" class="tab-content credentials-view active">
                 <div class="left-form-area">
                     <h3 style="font-size: 14px; margin-bottom: 10px; color: #333;">Cardholder Details</h3>
@@ -353,33 +415,93 @@
                 </div>
             </div>
 
-            <!-- REPORTS TAB VIEW -->
             <div id="reports-tab" class="tab-content reports-view">
-                <div class="reports-header">Issuance Reports Log</div>
-                <table class="reports-table">
-                    <thead>
-                        <tr>
-                            <th>Date & Time</th>
-                            <th>Issued By</th>
-                            <th>Cardholder ID</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>2026-09-05 12:12</td>
-                            <td>admin</td>
-                            <td>ID-00192</td>
-                            <td style="color: green; font-weight: bold;">Success</td>
-                        </tr>
-                        <tr>
-                            <td>2026-09-05 11:45</td>
-                            <td>admin</td>
-                            <td>ID-00191</td>
-                            <td style="color: green; font-weight: bold;">Success</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="report-card">
+                    <div class="filter-grid">
+                        <div class="filter-group">
+                            <label>Report Type *</label>
+                            <select id="reportType">
+                                <option>Production Audit Trail</option>
+                                <option>System Audit Trail</option>
+                                <option>Card Issuance Summary</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Format</label>
+                            <select id="reportFormat">
+                                <option>PDF</option>
+                                <option>CSV</option>
+                                <option>Excel</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Start Date</label>
+                            <input type="date" value="2026-09-01">
+                        </div>
+
+                        <div class="filter-group">
+                            <label>End Date</label>
+                            <input type="date" value="2026-09-05">
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Processed By</label>
+                            <select id="processedBy">
+                                <option>All Users</option>
+                                <option>admin</option>
+                                <option>operator1</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Status</label>
+                            <select id="processStatus">
+                                <option>All</option>
+                                <option>Successful</option>
+                                <option>Failed</option>
+                                <option>Pending</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="filter-actions">
+                        <button class="btn-clear" onclick="clearReportFilters()">Clear</button>
+                        <button class="btn-search" onclick="runReportSearch()">Search</button>
+                    </div>
+                </div>
+
+                <div class="results-section">
+                    <div class="results-title">Search Results</div>
+                    <table class="reports-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Report Name</th>
+                                <th>Generated By</th>
+                                <th>Format</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportResultsBody">
+                            <tr>
+                                <td>2026-09-05 10:15:22</td>
+                                <td>Production Audit Trail</td>
+                                <td>admin</td>
+                                <td>PDF</td>
+                                <td style="color: #16a34a; font-weight: 500;">Successful</td>
+                            </tr>
+                            <tr>
+                                <td>2026-09-04 14:30:00</td>
+                                <td>Card Issuance Summary</td>
+                                <td>admin</td>
+                                <td>CSV</td>
+                                <td style="color: #16a34a; font-weight: 500;">Successful</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
         </div>
@@ -388,13 +510,11 @@
     <script>
         // Tab Switcher Logic
         function switchTab(tabName) {
-            // Remove active status from all tabs & contents
             document.getElementById('tab-credentials-btn').classList.remove('active');
             document.getElementById('tab-reports-btn').classList.remove('active');
             document.getElementById('credentials-tab').classList.remove('active');
             document.getElementById('reports-tab').classList.remove('active');
 
-            // Activate selected tab & content
             if (tabName === 'credentials') {
                 document.getElementById('tab-credentials-btn').classList.add('active');
                 document.getElementById('credentials-tab').classList.add('active');
@@ -402,6 +522,18 @@
                 document.getElementById('tab-reports-btn').classList.add('active');
                 document.getElementById('reports-tab').classList.add('active');
             }
+        }
+
+        // Report Filter Functions
+        function clearReportFilters() {
+            document.getElementById('reportType').selectedIndex = 0;
+            document.getElementById('reportFormat').selectedIndex = 0;
+            document.getElementById('processedBy').selectedIndex = 0;
+            document.getElementById('processStatus').selectedIndex = 0;
+        }
+
+        function runReportSearch() {
+            alert('Searching reports...');
         }
 
         // IPC Control Functions

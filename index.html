@@ -3,239 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Datacard ID Works - Interactive MDI Window</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <title>Adaptive Issuance Instant ID - Login</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #808080; color: #000; height: 100vh; display: flex; overflow: hidden; padding: 10px; }
-
-        /* MDI Workspace Layout */
-        .workspace-desktop {
-            flex: 1; display: flex; gap: 10px; height: 100%; position: relative;
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        
+        /* Purple Gradient Background Setup */
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #7026b9 0%, #4a1582 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
 
-        /* Sub-Window Windows Classic Styling */
-        .sub-window {
-            background: #ece9d8; border: 2px solid #ffffff;
-            border-right-color: #404040; border-bottom-color: #404040;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.4); display: flex; flex-direction: column;
-            position: relative; transition: all 0.2s ease-in-out;
+        /* App Title Header */
+        .app-title {
+            color: #ffffff;
+            font-size: 26px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 25px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        /* Left Side Production Form - Full Height */
-        .win-production { width: 45%; height: 100%; }
-
-        /* Right Side Cards Stack Layout */
-        .right-stack { width: 55%; display: flex; flex-direction: column; gap: 10px; height: 100%; }
-        .win-card { width: 100%; flex: 1; }
-
-        /* Window Title Bar Styling */
-        .window-titlebar {
-            background: linear-gradient(90deg, #0a246a, #a6caf0); color: white;
-            padding: 3px 6px; font-size: 12px; font-weight: bold;
-            display: flex; justify-content: space-between; align-items: center; user-select: none;
-        }
-        .window-controls { display: flex; gap: 2px; }
-        .win-btn {
-            width: 16px; height: 14px; background: #ece9d8; border: 1px solid #fff;
-            border-right-color: #404040; border-bottom-color: #404040;
-            font-size: 9px; line-height: 10px; text-align: center; color: #000; cursor: pointer; font-weight: bold;
-        }
-        .win-btn:active {
-            border: 1px solid #404040; border-right-color: #fff; border-bottom-color: #fff;
+        /* Login Card Container */
+        .login-card {
+            background-color: rgba(255, 255, 255, 0.95);
+            width: 480px;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .window-body { padding: 10px; flex: 1; background: #808080; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: auto; }
-        .form-body { background: #ece9d8; padding: 20px; align-items: stretch; justify-content: flex-start; }
-
-        /* Form Inputs Inside Production Form */
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 12px; margin-bottom: 5px; font-weight: bold; color: #333; }
-        .form-group input, .form-group select { width: 100%; padding: 6px; font-size: 12px; border: 1px solid #7f9db9; background: #fff; }
-
-        /* Card Ruler Area */
-        .canvas-with-ruler { position: relative; padding-top: 20px; padding-left: 20px; background: #d4d0c8; border: 1px solid #999; }
-        .ruler-top { position: absolute; top: 0; left: 20px; right: 0; height: 20px; background: #ece9d8; border-bottom: 1px solid #808080; font-size: 9px; display: flex; justify-content: space-around; align-items: center; }
-        .ruler-left { position: absolute; top: 20px; left: 0; bottom: 0; width: 20px; background: #ece9d8; border-right: 1px solid #808080; font-size: 9px; display: flex; flex-direction: column; justify-content: space-around; align-items: center; }
-
-        canvas { background: #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.3); }
-
-        /* Minimized & Maximized States */
-        .sub-window.minimized {
-            height: 26px !important; min-height: 26px !important; flex: none !important; overflow: hidden;
+        /* Yellow Warning Banner */
+        .warning-banner {
+            background-color: #e5a043;
+            color: #2c1a00;
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
-        .sub-window.minimized .window-body { display: none; }
-
-        .sub-window.maximized {
-            position: absolute !important; top: 0; left: 0; width: 100% !important; height: 100% !important; z-index: 100;
+        .warning-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 380px;
+        }
+        .banner-icons {
+            display: flex;
+            gap: 10px;
+            font-weight: bold;
+            cursor: pointer;
         }
 
-        .sub-window.closed { display: none !important; }
-
-        /* Restore bar for closed windows */
-        .restore-bar {
-            position: absolute; bottom: 5px; left: 5px; display: flex; gap: 5px; z-index: 200;
+        /* Form Group Inputs */
+        .form-group {
+            width: 100%;
+            margin-bottom: 18px;
         }
-        .restore-btn {
-            background: #ece9d8; border: 2px solid #fff; border-right-color: #404040; border-bottom-color: #404040;
-            padding: 3px 8px; font-size: 11px; cursor: pointer; font-weight: bold;
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: #555555;
+            margin-bottom: 6px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #7c8ba1;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus {
+            border-color: #6200ee;
+        }
+
+        /* Forgot Password Link */
+        .forgot-password {
+            color: #ffffff;
+            font-size: 14px;
+            text-decoration: underline;
+            margin-top: 18px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        .forgot-password:hover {
+            color: #e0e0e0;
+        }
+
+        /* Sign In Button */
+        .btn-signin {
+            background-color: #00b0eb;
+            color: #ffffff;
+            border: none;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.2s;
+        }
+        .btn-signin:hover {
+            background-color: #0088b8;
         }
     </style>
 </head>
 <body>
 
-    <div class="workspace-desktop" id="workspace">
+    <!-- Header Title -->
+    <div class="app-title">Adaptive Issuance<br>Instant ID</div>
 
-        <div class="sub-window win-production" id="win-production">
-            <div class="window-titlebar">
-                <span>Production Form</span>
-                <div class="window-controls">
-                    <div class="win-btn" onclick="toggleMinimize('win-production')">_</div>
-                    <div class="win-btn" onclick="toggleMaximize('win-production')">□</div>
-                    <div class="win-btn" onclick="closeWindow('win-production')">×</div>
-                </div>
-            </div>
-            <div class="window-body form-body">
-                <div class="form-group">
-                    <label>Full Name:</label>
-                    <input type="text" id="inputName" value="" placeholder="Enter name..." oninput="updateCardText()">
-                </div>
-                <div class="form-group">
-                    <label>Designation / Title:</label>
-                    <input type="text" id="inputTitle" value="" placeholder="Enter title..." oninput="updateCardText()">
-                </div>
-                <div class="form-group">
-                    <label>ID Number:</label>
-                    <input type="text" id="inputId" value="" placeholder="Enter ID..." oninput="updateCardText()">
-                </div>
-                <div class="form-group">
-                    <label>Card Type:</label>
-                    <select>
-                        <option value="">-- Select Type --</option>
-                        <option>Employee Pass</option>
-                        <option>Visitor Pass</option>
-                        <option>VIP Access</option>
-                    </select>
-                </div>
-                <button style="margin-top: 10px; padding: 6px 12px; font-size: 11px; cursor: pointer; align-self: flex-start;" onclick="alert('Form Saved!')">Save Data</button>
+    <!-- Login Box Panel -->
+    <div class="login-card">
+        
+        <!-- Expired Warning Notification -->
+        <div class="warning-banner" id="warningBanner">
+            <span class="warning-text">Your session expired due to inactivity. You will n ...</span>
+            <div class="banner-icons">
+                <span title="Details">+</span>
+                <span title="Close" onclick="document.getElementById('warningBanner').style.display='none'">×</span>
             </div>
         </div>
 
-        <div class="right-stack" id="rightStack">
+        <!-- Input Fields -->
+        <div class="form-group">
+            <label for="userId">User ID</label>
+            <input type="text" id="userId" autocomplete="off">
+        </div>
 
-            <div class="sub-window win-card" id="win-front">
-                <div class="window-titlebar">
-                    <span>Card (Front Side)</span>
-                    <div class="window-controls">
-                        <div class="win-btn" onclick="toggleMinimize('win-front')">_</div>
-                        <div class="win-btn" onclick="toggleMaximize('win-front')">□</div>
-                        <div class="win-btn" onclick="closeWindow('win-front')">×</div>
-                    </div>
-                </div>
-                <div class="window-body">
-                    <div class="canvas-with-ruler">
-                        <div class="ruler-top"><span>| 1</span><span>| 2</span><span>| 3</span></div>
-                        <div class="ruler-left"><span>1 -</span><span>2 -</span></div>
-                        <canvas id="frontCanvas" width="340" height="200"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sub-window win-card" id="win-back">
-                <div class="window-titlebar">
-                    <span>Card (Back Side)</span>
-                    <div class="window-controls">
-                        <div class="win-btn" onclick="toggleMinimize('win-back')">_</div>
-                        <div class="win-btn" onclick="toggleMaximize('win-back')">□</div>
-                        <div class="win-btn" onclick="closeWindow('win-back')">×</div>
-                    </div>
-                </div>
-                <div class="window-body">
-                    <div class="canvas-with-ruler">
-                        <div class="ruler-top"><span>| 1</span><span>| 2</span><span>| 3</span></div>
-                        <div class="ruler-left"><span>1 -</span><span>2 -</span></div>
-                        <canvas id="backCanvas" width="340" height="200"></canvas>
-                    </div>
-                </div>
-            </div>
-
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password">
         </div>
 
     </div>
 
-    <div class="restore-bar" id="restoreBar"></div>
+    <!-- Actions Below Card -->
+    <a class="forgot-password" onclick="alert('Forgot Password Link Clicked')">Forgot Password?</a>
+    <button class="btn-signin" onclick="handleLogin()">Sign In</button>
 
     <script>
-        // Window Control Interactive Functions
-        function toggleMinimize(winId) {
-            const win = document.getElementById(winId);
-            win.classList.toggle('minimized');
-            if(win.classList.contains('maximized')) win.classList.remove('maximized');
-        }
-
-        function toggleMaximize(winId) {
-            const win = document.getElementById(winId);
-            win.classList.toggle('maximized');
-            if(win.classList.contains('minimized')) win.classList.remove('minimized');
-        }
-
-        function closeWindow(winId) {
-            const win = document.getElementById(winId);
-            win.classList.add('closed');
-            createRestoreButton(winId);
-        }
-
-        function restoreWindow(winId, btnElement) {
-            const win = document.getElementById(winId);
-            win.classList.remove('closed', 'minimized', 'maximized');
-            btnElement.remove();
-        }
-
-        function createRestoreButton(winId) {
-            const restoreBar = document.getElementById('restoreBar');
-            let name = "";
-            if (winId === 'win-production') name = "Production Form";
-            else if (winId === 'win-front') name = "Card (Front Side)";
-            else if (winId === 'win-back') name = "Card (Back Side)";
-
-            const btn = document.createElement('button');
-            btn.className = 'restore-btn';
-            btn.innerText = "Reopen " + name;
-            btn.onclick = function() { restoreWindow(winId, btn); };
-            restoreBar.appendChild(btn);
-        }
-
-        // Initialize Front Canvas
-        const frontCanvas = new fabric.Canvas('frontCanvas');
-        frontCanvas.setBackgroundColor('#ffffff', frontCanvas.renderAll.bind(frontCanvas));
-
-        const frontHeader = new fabric.Rect({ left: 0, top: 0, fill: '#1e3799', width: 340, height: 40 });
-        const companyTitle = new fabric.IText('COMPANY NAME', { left: 12, top: 10, fill: '#ffffff', fontSize: 14, fontWeight: 'bold' });
-        
-        const photoBox = new fabric.Rect({ left: 12, top: 50, fill: '#e0e0e0', stroke: '#aaa', strokeWidth: 1, width: 80, height: 100, rx: 4, ry: 4 });
-        
-        const cardName = new fabric.IText('', { left: 105, top: 60, fill: '#000000', fontSize: 14, fontWeight: 'bold' });
-        const cardTitle = new fabric.IText('', { left: 105, top: 82, fill: '#555555', fontSize: 11 });
-        const cardId = new fabric.IText('', { left: 105, top: 104, fill: '#333333', fontSize: 10 });
-
-        frontCanvas.add(frontHeader, companyTitle, photoBox, cardName, cardTitle, cardId);
-
-        // Initialize Back Canvas
-        const backCanvas = new fabric.Canvas('backCanvas');
-        backCanvas.setBackgroundColor('#ffffff', backCanvas.renderAll.bind(backCanvas));
-
-        const magStripe = new fabric.Rect({ left: 0, top: 15, fill: '#111111', width: 340, height: 35 });
-        const termsText = new fabric.IText('This card is non-transferable and remains\nthe property of the issuing organization.', { left: 15, top: 65, fill: '#666666', fontSize: 9 });
-        const barcode = new fabric.Rect({ left: 15, top: 120, fill: '#000000', width: 200, height: 30 });
-
-        backCanvas.add(magStripe, termsText, barcode);
-
-        // Dynamic Form Updates
-        function updateCardText() {
-            cardName.set('text', document.getElementById('inputName').value);
-            cardTitle.set('text', document.getElementById('inputTitle').value);
-            cardId.set('text', document.getElementById('inputId').value ? 'ID: ' + document.getElementById('inputId').value : '');
-            frontCanvas.renderAll();
+        function handleLogin() {
+            const user = document.getElementById('userId').value;
+            const pass = document.getElementById('password').value;
+            
+            if (!user || !pass) {
+                alert('ကျေးဇူးပြု၍ User ID နှင့် Password ထည့်သွင်းပါ။');
+                return;
+            }
+            alert('Login MDI Application သို့ ဝင်ရောက်နေပါသည်...');
         }
     </script>
 </body>

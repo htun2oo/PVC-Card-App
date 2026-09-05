@@ -33,7 +33,7 @@
             font-size: 12px;
             user-select: none;
             z-index: 2000000;
-            -webkit-app-region: drag; /* Window ကို Drag ဆွဲရန် */
+            -webkit-app-region: drag;
         }
 
         .app-title-text { font-weight: 500; color: #e5e7eb; }
@@ -42,7 +42,7 @@
             display: flex;
             align-items: center;
             gap: 2px;
-            -webkit-app-region: no-drag; /* ခလုတ်များ နှိပ်၍ရအောင် Fix လုပ်ထားသည် */
+            -webkit-app-region: no-drag;
         }
 
         .win-control-btn {
@@ -75,7 +75,7 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             background: linear-gradient(135deg, #7026b9 0%, #4a1582 100%);
-            display: flex; /* ပထမဆုံး စဖွင့်ချိန် Login ပေါ်စေရန် */
+            display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
@@ -135,6 +135,7 @@
             padding: 8px 10px;
             border-radius: 3px;
         }
+        .nav-item:hover { background-color: #f3f4f6; }
         
         .nav-right { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #333; }
         
@@ -152,12 +153,15 @@
         .page-view { display: none; flex-direction: column; flex: 1; width: 100%; height: calc(100% - 48px); }
         .page-view.active { display: flex; }
 
-        /* MANAGE DESIGNS PAGE */
+        /* COMMON BUTTONS & LAYOUT */
         .page-banner { background-color: #5c2483; color: #ffffff; padding: 10px 15px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
-        .sub-tab-bar-light { background-color: #e5e7eb; border-bottom: 1px solid #d1d5db; padding-left: 15px; display: flex; align-items: flex-end; height: 38px; }
-        .tab-btn-light { background: #f3f4f6; color: #374151; padding: 8px 16px; font-size: 12px; border: 1px solid #d1d5db; border-bottom: none; border-top-left-radius: 4px; border-top-right-radius: 4px; font-weight: 600; }
         .content-body-grey { background-color: #d1d5db; flex: 1; padding: 15px; display: flex; flex-direction: column; }
         .btn-create { background-color: #2563eb; color: white; border: none; padding: 6px 16px; font-size: 12px; border-radius: 3px; cursor: pointer; align-self: flex-start; margin-bottom: 12px; }
+        .btn-create:hover { background-color: #1d4ed8; }
+
+        /* CREDENTIAL DESIGNS PAGE */
+        .sub-tab-bar-light { background-color: #e5e7eb; border-bottom: 1px solid #d1d5db; padding-left: 15px; display: flex; align-items: flex-end; height: 38px; }
+        .tab-btn-light { background: #f3f4f6; color: #374151; padding: 8px 16px; font-size: 12px; border: 1px solid #d1d5db; border-bottom: none; border-top-left-radius: 4px; border-top-right-radius: 4px; font-weight: 600; }
         .filter-section { background-color: #e5e7eb; padding: 8px 12px; display: flex; justify-content: flex-end; align-items: center; gap: 10px; font-size: 12px; color: #374151; border: 1px solid #9ca3af; border-bottom: none; }
         .filter-input { padding: 4px 8px; border: 1px solid #9ca3af; border-radius: 2px; outline: none; width: 160px; }
         .data-table-container { background-color: #e5e7eb; border: 1px solid #9ca3af; }
@@ -171,6 +175,7 @@
         .studio-banner { background-color: #5c2483; color: #ffffff; padding: 8px 15px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
         .design-toolbar { background-color: #e5e7eb; border-bottom: 1px solid #b0b5bc; padding: 4px 10px; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
         .tool-btn { min-width: 26px; height: 26px; padding: 0 4px; background-color: #f3f4f6; border: 1px solid #9ca3af; border-radius: 2px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; color: #374151; }
+        .tool-btn:hover { background-color: #d1d5db; }
         .tool-divider { width: 1px; height: 20px; background-color: #9ca3af; margin: 0 4px; }
         .studio-workspace { flex: 1; display: flex; background-color: #d1d5db; overflow: hidden; position: relative; }
         .canvas-area { flex: 1; padding: 20px; display: flex; gap: 20px; overflow: auto; justify-content: center; align-items: flex-start; }
@@ -227,7 +232,9 @@
                     </div>
                     <div class="brand-title">Adaptive Issuance™<br><b>Instant ID</b></div>
                     <div class="nav-menu">
-                        <a class="nav-item">Home</a>
+                        <!-- HOME BUTTON WITH NAVIGATION -->
+                        <a class="nav-item" onclick="navigateTo('home')">Home</a>
+
                         <div class="dropdown-wrapper" id="dropdown-design">
                             <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-design')">
                                 Design <span style="font-size: 10px;">▲</span>
@@ -250,8 +257,22 @@
                 </div>
             </div>
 
+            <!-- PAGE 0: HOME PAGE (HOME DASHBOARD) -->
+            <div id="page-home" class="page-view active">
+                <div class="page-banner">🏠 Home Dashboard</div>
+                <div class="content-body-grey" style="justify-content: center; align-items: center;">
+                    <div style="background: white; padding: 40px; border-radius: 8px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 500px;">
+                        <h2 style="color: #1f2937; margin-bottom: 10px;">Welcome to Entrust Instant ID</h2>
+                        <p style="color: #6b7280; font-size: 13px; margin-bottom: 20px;">Manage your credential designs or select options from the top navigation bar.</p>
+                        <button class="btn-create" style="align-self: center; margin-bottom: 0;" onclick="navigateTo('credential-designs')">
+                            Go to Credential Designs
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <!-- PAGE 1: CREDENTIAL DESIGNS (FIRST IMAGE) -->
-            <div id="page-credential-designs" class="page-view active">
+            <div id="page-credential-designs" class="page-view">
                 <div class="page-banner">⚙ Manage Your Credential Designs</div>
                 <div class="sub-tab-bar-light"><div class="tab-btn-light">Credential Designs</div></div>
                 <div class="content-body-grey">
@@ -324,6 +345,7 @@
             if (u === "admin" && p === "1234") {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-workspace').style.display = 'flex';
+                navigateTo('home');
             } else {
                 alert('User ID သို့မဟုတ် Password မှားယွင်းနေပါသည်။ (Default: admin / 1234)');
             }
@@ -334,10 +356,14 @@
             document.getElementById('login-screen').style.display = 'flex';
         }
 
-        // NAVIGATION LOGIC
+        // NAVIGATION LOGIC (Home / Credentials / Studio)
         function navigateTo(pageName) {
+            document.querySelectorAll('.dropdown-wrapper').forEach(w => w.classList.remove('active'));
             document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
-            if (pageName === 'credential-designs') {
+
+            if (pageName === 'home') {
+                document.getElementById('page-home').classList.add('active');
+            } else if (pageName === 'credential-designs') {
                 document.getElementById('page-credential-designs').classList.add('active');
             } else if (pageName === 'card-studio') {
                 document.getElementById('page-card-studio').classList.add('active');
@@ -351,7 +377,7 @@
             if (!active) el.classList.add('active');
         }
 
-        // WINDOW CONTROLS (Electron/Browser support)
+        // WINDOW CONTROLS
         function appMinimize() {
             if (window.electronAPI && window.electronAPI.minimize) window.electronAPI.minimize();
             else alert("Minimize Clicked");

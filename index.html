@@ -20,10 +20,10 @@
             overflow: hidden;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #eef2f5;
+            background-color: #808080;
         }
 
-        /* ---------------- LOGIN PAGE STYLES ---------------- */
+        /* ---------------- LOGIN PAGE ---------------- */
         #login-screen {
             position: fixed;
             top: 0; left: 0;
@@ -61,7 +61,7 @@
         .forgot-password { color: #fff; font-size: 14px; text-decoration: underline; margin-top: 20px; margin-bottom: 15px; cursor: pointer; }
         .btn-signin { background-color: #00b0eb; color: #fff; border: none; padding: 10px 26px; font-size: 15px; font-weight: bold; border-radius: 4px; cursor: pointer; }
 
-        /* ---------------- ENTRUST TOP HEADER ---------------- */
+        /* ---------------- TOP NAVBAR ---------------- */
         #top-navbar {
             height: 48px;
             background-color: #ffffff;
@@ -118,7 +118,7 @@
 
         .action-btn { background: #ffffff; border: 1px solid #bbb; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 12px; }
 
-        /* ---------------- FRAMELESS MAIN WORKSPACE ---------------- */
+        /* ---------------- MAIN WORKSPACE ---------------- */
         #main-workspace {
             display: none;
             flex-direction: column;
@@ -129,58 +129,122 @@
 
         .workspace-content {
             flex: 1;
-            display: flex;
-            gap: 12px;
-            padding: 12px;
+            padding: 10px;
+            position: relative;
             background-color: #d1d5db;
             overflow: hidden;
         }
 
-        /* Window Frame များနှင့် Title Bar များကို လုံးဝ ဖယ်ထုတ်ထားသော Container များ */
-        .panel-container {
-            border: none !important;
-            box-shadow: none !important;
-            background: transparent;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .win-production {
-            width: 45%;
-            height: 100%;
-            background-color: #e5e5dc; /* Original Production Form Background */
-            border-radius: 4px;
-        }
-
-        .right-stack {
-            width: 55%;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            height: 100%;
-        }
-
-        .win-card {
+        /* SINGLE UNIFIED WINDOW STYLES */
+        .single-window {
             width: 100%;
+            height: 100%;
+            background: #ece9d8;
+            border: 2px solid #ffffff;
+            border-right-color: #404040;
+            border-bottom-color: #404040;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .window-titlebar {
+            background: linear-gradient(90deg, #0a246a, #a6caf0);
+            color: white;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .window-controls { display: flex; gap: 3px; }
+        .win-btn {
+            width: 18px;
+            height: 16px;
+            background: #ece9d8;
+            border: 1px solid #fff;
+            border-right-color: #404040;
+            border-bottom-color: #404040;
+            font-size: 10px;
+            line-height: 12px;
+            text-align: center;
+            color: #000;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .window-body {
             flex: 1;
-            background-color: #6b7280; /* Original Canvas Workspace Background */
-            border-radius: 4px;
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            background: #d4d0c8;
+            overflow: auto;
+        }
+
+        .left-form-area {
+            flex: 1;
+            background: #ece9d8;
+            border: 1px solid #808080;
+            border-radius: 2px;
+        }
+
+        .right-card-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .card-preview-box {
+            flex: 1;
+            background: #808080;
+            border: 1px solid #404040;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
         }
 
         canvas {
             background: #ffffff;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            border-radius: 4px;
+            box-shadow: 0 0 4px rgba(0,0,0,0.3);
+        }
+
+        /* WINDOW STATES */
+        .single-window.minimized {
+            height: 30px !important;
+            overflow: hidden;
+        }
+        .single-window.minimized .window-body { display: none; }
+
+        .single-window.closed { display: none !important; }
+
+        .restore-bar {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 200;
+        }
+        .restore-btn {
+            background: #ece9d8;
+            border: 2px solid #fff;
+            border-right-color: #404040;
+            border-bottom-color: #404040;
+            padding: 4px 10px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <!-- 1. LOGIN SCREEN -->
+    <!-- LOGIN SCREEN -->
     <div id="login-screen">
         <div class="app-title">Adaptive Issuance<br>Instant ID</div>
 
@@ -200,10 +264,10 @@
         <button class="btn-signin" onclick="handleLogin()">Sign In</button>
     </div>
 
-    <!-- 2. FRAMELESS MAIN WORKSPACE -->
+    <!-- MAIN WORKSPACE -->
     <div id="main-workspace">
         
-        <!-- Top Header -->
+        <!-- Top Header (Last Login Info Removed) -->
         <div id="top-navbar">
             <div class="nav-left">
                 <div class="brand-logo">
@@ -219,7 +283,6 @@
             </div>
 
             <div class="nav-right">
-                <span id="login-timestamp">Last Login at Sat Sep 05 10:11:53 MMT 2026 from IP 192.168.56.1</span>
                 <div class="user-profile">
                     <span>admin ▾</span>
                     <span>⚙</span>
@@ -241,25 +304,37 @@
             <button class="action-btn">☰</button>
         </div>
 
-        <!-- Main Workspace (No Window Frames & Title Bars) -->
+        <!-- Workspace Area with Single Window -->
         <div class="workspace-content">
-            <!-- Left Production Form Panel -->
-            <div class="panel-container win-production" id="panel-production">
-                <!-- Frame/Title Bar မပါဝင်သော Form Container -->
-            </div>
-
-            <!-- Right Card Display Panels -->
-            <div class="right-stack">
-                <!-- Front Side Panel -->
-                <div class="panel-container win-card" id="panel-front">
-                    <canvas id="frontCanvas" width="340" height="200"></canvas>
+            <div class="single-window" id="appWindow">
+                <!-- Titlebar with Minimize, Maximize, Close Buttons -->
+                <div class="window-titlebar">
+                    <span>Credentials Workspace</span>
+                    <div class="window-controls">
+                        <div class="win-btn" onclick="toggleMinimize()">_</div>
+                        <div class="win-btn" onclick="toggleMaximize()">□</div>
+                        <div class="win-btn" onclick="closeWindow()">×</div>
+                    </div>
                 </div>
 
-                <!-- Back Side Panel -->
-                <div class="panel-container win-card" id="panel-back">
-                    <canvas id="backCanvas" width="340" height="200"></canvas>
+                <!-- Unified Content Body -->
+                <div class="window-body">
+                    <!-- Production Form Area -->
+                    <div class="left-form-area"></div>
+
+                    <!-- Cards Front/Back Preview Area -->
+                    <div class="right-card-area">
+                        <div class="card-preview-box">
+                            <canvas id="frontCanvas" width="320" height="190"></canvas>
+                        </div>
+                        <div class="card-preview-box">
+                            <canvas id="backCanvas" width="320" height="190"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <div class="restore-bar" id="restoreBar"></div>
         </div>
 
     </div>
@@ -286,6 +361,47 @@
             }
         }
 
+        // Window Controls (Minimize, Maximize, Close)
+        let isMaximized = false;
+        function toggleMinimize() {
+            const win = document.getElementById('appWindow');
+            win.classList.toggle('minimized');
+        }
+
+        function toggleMaximize() {
+            const win = document.getElementById('appWindow');
+            if (!isMaximized) {
+                win.style.position = 'fixed';
+                win.style.top = '122px';
+                win.style.left = '0';
+                win.style.width = '100vw';
+                win.style.height = 'calc(100vh - 122px)';
+                win.style.zIndex = '1000';
+                isMaximized = true;
+            } else {
+                win.style.position = 'relative';
+                win.style.top = 'auto';
+                win.style.left = 'auto';
+                win.style.width = '100%';
+                win.style.height = '100%';
+                win.style.zIndex = 'auto';
+                isMaximized = false;
+            }
+        }
+
+        function closeWindow() {
+            document.getElementById('appWindow').classList.add('closed');
+            const restoreBar = document.getElementById('restoreBar');
+            restoreBar.innerHTML = `<button class="restore-btn" onclick="restoreWindow()">Reopen Workspace</button>`;
+        }
+
+        function restoreWindow() {
+            const win = document.getElementById('appWindow');
+            win.classList.remove('closed', 'minimized');
+            document.getElementById('restoreBar').innerHTML = '';
+        }
+
+        // Canvas Setup
         let frontCanvas, backCanvas;
         function initCanvases() {
             if (frontCanvas) return;
@@ -293,17 +409,17 @@
             frontCanvas = new fabric.Canvas('frontCanvas');
             frontCanvas.setBackgroundColor('#ffffff', frontCanvas.renderAll.bind(frontCanvas));
             frontCanvas.add(
-                new fabric.Rect({ left: 0, top: 0, fill: '#1e3799', width: 340, height: 40 }),
-                new fabric.IText('COMPANY NAME', { left: 12, top: 10, fill: '#ffffff', fontSize: 14, fontWeight: 'bold' }),
-                new fabric.Rect({ left: 12, top: 50, fill: '#e0e0e0', stroke: '#aaa', strokeWidth: 1, width: 80, height: 100, rx: 4, ry: 4 })
+                new fabric.Rect({ left: 0, top: 0, fill: '#1e3799', width: 320, height: 35 }),
+                new fabric.IText('COMPANY NAME', { left: 10, top: 8, fill: '#ffffff', fontSize: 12, fontWeight: 'bold' }),
+                new fabric.Rect({ left: 10, top: 45, fill: '#e0e0e0', stroke: '#aaa', strokeWidth: 1, width: 75, height: 95, rx: 3, ry: 3 })
             );
 
             backCanvas = new fabric.Canvas('backCanvas');
             backCanvas.setBackgroundColor('#ffffff', backCanvas.renderAll.bind(backCanvas));
             backCanvas.add(
-                new fabric.Rect({ left: 0, top: 15, fill: '#111111', width: 340, height: 35 }),
-                new fabric.IText('This card is non-transferable.', { left: 15, top: 65, fill: '#666666', fontSize: 9 }),
-                new fabric.Rect({ left: 15, top: 110, fill: '#000000', width: 200, height: 30 })
+                new fabric.Rect({ left: 0, top: 12, fill: '#111111', width: 320, height: 30 }),
+                new fabric.IText('This card is non-transferable.', { left: 12, top: 55, fill: '#666666', fontSize: 8 }),
+                new fabric.Rect({ left: 12, top: 95, fill: '#000000', width: 180, height: 25 })
             );
         }
     </script>

@@ -139,7 +139,7 @@
         
         .nav-right { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #333; }
         
-        /* ---------------- DROPDOWN STYLES (EXACTLY MATCHING IMAGES) ---------------- */
+        /* ---------------- DROPDOWN STYLES ---------------- */
         .dropdown-wrapper {
             position: relative;
             display: inline-block;
@@ -295,6 +295,16 @@
             height: 100%;
         }
 
+        .page-view {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            width: 100%;
+            height: calc(100% - 48px);
+        }
+
+        .page-view.active { display: flex; }
+
         .tab-content {
             display: none;
             flex: 1;
@@ -364,13 +374,7 @@
             margin-bottom: 12px;
         }
 
-        .chart-placeholder {
-            display: flex;
-            align-items: flex-end;
-            gap: 6px;
-            height: 50px;
-        }
-
+        .chart-placeholder { display: flex; align-items: flex-end; gap: 6px; height: 50px; }
         .bar { background-color: #22c55e; width: 14px; }
         .chart-date { font-size: 10px; color: #9ca3af; margin-top: 6px; }
         .report-card-title { font-size: 13px; font-weight: 600; margin-bottom: 15px; text-align: center; }
@@ -420,6 +424,129 @@
         .list-table th { font-weight: 600; color: #374151; border-top: 1px solid #d1d5db; }
         .list-table td { color: #1f2937; }
         .entries-count { margin-top: 15px; font-size: 12px; color: #374151; }
+
+        /* ---------------- MANAGE CREDENTIAL DESIGNS PAGE (NEW STYLES) ---------------- */
+        .page-banner {
+            background-color: #5c2483;
+            color: #ffffff;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sub-tab-bar-light {
+            background-color: #e5e7eb;
+            border-bottom: 1px solid #d1d5db;
+            padding-left: 15px;
+            display: flex;
+            align-items: flex-end;
+            height: 38px;
+        }
+
+        .tab-btn-light {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 8px 16px;
+            font-size: 12px;
+            border: 1px solid #d1d5db;
+            border-bottom: none;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            font-weight: 600;
+        }
+
+        .content-body-grey {
+            background-color: #d1d5db;
+            flex: 1;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .btn-create {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            font-size: 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            align-self: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .btn-create:hover { background-color: #1d4ed8; }
+
+        .filter-section {
+            background-color: #e5e7eb;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #374151;
+            border: 1px solid #9ca3af;
+            border-bottom: none;
+        }
+
+        .filter-input {
+            padding: 4px 8px;
+            border: 1px solid #9ca3af;
+            border-radius: 2px;
+            outline: none;
+            width: 160px;
+        }
+
+        .data-table-container {
+            background-color: #e5e7eb;
+            border: 1px solid #9ca3af;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 8px 12px;
+            color: #374151;
+            font-weight: 600;
+            border-bottom: 1px solid #9ca3af;
+        }
+
+        .data-table td.no-data {
+            text-align: center;
+            padding: 25px;
+            color: #4b5563;
+        }
+
+        .pagination-bar {
+            background-color: #e5e7eb;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #4b5563;
+            border: 1px solid #9ca3af;
+            border-top: none;
+        }
+
+        .pagination-links {
+            display: flex;
+            gap: 12px;
+            color: #6b7280;
+        }
+
+        .pagination-links span {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -465,16 +592,16 @@
                     </div>
                     <div class="brand-title">Adaptive Issuance™<br><b>Instant ID</b></div>
                     <div class="nav-menu">
-                        <a class="nav-item">Home</a>
+                        <a class="nav-item" onclick="navigateTo('home')">Home</a>
                         
-                        <!-- 1. DESIGN DROPDOWN MENU (Matching Image 1) -->
+                        <!-- DESIGN DROPDOWN MENU -->
                         <div class="dropdown-wrapper" id="dropdown-design">
                             <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-design')">
                                 Design <span style="font-size: 10px;">▲</span>
                             </div>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item">Quick Start</a>
-                                <a class="dropdown-item">Credentials</a>
+                                <a class="dropdown-item" onclick="navigateTo('credential-designs')">Credentials</a>
                                 <a class="dropdown-item">Workflows</a>
                                 <a class="dropdown-item">Reports</a>
                                 <a class="dropdown-item">Smart Card Workflows</a>
@@ -487,7 +614,7 @@
                 </div>
 
                 <div class="nav-right">
-                    <!-- 2. ADMIN USER DROPDOWN MENU (Matching Image 2) -->
+                    <!-- ADMIN USER DROPDOWN MENU -->
                     <div class="dropdown-wrapper" id="dropdown-admin">
                         <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-admin')">
                             admin <span style="font-size: 10px;">▲</span>
@@ -499,7 +626,7 @@
                         </div>
                     </div>
 
-                    <!-- 3. GEAR (SETTINGS) DROPDOWN MENU (Matching Image 3) -->
+                    <!-- GEAR (SETTINGS) DROPDOWN MENU -->
                     <div class="dropdown-wrapper" id="dropdown-gear">
                         <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-gear')">
                             ⚙ <span style="font-size: 10px;">▼</span>
@@ -523,80 +650,129 @@
                 </div>
             </div>
 
-            <!-- SUB TAB BAR -->
-            <div id="sub-navbar">
-                <button class="tab-btn active" id="tab-credentials-btn" onclick="switchTab('credentials')">Credentials</button>
-                <button class="tab-btn" id="tab-reports-btn" onclick="switchTab('reports')">Reports</button>
-            </div>
-
-            <!-- ACTION BAR -->
-            <div id="action-bar">
-                <div class="view-toggle-group">
-                    <button class="view-btn active" id="btn-grid-view" onclick="switchReportView('grid')" title="Grid View">
-                        <svg viewBox="0 0 16 16"><path d="M1 1h6v6H1V1zm8 0h6v6H9V1zM1 9h6v6H1V9zm8 0h6v6H9V9z"/></svg>
-                    </button>
-                    <button class="view-btn" id="btn-list-view" onclick="switchReportView('list')" title="List View">
-                        <svg viewBox="0 0 16 16"><path d="M1 2h14v2H1V2zm0 5h14v2H1V7zm0 5h14v2H1v-2z"/></svg>
-                    </button>
+            <!-- PAGE 1: HOME PAGE (Credentials & Reports Dashboard) -->
+            <div id="page-home" class="page-view active">
+                <div id="sub-navbar">
+                    <button class="tab-btn active" id="tab-credentials-btn" onclick="switchTab('credentials')">Credentials</button>
+                    <button class="tab-btn" id="tab-reports-btn" onclick="switchTab('reports')">Reports</button>
                 </div>
-            </div>
 
-            <!-- CREDENTIALS TAB VIEW -->
-            <div id="credentials-tab" class="tab-content credentials-view active">
-                <div class="printer-queue-status">Printer Queue Status</div>
-            </div>
-
-            <!-- REPORTS TAB VIEW -->
-            <div id="reports-tab" class="tab-content reports-view">
-                <div id="report-grid-view">
-                    <div class="report-card-item">
-                        <div class="report-card-preview">
-                            <div class="chart-placeholder">
-                                <div class="bar" style="height: 25px;"></div>
-                                <div class="bar" style="height: 35px;"></div>
-                                <div class="bar" style="height: 45px;"></div>
-                                <div class="bar" style="height: 50px;"></div>
-                                <div class="bar" style="height: 48px;"></div>
-                            </div>
-                            <div class="chart-date">Week 30, 2013</div>
-                        </div>
-                        <div class="report-card-title">Credentials Issued</div>
-                        <div class="report-card-action" onclick="alert('Running Credentials Issued Report...')">
-                            <span class="play-icon">▶</span>
-                            <span>Run</span>
-                        </div>
-                    </div>
-
-                    <div class="report-card-item">
-                        <div class="report-card-preview">
-                            <div class="chart-placeholder">
-                                <div class="bar" style="height: 25px;"></div>
-                                <div class="bar" style="height: 35px;"></div>
-                                <div class="bar" style="height: 45px;"></div>
-                                <div class="bar" style="height: 50px;"></div>
-                                <div class="bar" style="height: 48px;"></div>
-                            </div>
-                            <div class="chart-date">Week 30, 2013</div>
-                        </div>
-                        <div class="report-card-title">Credentials Printed</div>
-                        <div class="report-card-action" onclick="alert('Running Credentials Printed Report...')">
-                            <span class="play-icon">▶</span>
-                            <span>Run</span>
-                        </div>
+                <div id="action-bar">
+                    <div class="view-toggle-group">
+                        <button class="view-btn active" id="btn-grid-view" onclick="switchReportView('grid')" title="Grid View">
+                            <svg viewBox="0 0 16 16"><path d="M1 1h6v6H1V1zm8 0h6v6H9V1zM1 9h6v6H1V9zm8 0h6v6H9V9z"/></svg>
+                        </button>
+                        <button class="view-btn" id="btn-list-view" onclick="switchReportView('list')" title="List View">
+                            <svg viewBox="0 0 16 16"><path d="M1 2h14v2H1V2zm0 5h14v2H1V7zm0 5h14v2H1v-2z"/></svg>
+                        </button>
                     </div>
                 </div>
 
-                <div id="report-list-view">
-                    <table class="list-table">
-                        <thead>
-                            <tr><th>Name</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>Credentials Issued</td></tr>
-                            <tr><td>Credentials Printed</td></tr>
-                        </tbody>
-                    </table>
-                    <div class="entries-count">Showing 1 - 2 of 2 entries</div>
+                <!-- CREDENTIALS TAB VIEW -->
+                <div id="credentials-tab" class="tab-content credentials-view active">
+                    <div class="printer-queue-status">Printer Queue Status</div>
+                </div>
+
+                <!-- REPORTS TAB VIEW -->
+                <div id="reports-tab" class="tab-content reports-view">
+                    <div id="report-grid-view">
+                        <div class="report-card-item">
+                            <div class="report-card-preview">
+                                <div class="chart-placeholder">
+                                    <div class="bar" style="height: 25px;"></div>
+                                    <div class="bar" style="height: 35px;"></div>
+                                    <div class="bar" style="height: 45px;"></div>
+                                    <div class="bar" style="height: 50px;"></div>
+                                    <div class="bar" style="height: 48px;"></div>
+                                </div>
+                                <div class="chart-date">Week 30, 2013</div>
+                            </div>
+                            <div class="report-card-title">Credentials Issued</div>
+                            <div class="report-card-action" onclick="alert('Running Credentials Issued Report...')">
+                                <span class="play-icon">▶</span>
+                                <span>Run</span>
+                            </div>
+                        </div>
+
+                        <div class="report-card-item">
+                            <div class="report-card-preview">
+                                <div class="chart-placeholder">
+                                    <div class="bar" style="height: 25px;"></div>
+                                    <div class="bar" style="height: 35px;"></div>
+                                    <div class="bar" style="height: 45px;"></div>
+                                    <div class="bar" style="height: 50px;"></div>
+                                    <div class="bar" style="height: 48px;"></div>
+                                </div>
+                                <div class="chart-date">Week 30, 2013</div>
+                            </div>
+                            <div class="report-card-title">Credentials Printed</div>
+                            <div class="report-card-action" onclick="alert('Running Credentials Printed Report...')">
+                                <span class="play-icon">▶</span>
+                                <span>Run</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="report-list-view">
+                        <table class="list-table">
+                            <thead>
+                                <tr><th>Name</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Credentials Issued</td></tr>
+                                <tr><td>Credentials Printed</td></tr>
+                            </tbody>
+                        </table>
+                        <div class="entries-count">Showing 1 - 2 of 2 entries</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 2: MANAGE YOUR CREDENTIAL DESIGNS (Matching Image Exactly) -->
+            <div id="page-credential-designs" class="page-view">
+                <div class="page-banner">
+                    <span>⚙</span>
+                    <span>Manage Your Credential Designs</span>
+                </div>
+
+                <div class="sub-tab-bar-light">
+                    <div class="tab-btn-light">Credential Designs</div>
+                </div>
+
+                <div class="content-body-grey">
+                    <button class="btn-create" onclick="alert('Create New Credential Design')">Create</button>
+
+                    <div class="filter-section">
+                        <label for="filterInput">Filter</label>
+                        <input type="text" id="filterInput" class="filter-input">
+                    </div>
+
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50%;">Name ▲</th>
+                                    <th style="width: 25%;">Created By</th>
+                                    <th style="width: 25%;">Last Modified By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="3" class="no-data">No data is available</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination-bar">
+                        <div>Showing 0 - 0 of 0 entries</div>
+                        <div class="pagination-links">
+                            <span>First</span>
+                            <span>Previous</span>
+                            <span>Next</span>
+                            <span>Last</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -604,17 +780,15 @@
     </div>
 
     <script>
-        // Dropdown Toggle Logic
+        // Toggle Dropdowns
         function toggleDropdown(dropdownId) {
             const element = document.getElementById(dropdownId);
             const isActive = element.classList.contains('active');
             
-            // Close all open dropdowns first
             document.querySelectorAll('.dropdown-wrapper').forEach(wrapper => {
                 wrapper.classList.remove('active');
             });
 
-            // Toggle current dropdown
             if (!isActive) {
                 element.classList.add('active');
             }
@@ -629,7 +803,20 @@
             }
         };
 
-        // Main Tab Switcher
+        // Navigation Switcher (Home vs Manage Credential Designs)
+        function navigateTo(pageName) {
+            document.querySelectorAll('.page-view').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            if (pageName === 'home') {
+                document.getElementById('page-home').classList.add('active');
+            } else if (pageName === 'credential-designs') {
+                document.getElementById('page-credential-designs').classList.add('active');
+            }
+        }
+
+        // Tab Switcher for Home Page
         function switchTab(tabName) {
             document.getElementById('tab-credentials-btn').classList.remove('active');
             document.getElementById('tab-reports-btn').classList.remove('active');
@@ -665,7 +852,7 @@
             }
         }
 
-        // Authentication & Window Logic
+        // Authentication & Window Controls
         function handleLogin() {
             const user = document.getElementById('userId').value.trim();
             const pass = document.getElementById('password').value.trim();

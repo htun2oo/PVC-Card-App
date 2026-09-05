@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Adaptive Issuance Instant ID - Desktop Edition</title>
     
-    <!-- FontAwesome for exact UI Icons -->
+    <!-- FontAwesome for UI Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -66,7 +66,7 @@
         .page-view { display: none; flex-direction: column; flex: 1; width: 100%; height: calc(100% - 48px); }
         .page-view.active { display: flex; }
 
-        /* PURPLE BANNER LIKE IN THE IMAGE */
+        /* PURPLE BANNER */
         .page-banner { 
             background: linear-gradient(90deg, #812990 0%, #a238b3 100%); 
             color: #ffffff; 
@@ -95,7 +95,7 @@
         .btn-primary { background-color: #2563eb; color: white; border: none; padding: 6px 16px; font-size: 12px; border-radius: 3px; cursor: pointer; }
         .btn-primary:hover { background-color: #1d4ed8; }
 
-        /* EXACT TOOLBAR MATCHING THE ATTACHED IMAGE */
+        /* DESIGN TOOLBAR */
         .design-toolbar { 
             background-color: #cfd3d8; 
             border-bottom: 1px solid #b0b5bc; 
@@ -127,10 +127,9 @@
             color: #2c3e50; 
             user-select: none;
         }
-        .tool-group .tool-btn:last-child {
-            border-right: none;
-        }
+        .tool-group .tool-btn:last-child { border-right: none; }
         .tool-btn:hover { background-color: #e2e8f0; }
+        .tool-btn.active-tool { background-color: #cbd5e1; }
         .tool-spacer { width: 6px; }
 
         .zoom-dropdown {
@@ -143,7 +142,7 @@
             outline: none;
         }
 
-        /* CANVAS SUB-HEADER IN THE IMAGE */
+        /* CANVAS SUB-HEADER */
         .canvas-subheader {
             background-color: #e2e8f0;
             padding: 8px 30px;
@@ -158,11 +157,42 @@
 
         /* STUDIO CANVAS WORKSPACE */
         .studio-workspace { flex: 1; display: flex; background-color: #b0b5bc; overflow: hidden; position: relative; }
-        .canvas-area { flex: 1; padding: 20px; display: flex; gap: 40px; overflow: auto; justify-content: center; align-items: flex-start; }
+        .canvas-area { flex: 1; padding: 20px; display: flex; gap: 40px; overflow: auto; justify-content: center; align-items: flex-start; transition: transform 0.2s; }
         .card-container-wrapper { display: flex; flex-direction: column; align-items: center; }
         .card-canvas-outer { width: 360px; height: 240px; background-color: #838996; display: flex; align-items: center; justify-content: center; border: 1px solid #6b7280; box-shadow: inset 0 0 5px rgba(0,0,0,0.2); }
-        .id-card { width: 320px; height: 200px; background-color: #ffffff; border-radius: 6px; border: 1px solid #374151; box-shadow: 0 4px 10px rgba(0,0,0,0.25); position: relative; }
         
+        /* CARD CANVAS AREA WITH GRID SUPPORT */
+        .id-card { 
+            width: 320px; 
+            height: 200px; 
+            background-color: #ffffff; 
+            border-radius: 6px; 
+            border: 1px solid #374151; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25); 
+            position: relative; 
+            overflow: hidden;
+        }
+        .id-card.show-grid {
+            background-image: linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px);
+            background-size: 10px 10px;
+        }
+
+        /* CARD CANVAS ELEMENTS */
+        .card-element {
+            position: absolute;
+            cursor: move;
+            user-select: none;
+            border: 1px dashed transparent;
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-element:hover, .card-element.selected {
+            border-color: #2563eb;
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+
         /* PROPERTIES SIDEBAR */
         .properties-sidebar { width: 260px; background-color: #f3f4f6; border-left: 1px solid #b0b5bc; display: flex; flex-direction: column; }
         .sidebar-tabs { display: flex; background-color: #e5e7eb; border-bottom: 1px solid #b0b5bc; }
@@ -241,15 +271,15 @@
             </div>
         </div>
 
-        <!-- VIEW 3: CARD DESIGNER STUDIO (EXACT MATCH TO THE PHOTO) -->
+        <!-- VIEW 3: CARD DESIGNER STUDIO -->
         <div id="page-card-studio" class="page-view active">
             <!-- PURPLE HEADER BANNER -->
             <div class="page-banner">
-                <span>Credential Design 1</span>
-                <button class="edit-title-btn" title="Edit Name"><i class="fa-solid fa-pen"></i></button>
+                <span id="design-title">Credential Design 1</span>
+                <button class="edit-title-btn" title="Edit Name" onclick="editDesignName()"><i class="fa-solid fa-pen"></i></button>
             </div>
             
-            <!-- TOOLBAR WITH EXACT ICONS FROM IMAGE -->
+            <!-- TOOLBAR WITH FULL FUNCTIONAL ICONS -->
             <div class="design-toolbar">
                 <!-- Undo / Redo -->
                 <div class="tool-group">
@@ -268,68 +298,61 @@
 
                 <!-- Text Elements -->
                 <div class="tool-group">
-                    <button class="tool-btn" title="Static Text" onclick="executeAction('Add Static Text')"><i class="fa-solid fa-font"></i></button>
-                    <button class="tool-btn" title="Dynamic Text" onclick="executeAction('Add Dynamic Text')"><span style="font-weight: bold; font-size: 11px;">T_</span></button>
+                    <button class="tool-btn" title="Static Text" onclick="addElement('static-text')"><i class="fa-solid fa-font"></i></button>
+                    <button class="tool-btn" title="Dynamic Text" onclick="addElement('dynamic-text')"><span style="font-weight: bold; font-size: 11px;">T_</span></button>
                 </div>
                 <div class="tool-spacer"></div>
 
                 <!-- Photo & Image Elements -->
                 <div class="tool-group">
-                    <button class="tool-btn" title="Portrait Photo Field" onclick="executeAction('Add Photo Field')"><i class="fa-solid fa-id-badge"></i></button>
-                    <button class="tool-btn" title="Static Graphic Image" onclick="executeAction('Add Graphic')"><i class="fa-regular fa-image"></i></button>
-                    <button class="tool-btn" title="Dynamic Image Field" onclick="executeAction('Add Dynamic Image')"><i class="fa-solid fa-image"></i></button>
-                    <button class="tool-btn" title="Signature Field" onclick="executeAction('Add Signature')"><i class="fa-solid fa-signature"></i></button>
-                    <button class="tool-btn" title="Fingerprint Field" onclick="executeAction('Add Fingerprint')"><i class="fa-solid fa-fingerprint"></i></button>
+                    <button class="tool-btn" title="Portrait Photo Field" onclick="addElement('photo')"><i class="fa-solid fa-id-badge"></i></button>
+                    <button class="tool-btn" title="Static Graphic Image" onclick="addElement('graphic')"><i class="fa-regular fa-image"></i></button>
+                    <button class="tool-btn" title="Dynamic Image Field" onclick="addElement('dynamic-image')"><i class="fa-solid fa-image"></i></button>
+                    <button class="tool-btn" title="Signature Field" onclick="addElement('signature')"><i class="fa-solid fa-signature"></i></button>
+                    <button class="tool-btn" title="Fingerprint Field" onclick="addElement('fingerprint')"><i class="fa-solid fa-fingerprint"></i></button>
                 </div>
                 <div class="tool-spacer"></div>
 
                 <!-- Barcode & Card Elements -->
                 <div class="tool-group">
-                    <button class="tool-btn" title="1D/2D Barcode" onclick="executeAction('Add Barcode')"><i class="fa-solid fa-barcode"></i></button>
-                    <button class="tool-btn" title="Magnetic Stripe" onclick="executeAction('Add MagStripe')"><i class="fa-solid fa-credit-card"></i></button>
-                    <button class="tool-btn" title="Smart Card Chip" onclick="executeAction('Add SmartChip')"><i class="fa-solid fa-sim-card"></i></button>
+                    <button class="tool-btn" title="1D/2D Barcode" onclick="addElement('barcode')"><i class="fa-solid fa-barcode"></i></button>
+                    <button class="tool-btn" title="Magnetic Stripe" onclick="addElement('magstripe')"><i class="fa-solid fa-credit-card"></i></button>
+                    <button class="tool-btn" title="Smart Card Chip" onclick="addElement('smartchip')"><i class="fa-solid fa-sim-card"></i></button>
                 </div>
                 <div class="tool-spacer"></div>
 
                 <!-- Shapes: Line / Rectangle / Circle -->
                 <div class="tool-group">
-                    <button class="tool-btn" title="Line" onclick="executeAction('Draw Line')"><i class="fa-solid fa-slash"></i></button>
-                    <button class="tool-btn" title="Rectangle" onclick="executeAction('Draw Rectangle')"><i class="fa-regular fa-square"></i></button>
-                    <button class="tool-btn" title="Circle / Ellipse" onclick="executeAction('Draw Circle')"><i class="fa-regular fa-circle"></i></button>
+                    <button class="tool-btn" title="Line" onclick="addElement('line')"><i class="fa-solid fa-slash"></i></button>
+                    <button class="tool-btn" title="Rectangle" onclick="addElement('rectangle')"><i class="fa-regular fa-square"></i></button>
+                    <button class="tool-btn" title="Circle / Ellipse" onclick="addElement('circle')"><i class="fa-regular fa-circle"></i></button>
                 </div>
                 <div class="tool-spacer"></div>
 
                 <!-- Rulers & Grid -->
                 <div class="tool-group">
-                    <button class="tool-btn" title="Show/Hide Rulers" onclick="executeAction('Toggle Rulers')"><i class="fa-solid fa-ruler-combined"></i></button>
-                    <button class="tool-btn" title="Show/Hide Grid" onclick="executeAction('Toggle Grid')"><i class="fa-solid fa-border-all"></i></button>
+                    <button class="tool-btn" id="btn-grid" title="Show/Hide Grid" onclick="toggleGrid()"><i class="fa-solid fa-border-all"></i></button>
                 </div>
                 <div class="tool-spacer"></div>
 
                 <!-- Zoom Controls -->
                 <div class="tool-group">
-                    <button class="tool-btn" title="Zoom Out" onclick="executeAction('Zoom Out')"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
-                    <button class="tool-btn" title="Zoom In" onclick="executeAction('Zoom In')"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+                    <button class="tool-btn" title="Zoom Out" onclick="changeZoom(-10)"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+                    <button class="tool-btn" title="Zoom In" onclick="changeZoom(10)"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
                 </div>
                 <div class="tool-spacer"></div>
 
                 <!-- Zoom Level Dropdown -->
                 <span style="font-size: 12px; color: #374151; margin-right: 4px;">Zoom</span>
-                <select class="zoom-dropdown">
-                    <option>100%</option>
-                    <option>150%</option>
-                    <option>200%</option>
-                    <option>50%</option>
+                <select class="zoom-dropdown" id="zoom-select" onchange="setZoom(this.value)">
+                    <option value="100">100%</option>
+                    <option value="125">125%</option>
+                    <option value="150">150%</option>
+                    <option value="75">75%</option>
                 </select>
-                <div class="tool-spacer"></div>
-
-                <!-- Layout Split View -->
-                <div class="tool-group">
-                    <button class="tool-btn" title="Switch Layout View" onclick="executeAction('Toggle Layout')"><i class="fa-solid fa-table-columns"></i></button>
-                </div>
             </div>
 
-            <!-- CANVAS SUB-HEADER (AS SHOWN IN THE IMAGE) -->
+            <!-- CANVAS SUB-HEADER -->
             <div class="canvas-subheader">
                 <span>Front Side</span>
                 <span>Active Design Layer: Color</span>
@@ -338,7 +361,7 @@
 
             <!-- CANVAS WORKSPACE -->
             <div class="studio-workspace">
-                <div class="canvas-area">
+                <div class="canvas-area" id="canvas-area">
                     <div class="card-container-wrapper">
                         <div class="card-canvas-outer">
                             <div class="id-card" id="card-front"></div>
@@ -357,9 +380,9 @@
                         <div class="sidebar-tab active">Properties</div>
                         <div class="sidebar-tab">Layers</div>
                     </div>
-                    <div class="sidebar-content">
+                    <div class="sidebar-content" id="sidebar-details">
                         <b style="color: #374151;">Element Properties</b>
-                        <div style="margin-top: 10px; color: #6b7280;">Select an element on the canvas to inspect settings.</div>
+                        <div style="margin-top: 10px; color: #6b7280;">Click any element on the card to edit details, or double click to delete.</div>
                     </div>
                 </div>
             </div>
@@ -367,12 +390,16 @@
             <!-- FOOTER -->
             <div class="studio-footer">
                 <span class="footer-btn" onclick="alert('Card Design Saved Successfully!')">Save Design</span>
+                <span class="footer-btn" onclick="clearCanvas()">Clear Canvas</span>
                 <span class="footer-btn" onclick="navigateTo('credentials')">Close Studio</span>
             </div>
         </div>
     </div>
 
     <script>
+        let currentZoom = 100;
+        let selectedElement = null;
+
         // NAVIGATION HANDLER
         function navigateTo(pageName) {
             document.querySelectorAll('.dropdown-wrapper').forEach(w => w.classList.remove('active'));
@@ -391,23 +418,163 @@
             if (!active) el.classList.add('active');
         }
 
-        // CANVAS TOOL ACTIONS
-        function executeAction(actionName) {
-            const frontCard = document.getElementById('card-front');
-            if (actionName === 'Add Static Text') {
-                const textElem = document.createElement('div');
-                textElem.innerText = "Sample Text";
-                textElem.style.position = "absolute";
-                textElem.style.top = "30px";
-                textElem.style.left = "30px";
-                textElem.style.fontSize = "13px";
-                textElem.style.fontWeight = "bold";
-                textElem.style.color = "#1f2937";
-                textElem.style.cursor = "move";
-                frontCard.appendChild(textElem);
-            } else {
-                console.log("Action Triggered:", actionName);
+        function editDesignName() {
+            const name = prompt("Enter Design Name:", document.getElementById('design-title').innerText);
+            if (name) document.getElementById('design-title').innerText = name;
+        }
+
+        /* ADD ELEMENTS TO CARD FRONT CANVAS */
+        function addElement(type) {
+            const cardFront = document.getElementById('card-front');
+            const elem = document.createElement('div');
+            elem.className = 'card-element';
+            elem.style.top = '20px';
+            elem.style.left = '20px';
+
+            switch(type) {
+                case 'static-text':
+                    elem.innerText = 'Static Text';
+                    elem.style.fontSize = '12px';
+                    elem.style.fontWeight = 'bold';
+                    break;
+                case 'dynamic-text':
+                    elem.innerText = '{First Name}';
+                    elem.style.fontSize = '12px';
+                    elem.style.color = '#2563eb';
+                    break;
+                case 'photo':
+                    elem.innerHTML = '<div style="width:60px; height:75px; background:#e5e7eb; border:1px solid #9ca3af; display:flex; align-items:center; justify-content:center; font-size:20px; color:#6b7280;"><i class="fa-solid fa-user"></i></div>';
+                    break;
+                case 'graphic':
+                    elem.innerHTML = '<div style="width:40px; height:40px; background:#d1d5db; display:flex; align-items:center; justify-content:center; font-size:16px;"><i class="fa-regular fa-image"></i></div>';
+                    break;
+                case 'dynamic-image':
+                    elem.innerHTML = '<div style="width:40px; height:40px; background:#bfdbfe; display:flex; align-items:center; justify-content:center; font-size:16px; color:#1d4ed8;"><i class="fa-solid fa-image"></i></div>';
+                    break;
+                case 'signature':
+                    elem.innerHTML = '<span style="font-family:cursive; font-size:14px; color:#1e293b;">Signature</span>';
+                    break;
+                case 'fingerprint':
+                    elem.innerHTML = '<i class="fa-solid fa-fingerprint" style="font-size:30px; color:#475569;"></i>';
+                    break;
+                case 'barcode':
+                    elem.innerHTML = '<i class="fa-solid fa-barcode" style="font-size:36px;"></i>';
+                    break;
+                case 'magstripe':
+                    elem.innerHTML = '<div style="width:280px; height:25px; background:#1e293b;"></div>';
+                    elem.style.left = '10px';
+                    break;
+                case 'smartchip':
+                    elem.innerHTML = '<i class="fa-solid fa-sim-card" style="font-size:28px; color:#d97706;"></i>';
+                    break;
+                case 'line':
+                    elem.innerHTML = '<div style="width:100px; height:2px; background:#000;"></div>';
+                    break;
+                case 'rectangle':
+                    elem.innerHTML = '<div style="width:80px; height:50px; border:2px solid #000;"></div>';
+                    break;
+                case 'circle':
+                    elem.innerHTML = '<div style="width:50px; height:50px; border:2px solid #000; border-radius:50%;"></div>';
+                    break;
             }
+
+            // Make Element Draggable & Selectable
+            makeDraggable(elem);
+            elem.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectElement(elem, type);
+            });
+            elem.addEventListener('dblclick', () => {
+                elem.remove();
+                document.getElementById('sidebar-details').innerHTML = '<b>Element Properties</b><div style="margin-top:10px; color:#6b7280;">Element Deleted.</div>';
+            });
+
+            cardFront.appendChild(elem);
+            selectElement(elem, type);
+        }
+
+        /* DRAGGABLE FUNCTIONALITY */
+        function makeDraggable(elmnt) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            elmnt.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        function selectElement(elem, type) {
+            document.querySelectorAll('.card-element').forEach(el => el.classList.remove('selected'));
+            elem.classList.add('selected');
+            selectedElement = elem;
+
+            const details = document.getElementById('sidebar-details');
+            details.innerHTML = `
+                <b style="color: #374151;">Selected: ${type.toUpperCase()}</b>
+                <div style="margin-top: 10px;">
+                    <label>Position Top:</label> <input type="text" value="${elem.style.top}" readonly style="width:60px;"><br><br>
+                    <label>Position Left:</label> <input type="text" value="${elem.style.left}" readonly style="width:60px;"><br><br>
+                    <span style="color:#ef4444; cursor:pointer;" onclick="deleteSelected()">🗑 Delete Element</span>
+                </div>
+            `;
+        }
+
+        function deleteSelected() {
+            if (selectedElement) {
+                selectedElement.remove();
+                selectedElement = null;
+                document.getElementById('sidebar-details').innerHTML = '<b>Element Properties</b><div style="margin-top:10px; color:#6b7280;">Element Deleted.</div>';
+            }
+        }
+
+        function clearCanvas() {
+            document.getElementById('card-front').innerHTML = '';
+            document.getElementById('card-back').innerHTML = '';
+        }
+
+        /* GRID TOGGLE */
+        function toggleGrid() {
+            document.getElementById('card-front').classList.toggle('show-grid');
+            document.getElementById('card-back').classList.toggle('show-grid');
+            document.getElementById('btn-grid').classList.toggle('active-tool');
+        }
+
+        /* ZOOM CONTROLS */
+        function changeZoom(delta) {
+            currentZoom = Math.max(50, Math.min(200, currentZoom + delta));
+            setZoom(currentZoom);
+        }
+
+        function setZoom(val) {
+            currentZoom = parseInt(val);
+            document.getElementById('zoom-select').value = currentZoom;
+            document.getElementById('canvas-area').style.transform = `scale(${currentZoom / 100})`;
+            document.getElementById('canvas-area').style.transformOrigin = 'top center';
+        }
+
+        function executeAction(action) {
+            alert(action + " action executed.");
         }
 
         // WINDOW CONTROLS

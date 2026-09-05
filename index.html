@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Adaptive Issuance Instant ID</title>
+    <title>Adaptive Issuance Instant ID - Desktop Edition</title>
     
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         html, body { width: 100vw; height: 100vh; overflow: hidden; background-color: #d1d5db; display: flex; flex-direction: column; }
 
-        /* ---------------- GLOBAL WINDOW TITLEBAR ---------------- */
+        /* ---------------- GLOBAL DESKTOP TITLEBAR ---------------- */
         #global-titlebar {
             height: 32px;
             background-color: #1f2937;
@@ -23,7 +23,7 @@
             user-select: none;
             z-index: 2000000;
         }
-        .app-title-text { font-weight: 500; color: #e5e7eb; }
+        .app-title-text { font-weight: 500; color: #e5e7eb; display: flex; align-items: center; gap: 8px; }
         .global-window-controls { display: flex; align-items: center; gap: 2px; }
         .win-control-btn { width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; color: #ffffff; font-size: 13px; cursor: pointer; transition: background 0.15s; }
         .win-control-btn:hover { background-color: rgba(255, 255, 255, 0.15); }
@@ -76,9 +76,8 @@
         .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         .data-table th { text-align: left; padding: 8px 12px; background-color: #e5e7eb; color: #374151; font-weight: 600; border-bottom: 1px solid #9ca3af; }
         .data-table td { padding: 8px 12px; border-bottom: 1px solid #e5e7eb; }
-        .data-table td.no-data { text-align: center; padding: 25px; color: #4b5563; }
         
-        /* ---------------- DESIGN STUDIO & FULL TOOLBAR ---------------- */
+        /* ---------------- DESIGN STUDIO & TOOLBAR ---------------- */
         .design-toolbar { 
             background-color: #e5e7eb; 
             border-bottom: 1px solid #b0b5bc; 
@@ -120,16 +119,22 @@
         .sidebar-tab { flex: 1; padding: 8px; text-align: center; font-size: 12px; color: #4b5563; cursor: pointer; }
         .sidebar-tab.active { background-color: #f3f4f6; font-weight: bold; color: #1f2937; border-bottom: 2px solid #5c2483; }
         .sidebar-content { padding: 15px; font-size: 12px; }
-        .sidebar-group { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
         
         .studio-footer { height: 28px; background-color: #e5e7eb; border-top: 1px solid #b0b5bc; display: flex; align-items: center; padding: 0 10px; font-size: 12px; gap: 15px; }
         .footer-btn { cursor: pointer; color: #2563eb; font-weight: 500; }
         .footer-btn:hover { text-decoration: underline; }
+
+        /* MODAL OVERLAY */
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 500000; justify-content: center; align-items: center; }
+        .overlay.show { display: flex; }
+        .modal-box { background: white; padding: 20px; border-radius: 6px; width: 450px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .modal-header { font-size: 16px; font-weight: bold; margin-bottom: 12px; color: #1f2937; display: flex; justify-content: space-between; }
+        .modal-actions { margin-top: 20px; display: flex; justify-content: flex-end; gap: 8px; }
     </style>
 </head>
 <body>
 
-    <!-- TOP TITLEBAR -->
+    <!-- TOP DESKTOP TITLEBAR -->
     <div id="global-titlebar">
         <div class="app-title-text">ENTRUST Adaptive Issuance Instant ID</div>
         <div class="global-window-controls">
@@ -140,7 +145,7 @@
     </div>
 
     <div id="app-container">
-        <!-- GLOBAL NAVIGATION NAVBAR -->
+        <!-- NAVIGATION BAR -->
         <div id="top-navbar">
             <div class="nav-left">
                 <div class="brand-logo">
@@ -154,11 +159,12 @@
                             Design <span style="font-size: 9px;">▼</span>
                         </div>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" onclick="navigateTo('credential-designs')">Credentials</a>
-                            <a class="dropdown-item" onclick="navigateTo('card-studio')">Open Designer Studio</a>
+                            <a class="dropdown-item" onclick="openQuickStartModal()">Quick Start</a>
+                            <a class="dropdown-item" onclick="navigateTo('credentials')">Credentials</a>
+                            <a class="dropdown-item" onclick="navigateTo('card-studio')">Open Studio</a>
                         </div>
                     </div>
-                    <a class="nav-item">Printer Queues</a>
+                    <a class="nav-item" onclick="alert('Printer Queues Opened')">Printer Queues</a>
                 </div>
             </div>
 
@@ -173,46 +179,46 @@
             </div>
         </div>
 
-        <!-- PAGE 1: HOME PAGE -->
-        <div id="page-home" class="page-view">
+        <!-- VIEW 1: HOME PAGE -->
+        <div id="page-home" class="page-view active">
             <div class="page-banner">
-                <span>Home Dashboard</span>
+                <span>Dashboard Home</span>
             </div>
             <div class="content-body-grey" style="justify-content: center; align-items: center;">
                 <div style="background: white; padding: 40px; border-radius: 8px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 500px;">
-                    <h2 style="color: #1f2937; margin-bottom: 10px;">Welcome to Entrust Instant ID</h2>
-                    <p style="color: #6b7280; font-size: 13px; margin-bottom: 20px;">Manage your credential designs or launch the studio to edit layouts.</p>
-                    <button class="btn-primary" onclick="navigateTo('credential-designs')">Manage Credentials</button>
-                    <button class="btn-primary" style="background-color: #5c2483; margin-left: 8px;" onclick="navigateTo('card-studio')">Open Studio</button>
+                    <h2 style="color: #1f2937; margin-bottom: 10px;">Entrust Instant ID System</h2>
+                    <p style="color: #6b7280; font-size: 13px; margin-bottom: 20px;">Manage workflows, generate credentials, or design layout templates.</p>
+                    <button class="btn-primary" onclick="openQuickStartModal()">Quick Start Wizard</button>
+                    <button class="btn-primary" style="background-color: #5c2483; margin-left: 8px;" onclick="navigateTo('card-studio')">Open Designer Studio</button>
                 </div>
             </div>
         </div>
 
-        <!-- PAGE 2: CREDENTIAL DESIGNS LIST -->
-        <div id="page-credential-designs" class="page-view">
+        <!-- VIEW 2: CREDENTIALS MANAGEMENT -->
+        <div id="page-credentials" class="page-view">
             <div class="page-banner">
-                <span>Manage Your Credential Designs</span>
+                <span>Manage Credential Designs</span>
             </div>
             <div class="content-body-grey">
-                <button class="btn-primary" style="align-self: flex-start; margin-bottom: 12px;" onclick="navigateTo('card-studio')">Create New Design</button>
+                <button class="btn-primary" style="align-self: flex-start; margin-bottom: 12px;" onclick="navigateTo('card-studio')">New Credential Design</button>
                 <div class="filter-section">
-                    <label>Filter</label>
-                    <input type="text" class="filter-input" placeholder="Search...">
+                    <label>Search Filter:</label>
+                    <input type="text" class="filter-input" placeholder="Keyword...">
                 </div>
                 <div class="data-table-container">
                     <table class="data-table">
                         <thead>
                             <tr>
                                 <th style="width: 40%;">Credential Design Name</th>
-                                <th style="width: 30%;">Created By</th>
-                                <th style="width: 30%;">Last Modified By</th>
+                                <th style="width: 30%;">Workflow</th>
+                                <th style="width: 30%;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><a href="#" onclick="navigateTo('card-studio')" style="color: #2563eb; text-decoration: none;">Credential Design 1</a></td>
-                                <td>admin</td>
-                                <td>admin</td>
+                                <td><a href="#" onclick="navigateTo('card-studio')" style="color: #2563eb; text-decoration: none;">Standard Employee ID</a></td>
+                                <td>Default Workflow</td>
+                                <td><button class="btn-primary" onclick="navigateTo('card-studio')">Edit Design</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -220,76 +226,52 @@
             </div>
         </div>
 
-        <!-- PAGE 3: DESIGN STUDIO (FULL TOOLBAR WITH UNDO, REDO, COPY, PASTE) -->
-        <div id="page-card-studio" class="page-view active">
+        <!-- VIEW 3: CARD DESIGNER STUDIO -->
+        <div id="page-card-studio" class="page-view">
             <div class="page-banner" style="background-color: #4a1582;">
-                <span>Credential Design 1 ✏️</span>
+                <span>Credential Design Workspace ✏️</span>
             </div>
             
-            <!-- TOOLBAR -->
+            <!-- STUDIO TOOLBAR -->
             <div class="design-toolbar">
-                <!-- Undo / Redo -->
-                <div class="tool-btn" title="Undo (Ctrl+Z)" onclick="executeAction('Undo')">↶</div>
-                <div class="tool-btn" title="Redo (Ctrl+Y)" onclick="executeAction('Redo')">↷</div>
+                <div class="tool-btn" title="Undo" onclick="executeAction('Undo')">↶</div>
+                <div class="tool-btn" title="Redo" onclick="executeAction('Redo')">↷</div>
                 <div class="tool-divider"></div>
 
-                <!-- Cut / Copy / Paste -->
-                <div class="tool-btn" title="Copy (Ctrl+C)" onclick="executeAction('Copy')">📋</div>
-                <div class="tool-btn" title="Cut (Ctrl+X)" onclick="executeAction('Cut')">✂</div>
-                <div class="tool-btn" title="Paste (Ctrl+V)" onclick="executeAction('Paste')">📄</div>
+                <div class="tool-btn" title="Copy" onclick="executeAction('Copy')">📋</div>
+                <div class="tool-btn" title="Cut" onclick="executeAction('Cut')">✂</div>
+                <div class="tool-btn" title="Paste" onclick="executeAction('Paste')">📄</div>
                 <div class="tool-divider"></div>
 
-                <!-- Text Tools -->
                 <div class="tool-btn" title="Static Text" onclick="executeAction('Add Static Text')"><b>T</b></div>
                 <div class="tool-btn" title="Dynamic Text" onclick="executeAction('Add Dynamic Text')"><b>T_</b></div>
                 <div class="tool-divider"></div>
 
-                <!-- Graphics / Photos -->
                 <div class="tool-btn" title="Portrait Photo" onclick="executeAction('Add Photo Field')">👤</div>
-                <div class="tool-btn" title="Static Graphic" onclick="executeAction('Add Static Image')">🖼</div>
-                <div class="tool-btn" title="Dynamic Graphic" onclick="executeAction('Add Dynamic Image')">🖼_</div>
+                <div class="tool-btn" title="Graphic Image" onclick="executeAction('Add Graphic')">🖼</div>
+                <div class="tool-btn" title="Barcode" onclick="executeAction('Add Barcode')">║▌</div>
+                <div class="tool-btn" title="QR Code" onclick="executeAction('Add QR Code')">🏁</div>
                 <div class="tool-divider"></div>
 
-                <!-- Barcode & Magnetic Stripe -->
-                <div class="tool-btn" title="1D Barcode" onclick="executeAction('Add Barcode')">║▌</div>
-                <div class="tool-btn" title="2D / QR Code" onclick="executeAction('Add QR Code')">🏁</div>
-                <div class="tool-btn" title="Magnetic Stripe" onclick="executeAction('Configure Magstripe')">💳</div>
-                <div class="tool-divider"></div>
-
-                <!-- Shapes & Lines -->
-                <div class="tool-btn" title="Line" onclick="executeAction('Draw Line')">╱</div>
                 <div class="tool-btn" title="Rectangle" onclick="executeAction('Draw Rectangle')">▭</div>
-                <div class="tool-btn" title="Circle / Ellipse" onclick="executeAction('Draw Circle')">○</div>
+                <div class="tool-btn" title="Circle" onclick="executeAction('Draw Circle')">○</div>
                 <div class="tool-divider"></div>
 
-                <!-- Smartcard & Grid Alignment -->
-                <div class="tool-btn" title="Smart Chip Location" onclick="executeAction('Add Smartcard Chip')">📟</div>
-                <div class="tool-btn" title="Toggle Grid Alignment" onclick="executeAction('Toggle Grid')">▦</div>
-                <div class="tool-divider"></div>
-
-                <!-- Zoom Controls -->
                 <div class="tool-btn" title="Zoom In" onclick="executeAction('Zoom In')">🔍+</div>
                 <div class="tool-btn" title="Zoom Out" onclick="executeAction('Zoom Out')">🔍-</div>
-                <select class="zoom-select" title="Zoom Level" onchange="executeAction('Zoom to ' + this.value)">
-                    <option>100%</option>
-                    <option>75%</option>
-                    <option>50%</option>
-                    <option>150%</option>
-                </select>
-                <div class="tool-btn" title="Fit Screen" onclick="executeAction('Fit to Screen')">⤢</div>
             </div>
 
             <!-- CANVAS WORKSPACE -->
             <div class="studio-workspace">
                 <div class="canvas-area">
                     <div class="card-container-wrapper">
-                        <div class="card-title-header">Front Side <span style="font-weight: normal; opacity: 0.8; margin-left: 15px;">Active Design Layer: Color</span></div>
+                        <div class="card-title-header">Front Side Layer</div>
                         <div class="card-canvas-outer">
                             <div class="id-card" id="card-front"></div>
                         </div>
                     </div>
                     <div class="card-container-wrapper">
-                        <div class="card-title-header">Back Side</div>
+                        <div class="card-title-header">Back Side Layer</div>
                         <div class="card-canvas-outer">
                             <div class="id-card" id="card-back"></div>
                         </div>
@@ -303,39 +285,50 @@
                         <div class="sidebar-tab">Layers</div>
                     </div>
                     <div class="sidebar-content">
-                        <b style="color: #374151;">- Front Side Properties</b>
-                        <div class="sidebar-group">
-                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                <input type="checkbox"> Rotate print orientation 180 degrees
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                <input type="checkbox"> Tactile Impression Module
-                            </label>
-                        </div>
+                        <b style="color: #374151;">Element Configuration</b>
+                        <div style="margin-top: 10px;">Select an element on the canvas to inspect and modify properties.</div>
                     </div>
                 </div>
             </div>
 
-            <!-- STUDIO FOOTER -->
+            <!-- FOOTER -->
             <div class="studio-footer">
-                <span class="footer-btn" onclick="alert('Design saved successfully.')">Save</span>
-                <span class="footer-btn" onclick="navigateTo('credential-designs')">Close</span>
+                <span class="footer-btn" onclick="alert('Card Design Saved Successfully!')">Save Design</span>
+                <span class="footer-btn" onclick="navigateTo('credentials')">Close Studio</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUICKSTART MODAL DIALOG -->
+    <div class="overlay" id="quickstart-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span>Quick Start Wizard</span>
+                <span style="cursor:pointer;" onclick="closeQuickStartModal()">✕</span>
+            </div>
+            <p style="font-size: 13px; color: #4b5563; margin-bottom: 15px;">
+                The Quick Start wizard helps you create and print a credential easily.
+            </p>
+            <div style="font-size: 12px; display: flex; flex-direction: column; gap: 8px;">
+                <label><input type="radio" name="qs" checked> Let Quick Start generate workflow & fields (Recommended)</label>
+                <label><input type="radio" name="qs"> Customize workflow and field connections manually</label>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="closeQuickStartModal(); navigateTo('card-studio');">Next</button>
+                <button class="btn-primary" style="background:#6b7280;" onclick="closeQuickStartModal()">Cancel</button>
             </div>
         </div>
     </div>
 
     <script>
-        // NAVIGATION LOGIC
+        // NAVIGATION HANDLER
         function navigateTo(pageName) {
             document.querySelectorAll('.dropdown-wrapper').forEach(w => w.classList.remove('active'));
             document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
 
-            if (pageName === 'home') {
-                document.getElementById('page-home').classList.add('active');
-            } else if (pageName === 'credential-designs') {
-                document.getElementById('page-credential-designs').classList.add('active');
-            } else if (pageName === 'card-studio') {
-                document.getElementById('page-card-studio').classList.add('active');
+            const targetPage = document.getElementById('page-' + pageName);
+            if (targetPage) {
+                targetPage.classList.add('active');
             }
         }
 
@@ -346,28 +339,37 @@
             if (!active) el.classList.add('active');
         }
 
-        // TOOLBAR BUTTON ACTIONS
+        // QUICKSTART MODAL CONTROLS
+        function openQuickStartModal() {
+            document.getElementById('quickstart-modal').classList.add('show');
+        }
+        function closeQuickStartModal() {
+            document.getElementById('quickstart-modal').classList.remove('show');
+        }
+
+        // CANVAS TOOL ACTIONS
         function executeAction(actionName) {
-            console.log("Executed Action:", actionName);
             const frontCard = document.getElementById('card-front');
             if (actionName === 'Add Static Text') {
                 const textElem = document.createElement('div');
                 textElem.innerText = "Sample Text";
                 textElem.style.position = "absolute";
-                textElem.style.top = "20px";
-                textElem.style.left = "20px";
-                textElem.style.fontSize = "12px";
+                textElem.style.top = "30px";
+                textElem.style.left = "30px";
+                textElem.style.fontSize = "13px";
                 textElem.style.fontWeight = "bold";
-                textElem.style.color = "#333";
+                textElem.style.color = "#1f2937";
                 textElem.style.cursor = "move";
                 frontCard.appendChild(textElem);
+            } else {
+                console.log("Action Triggered:", actionName);
             }
         }
 
-        // WINDOW CONTROLS
-        function appMinimize() { alert("Minimize Window"); }
-        function appMaximize() { alert("Maximize Window"); }
-        function appClose() { if(confirm("Close application?")) window.close(); }
+        // WINDOW CONTROLS FOR DESKTOP CONTAINER
+        function appMinimize() { alert("Minimize Application Window"); }
+        function appMaximize() { alert("Maximize Application Window"); }
+        function appClose() { if(confirm("Close Application?")) window.close(); }
     </script>
 </body>
 </html>

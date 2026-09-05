@@ -1,27 +1,17 @@
 const { app, BrowserWindow } = require('electron');
 
-function createWindow () {
+function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
-    title: "PVC Card Studio & Product Builder",
+    frame: false,            // OS Standard Frame (Title Bar, Menu Bar) တစ်ခုလုံးကို ဖယ်ထုတ်မည်
+    autoHideMenuBar: true,   // Menu Bar ကို လုံးဝဖျောက်မည်
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      nodeIntegration: true
     }
   });
 
   win.loadFile('index.html');
 }
 
-app.whenReady().then(() => {
-  createWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
-});
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
-});
+app.whenReady().then(createWindow);

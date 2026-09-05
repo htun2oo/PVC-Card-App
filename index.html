@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ENTRUST Adaptive Issuance Instant ID</title>
-    <!-- Fabric.js Canvas Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <style>
         * { 
@@ -34,8 +33,8 @@
             padding: 0 10px;
             font-size: 12px;
             user-select: none;
-            z-index: 2000000; /* Always stay on top */
-            -webkit-app-region: drag; /* For Electron Window Dragging */
+            z-index: 2000000;
+            -webkit-app-region: drag; /* Dragging Area */
         }
 
         .app-title-text {
@@ -47,7 +46,7 @@
             display: flex;
             align-items: center;
             gap: 2px;
-            -webkit-app-region: no-drag;
+            -webkit-app-region: no-drag; /* Clickable Area */
         }
 
         .win-control-btn {
@@ -62,13 +61,8 @@
             transition: background 0.15s;
         }
 
-        .win-control-btn:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .win-control-btn.close-btn:hover {
-            background-color: #e11d48;
-        }
+        .win-control-btn:hover { background-color: rgba(255, 255, 255, 0.15); }
+        .win-control-btn.close-btn:hover { background-color: #e11d48; }
 
         /* ---------------- MAIN CONTAINER ---------------- */
         #app-container {
@@ -191,7 +185,6 @@
             overflow: hidden;
         }
 
-        /* DIRECT WORKSPACE LAYOUT (NO CREDENTIALS WORKSPACE BAR) */
         .left-form-area {
             flex: 1;
             background: #ece9d8;
@@ -224,7 +217,7 @@
 </head>
 <body>
 
-    <!-- GLOBAL APPLICATION TITLEBAR (AVAILABLE AT FIRST START) -->
+    <!-- APP TITLEBAR -->
     <div id="global-titlebar">
         <div class="app-title-text">ENTRUST Adaptive Issuance Instant ID</div>
         <div class="global-window-controls">
@@ -257,8 +250,6 @@
 
         <!-- MAIN WORKSPACE -->
         <div id="main-workspace">
-            
-            <!-- Top Header -->
             <div id="top-navbar">
                 <div class="nav-left">
                     <div class="brand-logo">
@@ -283,24 +274,18 @@
                 </div>
             </div>
 
-            <!-- Sub Tabs -->
             <div id="sub-navbar">
                 <button class="tab-btn active">Credentials</button>
                 <button class="tab-btn">Reports</button>
             </div>
 
-            <!-- Action Bar -->
             <div id="action-bar">
                 <button class="action-btn">🔲</button>
                 <button class="action-btn">☰</button>
             </div>
 
-            <!-- Workspace Area (Credentials Workspace Title Bar Removed) -->
             <div class="workspace-content">
-                <!-- Left Form Area -->
                 <div class="left-form-area"></div>
-
-                <!-- Right Card Preview Area -->
                 <div class="right-card-area">
                     <div class="card-preview-box">
                         <canvas id="frontCanvas" width="320" height="190"></canvas>
@@ -310,43 +295,29 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
     <script>
-        // Global App Window Control Functions
+        // IPC Control Functions
         function appMinimize() {
             if (window.electronAPI && window.electronAPI.minimize) {
                 window.electronAPI.minimize();
-            } else {
-                alert("Minimize clicked");
             }
         }
 
         function appMaximize() {
             if (window.electronAPI && window.electronAPI.maximize) {
                 window.electronAPI.maximize();
-            } else {
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen().catch(() => {});
-                } else {
-                    if (document.exitFullscreen) document.exitFullscreen();
-                }
             }
         }
 
         function appClose() {
             if (window.electronAPI && window.electronAPI.close) {
                 window.electronAPI.close();
-            } else {
-                if (confirm("Software ကို ပိတ်လိုပါသလား။")) {
-                    window.close();
-                }
             }
         }
 
-        // Login Logic
         function handleLogin() {
             const user = document.getElementById('userId').value.trim();
             const pass = document.getElementById('password').value.trim();
@@ -360,7 +331,6 @@
             }
         }
 
-        // Canvas Setup
         let frontCanvas, backCanvas;
         function initCanvases() {
             if (frontCanvas) return;

@@ -202,7 +202,7 @@
             font-size: 12px;
         }
 
-        /* ---------------- MDI WORKSPACE STYLES ---------------- */
+        /* ---------------- MAIN WORKSPACE ---------------- */
         #main-workspace {
             display: none;
             flex-direction: column;
@@ -246,8 +246,8 @@
         .form-body { background: #ece9d8; }
 
         .canvas-with-ruler { position: relative; padding-top: 20px; padding-left: 20px; background: #d4d0c8; border: 1px solid #999; }
-        .ruler-top { position: absolute; top: 0; left: 20px; right: 0; height: 20px; background: #ece9d8; border-bottom: 1px solid #808080; font-size: 9px; display: flex; justify-content: space-around; align-items: center; }
-        .ruler-left { position: absolute; top: 20px; left: 0; bottom: 0; width: 20px; background: #ece9d8; border-right: 1px solid #808080; font-size: 9px; display: flex; flex-direction: column; justify-content: space-around; align-items: center; }
+        .ruler-top { position: absolute; top: 0; left: 20px; right: 0; height: 20px; background: #ece9d8; border-bottom: 1px solid #808080; font-size: 9px; display: flex; justify-space-around: align-items: center; }
+        .ruler-left { position: absolute; top: 20px; left: 0; bottom: 0; width: 20px; background: #ece9d8; border-right: 1px solid #808080; font-size: 9px; display: flex; flex-direction: column; justify-space-around; align-items: center; }
 
         canvas { background: #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.3); }
 
@@ -290,7 +290,7 @@
     <!-- 2. MAIN APPLICATION WORKSPACE -->
     <div id="main-workspace">
         
-        <!-- Top Navbar -->
+        <!-- Top Navbar (Menu bar မပါဘဲ Direct Header သာပါရှိပါသည်) -->
         <div id="top-navbar">
             <div class="nav-left">
                 <div class="brand-logo">
@@ -400,7 +400,7 @@
             }
         }
 
-        // MDI Window Controls
+        // Window Controls
         function toggleMinimize(winId) {
             const win = document.getElementById(winId);
             win.classList.toggle('minimized');

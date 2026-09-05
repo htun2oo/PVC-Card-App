@@ -1,26 +1,40 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
+let mainWindow;
+
 function createWindow() {
-  const mainWindow = new BrowserWindow({
-    width: 1280,
+  mainWindow = new BrowserWindow({
+    width: 1200,
     height: 800,
-    minWidth: 1024,
-    minHeight: 720,
-    frame: false,           // OS Standard Frame (Title Bar, File/Edit/View Menu) ကို လုံးဝဖယ်ထုတ်ခြင်း
-    autoHideMenuBar: true,  // Menu Bar ကို ဖျောက်ခြင်း
+    frame: false, // Title bar ကို ဖယ်ထုတ်ထားခြင်း
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: false,
+      contextIsolation: true
     }
   });
 
-  mainWindow.setMenu(null);  // Menu ကို လုံးဝဖျက်ထုတ်ခြင်း
   mainWindow.loadFile('index.html');
 }
 
-app.whenReady().then(createWindow);
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+// Window Control Events
+ipcMain.on('window-minimize', () => {
+  if (mainWindow) mainWindow.minimize();
 });
+
+ipcMain.on('window-maximize', () => {
+  if (mainWindow) {
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize();
+    } else {
+      mainWindow.maximize();
+    }
+  }
+});
+
+ipcMain.on('window-close', () => {
+  if (mainWindow) mainWindow.close();
+});
+
+app.whenReady().then(createWindow);

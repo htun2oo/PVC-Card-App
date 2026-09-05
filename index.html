@@ -33,7 +33,6 @@
             font-size: 12px;
             user-select: none;
             z-index: 2000000;
-            -webkit-app-region: drag;
         }
 
         .app-title-text { font-weight: 500; color: #e5e7eb; }
@@ -42,7 +41,6 @@
             display: flex;
             align-items: center;
             gap: 2px;
-            -webkit-app-region: no-drag;
         }
 
         .win-control-btn {
@@ -68,44 +66,6 @@
             height: calc(100vh - 32px);
             overflow: hidden;
         }
-
-        /* ---------------- LOGIN PAGE ---------------- */
-        #login-screen {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: linear-gradient(135deg, #7026b9 0%, #4a1582 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000000;
-        }
-
-        .app-title {
-            color: #ffffff;
-            font-size: 28px;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .login-card {
-            background-color: rgba(255, 255, 255, 0.95);
-            width: 440px;
-            border-radius: 12px;
-            padding: 35px 30px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group-login { width: 100%; margin-bottom: 20px; }
-        .form-group-login label { display: block; font-size: 14px; color: #666; margin-bottom: 8px; }
-        .form-group-login input { width: 100%; padding: 12px; border: 1px solid #9aa0a6; border-radius: 6px; font-size: 15px; outline: none; }
-
-        .forgot-password { color: #fff; font-size: 14px; text-decoration: underline; margin-top: 20px; margin-bottom: 15px; cursor: pointer; }
-        .btn-signin { background-color: #00b0eb; color: #fff; border: none; padding: 10px 26px; font-size: 15px; font-weight: bold; border-radius: 4px; cursor: pointer; }
 
         /* ---------------- TOP NAVBAR ---------------- */
         #top-navbar {
@@ -139,597 +99,273 @@
         
         .nav-right { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #333; }
         
-        /* ---------------- DROPDOWN STYLES ---------------- */
-        .dropdown-wrapper {
-            position: relative;
-            display: inline-block;
-        }
+        /* DROPDOWN STYLES */
+        .dropdown-wrapper { position: relative; display: inline-block; }
+        .dropdown-trigger { cursor: pointer; padding: 6px 10px; border-radius: 3px 3px 0 0; display: flex; align-items: center; gap: 4px; user-select: none; font-weight: 500; }
+        .dropdown-wrapper.active .dropdown-trigger { background-color: #e5e7eb; border: 1px solid #9ca3af; border-bottom: none; }
+        .dropdown-menu { display: none; position: absolute; top: 100%; left: 0; background-color: #e5e7eb; border: 1px solid #9ca3af; border-radius: 0 3px 3px 3px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); min-width: 170px; z-index: 10000; }
+        .dropdown-wrapper.active .dropdown-menu { display: block; }
+        .dropdown-item { padding: 8px 14px; color: #1f2937; text-decoration: none; display: block; font-size: 12px; border-bottom: 1px solid #d1d5db; cursor: pointer; }
+        .dropdown-item:hover { background-color: #d1d5db; }
 
-        .dropdown-trigger {
-            cursor: pointer;
-            padding: 6px 10px;
-            border-radius: 3px 3px 0 0;
+        .badge-container { position: relative; display: inline-block; cursor: pointer; }
+        .notification-badge { position: absolute; top: -5px; right: -6px; background-color: #ef4444; color: white; font-size: 9px; font-weight: bold; border-radius: 50%; width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; }
+
+        /* ---------------- WORKSPACE VIEWS ---------------- */
+        #main-workspace { display: flex; flex-direction: column; width: 100%; height: 100%; }
+        .page-view { display: none; flex-direction: column; flex: 1; width: 100%; height: calc(100% - 48px); }
+        .page-view.active { display: flex; }
+
+        /* ---------------- PAGE 1: MANAGE CREDENTIAL DESIGNS ---------------- */
+        .page-banner { background-color: #5c2483; color: #ffffff; padding: 10px 15px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+        .sub-tab-bar-light { background-color: #e5e7eb; border-bottom: 1px solid #d1d5db; padding-left: 15px; display: flex; align-items: flex-end; height: 38px; }
+        .tab-btn-light { background: #f3f4f6; color: #374151; padding: 8px 16px; font-size: 12px; border: 1px solid #d1d5db; border-bottom: none; border-top-left-radius: 4px; border-top-right-radius: 4px; font-weight: 600; }
+        .content-body-grey { background-color: #d1d5db; flex: 1; padding: 15px; display: flex; flex-direction: column; }
+        .btn-create { background-color: #2563eb; color: white; border: none; padding: 6px 16px; font-size: 12px; border-radius: 3px; cursor: pointer; align-self: flex-start; margin-bottom: 12px; }
+        .btn-create:hover { background-color: #1d4ed8; }
+        .filter-section { background-color: #e5e7eb; padding: 8px 12px; display: flex; justify-content: flex-end; align-items: center; gap: 10px; font-size: 12px; color: #374151; border: 1px solid #9ca3af; border-bottom: none; }
+        .filter-input { padding: 4px 8px; border: 1px solid #9ca3af; border-radius: 2px; outline: none; width: 160px; }
+        .data-table-container { background-color: #e5e7eb; border: 1px solid #9ca3af; }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .data-table th { text-align: left; padding: 8px 12px; color: #374151; font-weight: 600; border-bottom: 1px solid #9ca3af; }
+        .data-table td.no-data { text-align: center; padding: 25px; color: #4b5563; }
+        .pagination-bar { background-color: #e5e7eb; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #4b5563; border: 1px solid #9ca3af; border-top: none; }
+        .pagination-links { display: flex; gap: 12px; color: #6b7280; }
+
+        /* ---------------- PAGE 2: CARD DESIGN STUDIO (SECOND IMAGE) ---------------- */
+        .studio-banner { background-color: #5c2483; color: #ffffff; padding: 8px 15px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+        .studio-banner .edit-icon { cursor: pointer; opacity: 0.8; font-size: 11px; }
+
+        /* DESIGN TOOLBAR */
+        .design-toolbar {
+            background-color: #e5e7eb;
+            border-bottom: 1px solid #b0b5bc;
+            padding: 4px 10px;
             display: flex;
             align-items: center;
             gap: 4px;
-            user-select: none;
-            font-weight: 500;
-        }
-
-        .dropdown-wrapper.active .dropdown-trigger {
-            background-color: #e5e7eb;
-            border: 1px solid #9ca3af;
-            border-bottom: none;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background-color: #e5e7eb;
-            border: 1px solid #9ca3af;
-            border-radius: 0 3px 3px 3px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            min-width: 170px;
-            z-index: 10000;
-        }
-
-        .dropdown-wrapper.active .dropdown-menu {
-            display: block;
-        }
-
-        .dropdown-item {
-            padding: 8px 14px;
-            color: #1f2937;
-            text-decoration: none;
-            display: block;
-            font-size: 12px;
-            font-weight: 400;
-            border-bottom: 1px solid #d1d5db;
-            cursor: pointer;
-        }
-
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-item:hover {
-            background-color: #d1d5db;
-            color: #000;
-        }
-
-        /* Notification Badge */
-        .badge-container {
-            position: relative;
-            display: inline-block;
-            cursor: pointer;
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -6px;
-            background-color: #ef4444;
-            color: white;
-            font-size: 9px;
-            font-weight: bold;
-            border-radius: 50%;
-            width: 14px;
-            height: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* ---------------- SUB TAB BAR ---------------- */
-        #sub-navbar {
-            height: 38px;
-            background-color: #5c2483;
-            display: flex;
-            align-items: flex-end;
-            padding-left: 15px;
-        }
-
-        .tab-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            padding: 8px 16px;
-            font-size: 12px;
-            border: none;
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
-            margin-right: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .tab-btn.active { 
-            background: #e5e7eb; 
-            color: #333333; 
-            font-weight: bold; 
-        }
-
-        /* ---------------- ACTION BAR ---------------- */
-        #action-bar {
-            height: 38px;
-            background-color: #e5e7eb;
-            border-bottom: 1px solid #ccc;
-            display: flex;
-            align-items: center;
-            padding: 0 10px;
-        }
-
-        .view-toggle-group {
-            display: flex;
-            border: 1px solid #9aa0a6;
-            border-radius: 2px;
-            overflow: hidden;
-            background: #d1d5db;
-        }
-
-        .view-btn {
-            background: #d1d5db;
-            border: none;
-            padding: 5px 9px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            outline: none;
-        }
-
-        .view-btn.active {
-            background: #9aa0a6;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
-        }
-
-        .view-btn svg { width: 14px; height: 14px; fill: #333; }
-
-        /* ---------------- MAIN WORKSPACE ---------------- */
-        #main-workspace {
-            display: none;
-            flex-direction: column;
-            width: 100%;
-            height: 100%;
-        }
-
-        .page-view {
-            display: none;
-            flex-direction: column;
-            flex: 1;
-            width: 100%;
-            height: calc(100% - 48px);
-        }
-
-        .page-view.active { display: flex; }
-
-        .tab-content {
-            display: none;
-            flex: 1;
-            width: 100%;
-            height: calc(100% - 124px);
-            position: relative;
-        }
-
-        .tab-content.active { display: flex; }
-
-        .credentials-view {
-            background-color: #e5e7eb;
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        .printer-queue-status {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background-color: #d1d5db;
-            border-top: 1px solid #b0b5bc;
-            border-left: 1px solid #b0b5bc;
-            padding: 4px 15px;
-            font-size: 11px;
-            color: #4b5563;
-            cursor: pointer;
-            border-top-left-radius: 3px;
-        }
-
-        .reports-view {
-            padding: 20px;
-            background-color: #e5e7eb;
-            width: 100%;
-            overflow-y: auto;
-            flex-direction: column;
-        }
-
-        /* GRID VIEW LAYOUT */
-        #report-grid-view {
-            display: flex;
-            gap: 20px;
             flex-wrap: wrap;
         }
 
-        .report-card-item {
-            width: 240px;
-            background-color: #4b5563;
-            border-radius: 6px;
-            padding: 12px;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-        }
-
-        .report-card-preview {
-            background-color: #ffffff;
-            border-radius: 4px;
-            height: 110px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            margin-bottom: 12px;
-        }
-
-        .chart-placeholder { display: flex; align-items: flex-end; gap: 6px; height: 50px; }
-        .bar { background-color: #22c55e; width: 14px; }
-        .chart-date { font-size: 10px; color: #9ca3af; margin-top: 6px; }
-        .report-card-title { font-size: 13px; font-weight: 600; margin-bottom: 15px; text-align: center; }
-        
-        .report-card-action {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        .play-icon {
-            width: 20px;
-            height: 20px;
-            background: #9ca3af;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #374151;
-            font-size: 10px;
-            padding-left: 2px;
-        }
-
-        /* LIST VIEW LAYOUT */
-        #report-list-view {
-            display: none;
-            width: 100%;
-            flex-direction: column;
-            background: #e5e7eb;
-        }
-
-        .list-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .list-table th, .list-table td {
-            padding: 10px 12px;
-            text-align: left;
-            font-size: 12px;
-            border-bottom: 1px solid #d1d5db;
-        }
-
-        .list-table th { font-weight: 600; color: #374151; border-top: 1px solid #d1d5db; }
-        .list-table td { color: #1f2937; }
-        .entries-count { margin-top: 15px; font-size: 12px; color: #374151; }
-
-        /* ---------------- MANAGE CREDENTIAL DESIGNS PAGE (NEW STYLES) ---------------- */
-        .page-banner {
-            background-color: #5c2483;
-            color: #ffffff;
-            padding: 10px 15px;
-            font-size: 14px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .sub-tab-bar-light {
-            background-color: #e5e7eb;
-            border-bottom: 1px solid #d1d5db;
-            padding-left: 15px;
-            display: flex;
-            align-items: flex-end;
-            height: 38px;
-        }
-
-        .tab-btn-light {
-            background: #f3f4f6;
-            color: #374151;
-            padding: 8px 16px;
-            font-size: 12px;
-            border: 1px solid #d1d5db;
-            border-bottom: none;
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
-            font-weight: 600;
-        }
-
-        .content-body-grey {
-            background-color: #d1d5db;
-            flex: 1;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .btn-create {
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            padding: 6px 16px;
-            font-size: 12px;
-            border-radius: 3px;
-            cursor: pointer;
-            align-self: flex-start;
-            margin-bottom: 12px;
-        }
-
-        .btn-create:hover { background-color: #1d4ed8; }
-
-        .filter-section {
-            background-color: #e5e7eb;
-            padding: 8px 12px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 10px;
-            font-size: 12px;
-            color: #374151;
-            border: 1px solid #9ca3af;
-            border-bottom: none;
-        }
-
-        .filter-input {
-            padding: 4px 8px;
+        .tool-btn {
+            min-width: 26px;
+            height: 26px;
+            padding: 0 4px;
+            background-color: #f3f4f6;
             border: 1px solid #9ca3af;
             border-radius: 2px;
-            outline: none;
-            width: 160px;
-        }
-
-        .data-table-container {
-            background-color: #e5e7eb;
-            border: 1px solid #9ca3af;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12px;
-        }
-
-        .data-table th {
-            text-align: left;
-            padding: 8px 12px;
-            color: #374151;
-            font-weight: 600;
-            border-bottom: 1px solid #9ca3af;
-        }
-
-        .data-table td.no-data {
-            text-align: center;
-            padding: 25px;
-            color: #4b5563;
-        }
-
-        .pagination-bar {
-            background-color: #e5e7eb;
-            padding: 8px 12px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-size: 12px;
-            color: #4b5563;
-            border: 1px solid #9ca3af;
-            border-top: none;
-        }
-
-        .pagination-links {
-            display: flex;
-            gap: 12px;
-            color: #6b7280;
-        }
-
-        .pagination-links span {
+            justify-content: center;
             cursor: pointer;
+            font-size: 12px;
+            color: #374151;
+            user-select: none;
         }
+
+        .tool-btn:hover { background-color: #d1d5db; }
+        .tool-divider { width: 1px; height: 20px; background-color: #9ca3af; margin: 0 4px; }
+        .zoom-select { font-size: 11px; padding: 2px 4px; border: 1px solid #9ca3af; border-radius: 2px; background: #fff; }
+
+        /* STUDIO WORKSPACE (CANVAS + SIDEBAR) */
+        .studio-workspace {
+            flex: 1;
+            display: flex;
+            background-color: #d1d5db;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .canvas-area {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            overflow: auto;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .card-container-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title-header {
+            font-size: 12px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .active-layer-indicator {
+            font-size: 11px;
+            font-weight: bold;
+            color: #1f2937;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .card-canvas-outer {
+            width: 320px;
+            height: 250px;
+            background-color: #808080;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #6b7280;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .id-card {
+            width: 220px;
+            height: 140px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #4b5563;
+            box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        /* PROPERTIES SIDEBAR */
+        .properties-sidebar {
+            width: 240px;
+            background-color: #f3f4f6;
+            border-left: 1px solid #b0b5bc;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            background-color: #e5e7eb;
+            border-bottom: 1px solid #b0b5bc;
+        }
+
+        .sidebar-tab {
+            flex: 1;
+            padding: 6px;
+            text-align: center;
+            font-size: 11px;
+            color: #4b5563;
+            cursor: pointer;
+            border-right: 1px solid #b0b5bc;
+        }
+
+        .sidebar-tab.active {
+            background-color: #f3f4f6;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .sidebar-content {
+            padding: 12px;
+            font-size: 12px;
+            color: #374151;
+        }
+
+        .section-header {
+            font-weight: bold;
+            font-size: 11px;
+            margin-bottom: 10px;
+            color: #1f2937;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            margin-bottom: 8px;
+            font-size: 11px;
+            color: #4b5563;
+        }
+
+        .checkbox-group input { margin-top: 2px; }
+
+        .studio-footer {
+            height: 24px;
+            background-color: #e5e7eb;
+            border-top: 1px solid #b0b5bc;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            font-size: 11px;
+            color: #4b5563;
+            gap: 15px;
+        }
+
+        .footer-btn { cursor: pointer; text-decoration: underline; }
     </style>
 </head>
 <body>
 
-    <!-- APP TITLEBAR -->
+    <!-- GLOBAL TITLEBAR -->
     <div id="global-titlebar">
         <div class="app-title-text">ENTRUST Adaptive Issuance Instant ID</div>
         <div class="global-window-controls">
-            <div class="win-control-btn" onclick="appMinimize()">&#8722;</div>
-            <div class="win-control-btn" onclick="appMaximize()">&#9633;</div>
-            <div class="win-control-btn close-btn" onclick="appClose()">&#10005;</div>
+            <div class="win-control-btn">&#8722;</div>
+            <div class="win-control-btn">&#9633;</div>
+            <div class="win-control-btn close-btn">&#10005;</div>
         </div>
     </div>
 
     <div id="app-container">
-        <!-- LOGIN SCREEN -->
-        <div id="login-screen">
-            <div class="app-title">Adaptive Issuance<br>Instant ID</div>
-
-            <div class="login-card">
-                <div class="form-group-login">
-                    <label for="userId">User ID</label>
-                    <input type="text" id="userId" value="admin" autocomplete="off">
+        <!-- TOP NAVBAR -->
+        <div id="top-navbar">
+            <div class="nav-left">
+                <div class="brand-logo">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    <span>ENTRUST</span>
                 </div>
+                <div class="brand-title">Adaptive Issuance™<br><b>Instant ID</b></div>
+                <div class="nav-menu">
+                    <a class="nav-item">Home</a>
+                    
+                    <div class="dropdown-wrapper" id="dropdown-design">
+                        <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-design')">
+                            Design <span style="font-size: 10px;">▲</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item">Quick Start</a>
+                            <a class="dropdown-item" onclick="navigateTo('credential-designs')">Credentials</a>
+                            <a class="dropdown-item">Workflows</a>
+                            <a class="dropdown-item">Reports</a>
+                        </div>
+                    </div>
 
-                <div class="form-group-login">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" value="1234">
+                    <a class="nav-item">Printer Queues</a>
                 </div>
             </div>
 
-            <a class="forgot-password" onclick="alert('Password reset link sent!')">Forgot Password?</a>
-            <button class="btn-signin" onclick="handleLogin()">Sign In</button>
+            <div class="nav-right">
+                <div class="dropdown-wrapper" id="dropdown-admin">
+                    <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-admin')">
+                        admin <span style="font-size: 10px;">▲</span>
+                    </div>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item">Preferences</a>
+                        <a class="dropdown-item">Sign Out</a>
+                    </div>
+                </div>
+
+                <div class="dropdown-wrapper" id="dropdown-gear">
+                    <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-gear')">⚙ <span style="font-size: 10px;">▼</span></div>
+                </div>
+
+                <div class="badge-container">
+                    <span style="font-size: 15px;">🔔</span>
+                    <span class="notification-badge">2</span>
+                </div>
+                <span style="font-size: 15px;">❓</span>
+                <span style="font-size: 15px;">ℹ️</span>
+            </div>
         </div>
 
-        <!-- MAIN WORKSPACE -->
         <div id="main-workspace">
-            <div id="top-navbar">
-                <div class="nav-left">
-                    <div class="brand-logo">
-                        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                        <span>ENTRUST</span>
-                    </div>
-                    <div class="brand-title">Adaptive Issuance™<br><b>Instant ID</b></div>
-                    <div class="nav-menu">
-                        <a class="nav-item" onclick="navigateTo('home')">Home</a>
-                        
-                        <!-- DESIGN DROPDOWN MENU -->
-                        <div class="dropdown-wrapper" id="dropdown-design">
-                            <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-design')">
-                                Design <span style="font-size: 10px;">▲</span>
-                            </div>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item">Quick Start</a>
-                                <a class="dropdown-item" onclick="navigateTo('credential-designs')">Credentials</a>
-                                <a class="dropdown-item">Workflows</a>
-                                <a class="dropdown-item">Reports</a>
-                                <a class="dropdown-item">Smart Card Workflows</a>
-                                <a class="dropdown-item">Field Connections</a>
-                            </div>
-                        </div>
-
-                        <a class="nav-item">Printer Queues</a>
-                    </div>
-                </div>
-
-                <div class="nav-right">
-                    <!-- ADMIN USER DROPDOWN MENU -->
-                    <div class="dropdown-wrapper" id="dropdown-admin">
-                        <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-admin')">
-                            admin <span style="font-size: 10px;">▲</span>
-                        </div>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item">Preferences</a>
-                            <a class="dropdown-item">Change Your Password</a>
-                            <a class="dropdown-item" onclick="handleSignOut()">Sign Out</a>
-                        </div>
-                    </div>
-
-                    <!-- GEAR (SETTINGS) DROPDOWN MENU -->
-                    <div class="dropdown-wrapper" id="dropdown-gear">
-                        <div class="dropdown-trigger" onclick="toggleDropdown('dropdown-gear')">
-                            ⚙ <span style="font-size: 10px;">▼</span>
-                        </div>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item">Settings</a>
-                            <a class="dropdown-item">Tools</a>
-                            <a class="dropdown-item">User Management</a>
-                            <a class="dropdown-item">System Dashboard</a>
-                        </div>
-                    </div>
-
-                    <!-- Notifications Badge -->
-                    <div class="badge-container">
-                        <span style="font-size: 15px;">🔔</span>
-                        <span class="notification-badge">2</span>
-                    </div>
-
-                    <span style="font-size: 15px; cursor: pointer;">❓</span>
-                    <span style="font-size: 15px; cursor: pointer;">ℹ️</span>
-                </div>
-            </div>
-
-            <!-- PAGE 1: HOME PAGE (Credentials & Reports Dashboard) -->
-            <div id="page-home" class="page-view active">
-                <div id="sub-navbar">
-                    <button class="tab-btn active" id="tab-credentials-btn" onclick="switchTab('credentials')">Credentials</button>
-                    <button class="tab-btn" id="tab-reports-btn" onclick="switchTab('reports')">Reports</button>
-                </div>
-
-                <div id="action-bar">
-                    <div class="view-toggle-group">
-                        <button class="view-btn active" id="btn-grid-view" onclick="switchReportView('grid')" title="Grid View">
-                            <svg viewBox="0 0 16 16"><path d="M1 1h6v6H1V1zm8 0h6v6H9V1zM1 9h6v6H1V9zm8 0h6v6H9V9z"/></svg>
-                        </button>
-                        <button class="view-btn" id="btn-list-view" onclick="switchReportView('list')" title="List View">
-                            <svg viewBox="0 0 16 16"><path d="M1 2h14v2H1V2zm0 5h14v2H1V7zm0 5h14v2H1v-2z"/></svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- CREDENTIALS TAB VIEW -->
-                <div id="credentials-tab" class="tab-content credentials-view active">
-                    <div class="printer-queue-status">Printer Queue Status</div>
-                </div>
-
-                <!-- REPORTS TAB VIEW -->
-                <div id="reports-tab" class="tab-content reports-view">
-                    <div id="report-grid-view">
-                        <div class="report-card-item">
-                            <div class="report-card-preview">
-                                <div class="chart-placeholder">
-                                    <div class="bar" style="height: 25px;"></div>
-                                    <div class="bar" style="height: 35px;"></div>
-                                    <div class="bar" style="height: 45px;"></div>
-                                    <div class="bar" style="height: 50px;"></div>
-                                    <div class="bar" style="height: 48px;"></div>
-                                </div>
-                                <div class="chart-date">Week 30, 2013</div>
-                            </div>
-                            <div class="report-card-title">Credentials Issued</div>
-                            <div class="report-card-action" onclick="alert('Running Credentials Issued Report...')">
-                                <span class="play-icon">▶</span>
-                                <span>Run</span>
-                            </div>
-                        </div>
-
-                        <div class="report-card-item">
-                            <div class="report-card-preview">
-                                <div class="chart-placeholder">
-                                    <div class="bar" style="height: 25px;"></div>
-                                    <div class="bar" style="height: 35px;"></div>
-                                    <div class="bar" style="height: 45px;"></div>
-                                    <div class="bar" style="height: 50px;"></div>
-                                    <div class="bar" style="height: 48px;"></div>
-                                </div>
-                                <div class="chart-date">Week 30, 2013</div>
-                            </div>
-                            <div class="report-card-title">Credentials Printed</div>
-                            <div class="report-card-action" onclick="alert('Running Credentials Printed Report...')">
-                                <span class="play-icon">▶</span>
-                                <span>Run</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="report-list-view">
-                        <table class="list-table">
-                            <thead>
-                                <tr><th>Name</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>Credentials Issued</td></tr>
-                                <tr><td>Credentials Printed</td></tr>
-                            </tbody>
-                        </table>
-                        <div class="entries-count">Showing 1 - 2 of 2 entries</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PAGE 2: MANAGE YOUR CREDENTIAL DESIGNS (Matching Image Exactly) -->
-            <div id="page-credential-designs" class="page-view">
+            <!-- PAGE 1: MANAGE YOUR CREDENTIAL DESIGNS (FIRST IMAGE) -->
+            <div id="page-credential-designs" class="page-view active">
                 <div class="page-banner">
                     <span>⚙</span>
                     <span>Manage Your Credential Designs</span>
@@ -740,7 +376,8 @@
                 </div>
 
                 <div class="content-body-grey">
-                    <button class="btn-create" onclick="alert('Create New Credential Design')">Create</button>
+                    <!-- CREATE BUTTON THAT NAVIGATES TO SECOND IMAGE VIEW -->
+                    <button class="btn-create" onclick="navigateTo('card-studio')">Create</button>
 
                     <div class="filter-section">
                         <label for="filterInput">Filter</label>
@@ -776,11 +413,105 @@
                 </div>
             </div>
 
+            <!-- PAGE 2: CARD DESIGN STUDIO (SECOND IMAGE) -->
+            <div id="page-card-studio" class="page-view">
+                <div class="studio-banner">
+                    <span>Credential Design 1</span>
+                    <span class="edit-icon">✏️</span>
+                </div>
+
+                <!-- DESIGN TOOLBAR -->
+                <div class="design-toolbar">
+                    <div class="tool-btn" title="Undo">↩</div>
+                    <div class="tool-btn" title="Redo">↪</div>
+                    <div class="tool-divider"></div>
+                    <div class="tool-btn" title="Cut">✂</div>
+                    <div class="tool-btn" title="Copy">📋</div>
+                    <div class="tool-divider"></div>
+                    <div class="tool-btn" title="Text"><b>T</b></div>
+                    <div class="tool-btn" title="Dynamic Text">T̅</div>
+                    <div class="tool-btn" title="Image">🖼</div>
+                    <div class="tool-btn" title="Photo Slot">👤</div>
+                    <div class="tool-divider"></div>
+                    <div class="tool-btn" title="Barcode">||||</div>
+                    <div class="tool-btn" title="Magnetic Stripe">💳</div>
+                    <div class="tool-btn" title="Smart Card Module">🔲</div>
+                    <div class="tool-divider"></div>
+                    <div class="tool-btn" title="Line">/</div>
+                    <div class="tool-btn" title="Rectangle">☐</div>
+                    <div class="tool-btn" title="Circle">◯</div>
+                    <div class="tool-divider"></div>
+                    <div class="tool-btn" title="Grid">▦</div>
+                    <div class="tool-divider"></div>
+                    <div class="tool-btn" title="Zoom In">🔍+</div>
+                    <div class="tool-btn" title="Zoom Out">🔍-</div>
+                    <span style="font-size: 11px; margin-left: 2px;">Zoom:</span>
+                    <select class="zoom-select">
+                        <option>100%</option>
+                        <option>75%</option>
+                        <option>50%</option>
+                    </select>
+                    <div class="tool-divider"></div>
+                    <div class="tool-btn" title="Align Layout">📑</div>
+                </div>
+
+                <!-- MAIN STUDIO WORKSPACE -->
+                <div class="studio-workspace">
+                    <div class="active-layer-indicator">Active Design Layer: Color</div>
+
+                    <div class="canvas-area">
+                        <!-- FRONT SIDE CARD -->
+                        <div class="card-container-wrapper">
+                            <div class="card-title-header">Front Side</div>
+                            <div class="card-canvas-outer">
+                                <div class="id-card"></div>
+                            </div>
+                        </div>
+
+                        <!-- BACK SIDE CARD -->
+                        <div class="card-container-wrapper">
+                            <div class="card-title-header">Back Side</div>
+                            <div class="card-canvas-outer">
+                                <div class="id-card"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PROPERTIES / LAYERS SIDEBAR -->
+                    <div class="properties-sidebar">
+                        <div class="sidebar-tabs">
+                            <div class="sidebar-tab active">Properties</div>
+                            <div class="sidebar-tab">Layers</div>
+                        </div>
+                        <div class="sidebar-content">
+                            <div class="section-header">- Front Side Properties</div>
+                            
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="rotate180">
+                                <label for="rotate180">Rotate print orientation 180 degrees</label>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="tactileModule">
+                                <label for="tactileModule">Tactile impression Module</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FOOTER -->
+                <div class="studio-footer">
+                    <span class="footer-btn">Save</span>
+                    <span class="footer-btn" onclick="navigateTo('credential-designs')">Close</span>
+                    <span class="footer-btn">Front Sample</span>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
-        // Toggle Dropdowns
+        // Toggle Dropdown menus
         function toggleDropdown(dropdownId) {
             const element = document.getElementById(dropdownId);
             const isActive = element.classList.contains('active');
@@ -803,83 +534,17 @@
             }
         };
 
-        // Navigation Switcher (Home vs Manage Credential Designs)
+        // Navigation Function
         function navigateTo(pageName) {
             document.querySelectorAll('.page-view').forEach(page => {
                 page.classList.remove('active');
             });
 
-            if (pageName === 'home') {
-                document.getElementById('page-home').classList.add('active');
-            } else if (pageName === 'credential-designs') {
+            if (pageName === 'credential-designs') {
                 document.getElementById('page-credential-designs').classList.add('active');
+            } else if (pageName === 'card-studio') {
+                document.getElementById('page-card-studio').classList.add('active');
             }
-        }
-
-        // Tab Switcher for Home Page
-        function switchTab(tabName) {
-            document.getElementById('tab-credentials-btn').classList.remove('active');
-            document.getElementById('tab-reports-btn').classList.remove('active');
-            document.getElementById('credentials-tab').classList.remove('active');
-            document.getElementById('reports-tab').classList.remove('active');
-
-            if (tabName === 'credentials') {
-                document.getElementById('tab-credentials-btn').classList.add('active');
-                document.getElementById('credentials-tab').classList.add('active');
-            } else if (tabName === 'reports') {
-                document.getElementById('tab-reports-btn').classList.add('active');
-                document.getElementById('reports-tab').classList.add('active');
-            }
-        }
-
-        // View Switcher (Grid / List)
-        function switchReportView(viewMode) {
-            const gridBtn = document.getElementById('btn-grid-view');
-            const listBtn = document.getElementById('btn-list-view');
-            const gridDisplay = document.getElementById('report-grid-view');
-            const listDisplay = document.getElementById('report-list-view');
-
-            if (viewMode === 'grid') {
-                gridBtn.classList.add('active');
-                listBtn.classList.remove('active');
-                gridDisplay.style.display = 'flex';
-                listDisplay.style.display = 'none';
-            } else if (viewMode === 'list') {
-                listBtn.classList.add('active');
-                gridBtn.classList.remove('active');
-                gridDisplay.style.display = 'none';
-                listDisplay.style.display = 'flex';
-            }
-        }
-
-        // Authentication & Window Controls
-        function handleLogin() {
-            const user = document.getElementById('userId').value.trim();
-            const pass = document.getElementById('password').value.trim();
-
-            if (user === "admin" && pass === "1234") {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('main-workspace').style.display = 'flex';
-            } else {
-                alert('User ID သို့မဟုတ် Password မှားယွင်းနေပါသည်။ (Default: admin / 1234)');
-            }
-        }
-
-        function handleSignOut() {
-            document.getElementById('main-workspace').style.display = 'none';
-            document.getElementById('login-screen').style.display = 'flex';
-        }
-
-        function appMinimize() {
-            if (window.electronAPI && window.electronAPI.minimize) window.electronAPI.minimize();
-        }
-
-        function appMaximize() {
-            if (window.electronAPI && window.electronAPI.maximize) window.electronAPI.maximize();
-        }
-
-        function appClose() {
-            if (window.electronAPI && window.electronAPI.close) window.electronAPI.close();
         }
     </script>
 </body>

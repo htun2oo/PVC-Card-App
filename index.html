@@ -18,16 +18,72 @@
             width: 100vw;
             height: 100vh;
             overflow: hidden;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #808080;
+            background-color: #d1d5db;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ---------------- GLOBAL APP WINDOW TITLEBAR ---------------- */
+        #global-titlebar {
+            height: 32px;
+            background-color: #1f2937;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            font-size: 12px;
+            user-select: none;
+            z-index: 2000000; /* Always stay on top */
+            -webkit-app-region: drag; /* For Electron Window Dragging */
+        }
+
+        .app-title-text {
+            font-weight: 500;
+            color: #e5e7eb;
+        }
+
+        .global-window-controls {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            -webkit-app-region: no-drag;
+        }
+
+        .win-control-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .win-control-btn:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .win-control-btn.close-btn:hover {
+            background-color: #e11d48;
+        }
+
+        /* ---------------- MAIN CONTAINER ---------------- */
+        #app-container {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 32px);
+            overflow: hidden;
         }
 
         /* ---------------- LOGIN PAGE ---------------- */
         #login-screen {
-            position: fixed;
+            position: absolute;
             top: 0; left: 0;
-            width: 100vw; height: 100vh;
+            width: 100%; height: 100%;
             background: linear-gradient(135deg, #7026b9 0%, #4a1582 100%);
             display: flex;
             flex-direction: column;
@@ -122,75 +178,24 @@
         #main-workspace {
             display: none;
             flex-direction: column;
-            height: 100vh; width: 100vw;
-            position: fixed; top: 0; left: 0;
-            z-index: 999999;
+            width: 100%;
+            height: 100%;
         }
 
         .workspace-content {
             flex: 1;
+            display: flex;
+            gap: 10px;
             padding: 10px;
-            position: relative;
             background-color: #d1d5db;
             overflow: hidden;
         }
 
-        /* SINGLE UNIFIED WINDOW STYLES */
-        .single-window {
-            width: 100%;
-            height: 100%;
-            background: #ece9d8;
-            border: 2px solid #ffffff;
-            border-right-color: #404040;
-            border-bottom-color: #404040;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            transition: all 0.2s ease-in-out;
-        }
-
-        .window-titlebar {
-            background: linear-gradient(90deg, #0a246a, #a6caf0);
-            color: white;
-            padding: 4px 8px;
-            font-size: 12px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            user-select: none;
-        }
-
-        .window-controls { display: flex; gap: 3px; }
-        .win-btn {
-            width: 18px;
-            height: 16px;
-            background: #ece9d8;
-            border: 1px solid #fff;
-            border-right-color: #404040;
-            border-bottom-color: #404040;
-            font-size: 10px;
-            line-height: 12px;
-            text-align: center;
-            color: #000;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .window-body {
-            flex: 1;
-            display: flex;
-            gap: 10px;
-            padding: 10px;
-            background: #d4d0c8;
-            overflow: auto;
-        }
-
+        /* DIRECT WORKSPACE LAYOUT (NO CREDENTIALS WORKSPACE BAR) */
         .left-form-area {
             flex: 1;
             background: #ece9d8;
-            border: 1px solid #808080;
+            border: 1px solid #999;
             border-radius: 2px;
         }
 
@@ -204,201 +209,155 @@
         .card-preview-box {
             flex: 1;
             background: #808080;
-            border: 1px solid #404040;
+            border: 1px solid #666;
             display: flex;
             justify-content: center;
             align-items: center;
+            border-radius: 2px;
         }
 
         canvas {
             background: #ffffff;
-            box-shadow: 0 0 4px rgba(0,0,0,0.3);
-        }
-
-        /* WINDOW STATES */
-        .single-window.minimized {
-            height: 30px !important;
-            overflow: hidden;
-        }
-        .single-window.minimized .window-body { display: none; }
-
-        .single-window.closed { display: none !important; }
-
-        .restore-bar {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            z-index: 200;
-        }
-        .restore-btn {
-            background: #ece9d8;
-            border: 2px solid #fff;
-            border-right-color: #404040;
-            border-bottom-color: #404040;
-            padding: 4px 10px;
-            font-size: 11px;
-            cursor: pointer;
-            font-weight: bold;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
         }
     </style>
 </head>
 <body>
 
-    <!-- LOGIN SCREEN -->
-    <div id="login-screen">
-        <div class="app-title">Adaptive Issuance<br>Instant ID</div>
-
-        <div class="login-card">
-            <div class="form-group">
-                <label for="userId">User ID</label>
-                <input type="text" id="userId" value="admin" autocomplete="off">
-            </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" value="1234">
-            </div>
+    <!-- GLOBAL APPLICATION TITLEBAR (AVAILABLE AT FIRST START) -->
+    <div id="global-titlebar">
+        <div class="app-title-text">ENTRUST Adaptive Issuance Instant ID</div>
+        <div class="global-window-controls">
+            <div class="win-control-btn" onclick="appMinimize()">&#8722;</div>
+            <div class="win-control-btn" onclick="appMaximize()">&#9633;</div>
+            <div class="win-control-btn close-btn" onclick="appClose()">&#10005;</div>
         </div>
-
-        <a class="forgot-password" onclick="alert('Password reset link sent!')">Forgot Password?</a>
-        <button class="btn-signin" onclick="handleLogin()">Sign In</button>
     </div>
 
-    <!-- MAIN WORKSPACE -->
-    <div id="main-workspace">
-        
-        <!-- Top Header (Last Login Info Removed) -->
-        <div id="top-navbar">
-            <div class="nav-left">
-                <div class="brand-logo">
-                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                    <span>ENTRUST</span>
-                </div>
-                <div class="brand-title">Adaptive Issuance™<br><b>Instant ID</b></div>
-                <div class="nav-menu">
-                    <a class="nav-item">Home</a>
-                    <a class="nav-item">Design ▾</a>
-                    <a class="nav-item">Printer Queues</a>
-                </div>
-            </div>
+    <div id="app-container">
+        <!-- LOGIN SCREEN -->
+        <div id="login-screen">
+            <div class="app-title">Adaptive Issuance<br>Instant ID</div>
 
-            <div class="nav-right">
-                <div class="user-profile">
-                    <span>admin ▾</span>
-                    <span>⚙</span>
-                    <span>🔔</span>
-                    <span>👤</span>
+            <div class="login-card">
+                <div class="form-group">
+                    <label for="userId">User ID</label>
+                    <input type="text" id="userId" value="admin" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" value="1234">
                 </div>
             </div>
+
+            <a class="forgot-password" onclick="alert('Password reset link sent!')">Forgot Password?</a>
+            <button class="btn-signin" onclick="handleLogin()">Sign In</button>
         </div>
 
-        <!-- Sub Tabs -->
-        <div id="sub-navbar">
-            <button class="tab-btn active">Credentials</button>
-            <button class="tab-btn">Reports</button>
-        </div>
-
-        <!-- Action Bar -->
-        <div id="action-bar">
-            <button class="action-btn">🔲</button>
-            <button class="action-btn">☰</button>
-        </div>
-
-        <!-- Workspace Area with Single Window -->
-        <div class="workspace-content">
-            <div class="single-window" id="appWindow">
-                <!-- Titlebar with Minimize, Maximize, Close Buttons -->
-                <div class="window-titlebar">
-                    <span>Credentials Workspace</span>
-                    <div class="window-controls">
-                        <div class="win-btn" onclick="toggleMinimize()">_</div>
-                        <div class="win-btn" onclick="toggleMaximize()">□</div>
-                        <div class="win-btn" onclick="closeWindow()">×</div>
+        <!-- MAIN WORKSPACE -->
+        <div id="main-workspace">
+            
+            <!-- Top Header -->
+            <div id="top-navbar">
+                <div class="nav-left">
+                    <div class="brand-logo">
+                        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        <span>ENTRUST</span>
+                    </div>
+                    <div class="brand-title">Adaptive Issuance™<br><b>Instant ID</b></div>
+                    <div class="nav-menu">
+                        <a class="nav-item">Home</a>
+                        <a class="nav-item">Design ▾</a>
+                        <a class="nav-item">Printer Queues</a>
                     </div>
                 </div>
 
-                <!-- Unified Content Body -->
-                <div class="window-body">
-                    <!-- Production Form Area -->
-                    <div class="left-form-area"></div>
-
-                    <!-- Cards Front/Back Preview Area -->
-                    <div class="right-card-area">
-                        <div class="card-preview-box">
-                            <canvas id="frontCanvas" width="320" height="190"></canvas>
-                        </div>
-                        <div class="card-preview-box">
-                            <canvas id="backCanvas" width="320" height="190"></canvas>
-                        </div>
+                <div class="nav-right">
+                    <div class="user-profile">
+                        <span>admin ▾</span>
+                        <span>⚙</span>
+                        <span>🔔</span>
+                        <span>👤</span>
                     </div>
                 </div>
             </div>
 
-            <div class="restore-bar" id="restoreBar"></div>
-        </div>
+            <!-- Sub Tabs -->
+            <div id="sub-navbar">
+                <button class="tab-btn active">Credentials</button>
+                <button class="tab-btn">Reports</button>
+            </div>
 
+            <!-- Action Bar -->
+            <div id="action-bar">
+                <button class="action-btn">🔲</button>
+                <button class="action-btn">☰</button>
+            </div>
+
+            <!-- Workspace Area (Credentials Workspace Title Bar Removed) -->
+            <div class="workspace-content">
+                <!-- Left Form Area -->
+                <div class="left-form-area"></div>
+
+                <!-- Right Card Preview Area -->
+                <div class="right-card-area">
+                    <div class="card-preview-box">
+                        <canvas id="frontCanvas" width="320" height="190"></canvas>
+                    </div>
+                    <div class="card-preview-box">
+                        <canvas id="backCanvas" width="320" height="190"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <script>
-        function triggerFullScreen() {
-            const doc = document.documentElement;
-            if (doc.requestFullscreen) doc.requestFullscreen().catch(() => {});
-            else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
-            else if (doc.msRequestFullscreen) doc.msRequestFullscreen();
+        // Global App Window Control Functions
+        function appMinimize() {
+            if (window.electronAPI && window.electronAPI.minimize) {
+                window.electronAPI.minimize();
+            } else {
+                alert("Minimize clicked");
+            }
         }
 
+        function appMaximize() {
+            if (window.electronAPI && window.electronAPI.maximize) {
+                window.electronAPI.maximize();
+            } else {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(() => {});
+                } else {
+                    if (document.exitFullscreen) document.exitFullscreen();
+                }
+            }
+        }
+
+        function appClose() {
+            if (window.electronAPI && window.electronAPI.close) {
+                window.electronAPI.close();
+            } else {
+                if (confirm("Software ကို ပိတ်လိုပါသလား။")) {
+                    window.close();
+                }
+            }
+        }
+
+        // Login Logic
         function handleLogin() {
             const user = document.getElementById('userId').value.trim();
             const pass = document.getElementById('password').value.trim();
 
             if (user === "admin" && pass === "1234") {
-                triggerFullScreen();
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-workspace').style.display = 'flex';
                 initCanvases();
             } else {
                 alert('User ID သို့မဟုတ် Password မှားယွင်းနေပါသည်။ (Default: admin / 1234)');
             }
-        }
-
-        // Window Controls (Minimize, Maximize, Close)
-        let isMaximized = false;
-        function toggleMinimize() {
-            const win = document.getElementById('appWindow');
-            win.classList.toggle('minimized');
-        }
-
-        function toggleMaximize() {
-            const win = document.getElementById('appWindow');
-            if (!isMaximized) {
-                win.style.position = 'fixed';
-                win.style.top = '122px';
-                win.style.left = '0';
-                win.style.width = '100vw';
-                win.style.height = 'calc(100vh - 122px)';
-                win.style.zIndex = '1000';
-                isMaximized = true;
-            } else {
-                win.style.position = 'relative';
-                win.style.top = 'auto';
-                win.style.left = 'auto';
-                win.style.width = '100%';
-                win.style.height = '100%';
-                win.style.zIndex = 'auto';
-                isMaximized = false;
-            }
-        }
-
-        function closeWindow() {
-            document.getElementById('appWindow').classList.add('closed');
-            const restoreBar = document.getElementById('restoreBar');
-            restoreBar.innerHTML = `<button class="restore-btn" onclick="restoreWindow()">Reopen Workspace</button>`;
-        }
-
-        function restoreWindow() {
-            const win = document.getElementById('appWindow');
-            win.classList.remove('closed', 'minimized');
-            document.getElementById('restoreBar').innerHTML = '';
         }
 
         // Canvas Setup

@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Adaptive Issuance Instant ID - Desktop Edition</title>
     
+    <!-- FontAwesome for exact UI Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         html, body { width: 100vw; height: 100vh; overflow: hidden; background-color: #d1d5db; display: flex; flex-direction: column; }
@@ -44,15 +47,15 @@
             z-index: 1000;
         }
         .nav-left { display: flex; align-items: center; gap: 20px; }
-        .brand-logo { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #5c2483; }
-        .brand-title { font-size: 12px; color: #555; border-left: 1px solid #ccc; padding-left: 10px; line-height: 1.2; }
+        .brand-logo { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #5c2483; font-size: 16px; }
+        .brand-title { font-size: 11px; color: #6b7280; border-left: 1px solid #ccc; padding-left: 10px; line-height: 1.2; }
         .nav-menu { display: flex; gap: 10px; align-items: center; }
-        .nav-item { color: #333; text-decoration: none; cursor: pointer; font-weight: 500; padding: 6px 10px; border-radius: 3px; }
+        .nav-item { color: #374151; text-decoration: none; cursor: pointer; font-weight: 500; padding: 6px 10px; border-radius: 3px; }
         .nav-item:hover { background-color: #f3f4f6; }
         
         /* DROPDOWN MENU */
         .dropdown-wrapper { position: relative; display: inline-block; }
-        .dropdown-trigger { cursor: pointer; padding: 6px 10px; border-radius: 3px; display: flex; align-items: center; gap: 4px; user-select: none; font-weight: 500; }
+        .dropdown-trigger { cursor: pointer; padding: 6px 10px; border-radius: 3px; display: flex; align-items: center; gap: 4px; user-select: none; font-weight: 500; color: #374151; }
         .dropdown-wrapper.active .dropdown-trigger { background-color: #e5e7eb; }
         .dropdown-menu { display: none; position: absolute; top: 100%; left: 0; background-color: #ffffff; border: 1px solid #d1d5db; border-radius: 3px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); min-width: 170px; z-index: 10000; }
         .dropdown-wrapper.active .dropdown-menu { display: block; }
@@ -63,60 +66,108 @@
         .page-view { display: none; flex-direction: column; flex: 1; width: 100%; height: calc(100% - 48px); }
         .page-view.active { display: flex; }
 
-        /* COMMON UI COMPONENTS */
-        .page-banner { background-color: #5c2483; color: #ffffff; padding: 10px 15px; font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: space-between; }
-        .content-body-grey { background-color: #d1d5db; flex: 1; padding: 15px; display: flex; flex-direction: column; }
+        /* PURPLE BANNER LIKE IN THE IMAGE */
+        .page-banner { 
+            background: linear-gradient(90deg, #812990 0%, #a238b3 100%); 
+            color: #ffffff; 
+            padding: 8px 15px; 
+            font-size: 15px; 
+            font-weight: 500; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+        }
+        .edit-title-btn {
+            background: #ffffff;
+            color: #812990;
+            border: none;
+            border-radius: 3px;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .content-body-grey { background-color: #e5e7eb; flex: 1; padding: 15px; display: flex; flex-direction: column; }
         .btn-primary { background-color: #2563eb; color: white; border: none; padding: 6px 16px; font-size: 12px; border-radius: 3px; cursor: pointer; }
         .btn-primary:hover { background-color: #1d4ed8; }
 
-        /* CREDENTIAL MANAGEMENT TABLE VIEW */
-        .filter-section { background-color: #e5e7eb; padding: 8px 12px; display: flex; justify-content: flex-end; align-items: center; gap: 10px; font-size: 12px; border: 1px solid #9ca3af; border-bottom: none; }
-        .filter-input { padding: 4px 8px; border: 1px solid #9ca3af; border-radius: 2px; outline: none; width: 160px; }
-        .data-table-container { background-color: #ffffff; border: 1px solid #9ca3af; }
-        .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        .data-table th { text-align: left; padding: 8px 12px; background-color: #e5e7eb; color: #374151; font-weight: 600; border-bottom: 1px solid #9ca3af; }
-        .data-table td { padding: 8px 12px; border-bottom: 1px solid #e5e7eb; }
-        
-        /* DESIGN STUDIO & TOOLBAR */
+        /* EXACT TOOLBAR MATCHING THE ATTACHED IMAGE */
         .design-toolbar { 
-            background-color: #e5e7eb; 
+            background-color: #cfd3d8; 
             border-bottom: 1px solid #b0b5bc; 
-            padding: 4px 8px; 
+            padding: 4px 10px; 
             display: flex; 
             align-items: center; 
-            gap: 3px; 
+            gap: 2px; 
             flex-wrap: wrap; 
         }
+        .tool-group {
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border: 1px solid #a3a8b0;
+            border-radius: 2px;
+            padding: 1px;
+        }
         .tool-btn { 
-            width: 28px; 
-            height: 28px; 
-            background-color: #f3f4f6; 
-            border: 1px solid #9ca3af; 
-            border-radius: 2px; 
+            width: 26px; 
+            height: 26px; 
+            background-color: #ffffff; 
+            border: none;
+            border-right: 1px solid #e5e7eb;
             display: flex; 
             align-items: center; 
             justify-content: center; 
             cursor: pointer; 
-            font-size: 13px; 
-            color: #374151; 
+            font-size: 12px; 
+            color: #2c3e50; 
             user-select: none;
         }
-        .tool-btn:hover { background-color: #d1d5db; border-color: #6b7280; }
-        .tool-divider { width: 1px; height: 22px; background-color: #9ca3af; margin: 0 3px; }
+        .tool-group .tool-btn:last-child {
+            border-right: none;
+        }
+        .tool-btn:hover { background-color: #e2e8f0; }
+        .tool-spacer { width: 6px; }
+
+        .zoom-dropdown {
+            height: 28px;
+            font-size: 12px;
+            border: 1px solid #a3a8b0;
+            padding: 0 4px;
+            border-radius: 2px;
+            background: #fff;
+            outline: none;
+        }
+
+        /* CANVAS SUB-HEADER IN THE IMAGE */
+        .canvas-subheader {
+            background-color: #e2e8f0;
+            padding: 8px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4b5563;
+            border-bottom: 1px solid #cbd5e1;
+        }
 
         /* STUDIO CANVAS WORKSPACE */
-        .studio-workspace { flex: 1; display: flex; background-color: #9ca3af; overflow: hidden; position: relative; }
-        .canvas-area { flex: 1; padding: 20px; display: flex; gap: 30px; overflow: auto; justify-content: center; align-items: flex-start; }
-        .card-container-wrapper { display: flex; flex-direction: column; }
-        .card-title-header { font-size: 12px; font-weight: bold; color: #ffffff; margin-bottom: 8px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
-        .card-canvas-outer { width: 360px; height: 240px; background-color: #6b7280; display: flex; align-items: center; justify-content: center; border: 1px dashed #374151; }
-        .id-card { width: 320px; height: 200px; background-color: #ffffff; border-radius: 10px; border: 1px solid #1f2937; box-shadow: 0 4px 10px rgba(0,0,0,0.3); position: relative; }
+        .studio-workspace { flex: 1; display: flex; background-color: #b0b5bc; overflow: hidden; position: relative; }
+        .canvas-area { flex: 1; padding: 20px; display: flex; gap: 40px; overflow: auto; justify-content: center; align-items: flex-start; }
+        .card-container-wrapper { display: flex; flex-direction: column; align-items: center; }
+        .card-canvas-outer { width: 360px; height: 240px; background-color: #838996; display: flex; align-items: center; justify-content: center; border: 1px solid #6b7280; box-shadow: inset 0 0 5px rgba(0,0,0,0.2); }
+        .id-card { width: 320px; height: 200px; background-color: #ffffff; border-radius: 6px; border: 1px solid #374151; box-shadow: 0 4px 10px rgba(0,0,0,0.25); position: relative; }
         
         /* PROPERTIES SIDEBAR */
         .properties-sidebar { width: 260px; background-color: #f3f4f6; border-left: 1px solid #b0b5bc; display: flex; flex-direction: column; }
         .sidebar-tabs { display: flex; background-color: #e5e7eb; border-bottom: 1px solid #b0b5bc; }
         .sidebar-tab { flex: 1; padding: 8px; text-align: center; font-size: 12px; color: #4b5563; cursor: pointer; }
-        .sidebar-tab.active { background-color: #f3f4f6; font-weight: bold; color: #1f2937; border-bottom: 2px solid #5c2483; }
+        .sidebar-tab.active { background-color: #f3f4f6; font-weight: bold; color: #1f2937; border-bottom: 2px solid #812990; }
         .sidebar-content { padding: 15px; font-size: 12px; }
         
         .studio-footer { height: 28px; background-color: #e5e7eb; border-top: 1px solid #b0b5bc; display: flex; align-items: center; padding: 0 10px; font-size: 12px; gap: 15px; }
@@ -141,9 +192,9 @@
         <div id="top-navbar">
             <div class="nav-left">
                 <div class="brand-logo">
-                    <span>ENTRUST</span>
+                    <i class="fa-solid fa-cube"></i> ENTRUST
                 </div>
-                <div class="brand-title">Adaptive Issuance™<br><b>Instant ID</b></div>
+                <div class="brand-title">Adaptive Issuance<br>Instant ID</div>
                 <div class="nav-menu">
                     <a class="nav-item" onclick="navigateTo('home')">Home</a>
                     <div class="dropdown-wrapper" id="dropdown-design">
@@ -171,12 +222,12 @@
         </div>
 
         <!-- VIEW 1: HOME PAGE -->
-        <div id="page-home" class="page-view active">
+        <div id="page-home" class="page-view">
             <div class="page-banner">
                 <span>Dashboard Home</span>
             </div>
-            <div class="content-body-grey">
-                <!-- ပုံပါ Welcome Box ကို ဖယ်ရှားထားပါသည် -->
+            <div class="content-body-grey" style="justify-content: center; align-items: center;">
+                <button class="btn-primary" onclick="navigateTo('card-studio')">Open Designer Studio</button>
             </div>
         </div>
 
@@ -187,73 +238,113 @@
             </div>
             <div class="content-body-grey">
                 <button class="btn-primary" style="align-self: flex-start; margin-bottom: 12px;" onclick="navigateTo('card-studio')">New Credential Design</button>
-                <div class="filter-section">
-                    <label>Search Filter:</label>
-                    <input type="text" class="filter-input" placeholder="Keyword...">
-                </div>
-                <div class="data-table-container">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 40%;">Credential Design Name</th>
-                                <th style="width: 30%;">Workflow</th>
-                                <th style="width: 30%;">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><a href="#" onclick="navigateTo('card-studio')" style="color: #2563eb; text-decoration: none;">Standard Employee ID</a></td>
-                                <td>Default Workflow</td>
-                                <td><button class="btn-primary" onclick="navigateTo('card-studio')">Edit Design</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
 
-        <!-- VIEW 3: CARD DESIGNER STUDIO -->
-        <div id="page-card-studio" class="page-view">
-            <div class="page-banner" style="background-color: #4a1582;">
-                <span>Credential Design Workspace ✏️</span>
+        <!-- VIEW 3: CARD DESIGNER STUDIO (EXACT MATCH TO THE PHOTO) -->
+        <div id="page-card-studio" class="page-view active">
+            <!-- PURPLE HEADER BANNER -->
+            <div class="page-banner">
+                <span>Credential Design 1</span>
+                <button class="edit-title-btn" title="Edit Name"><i class="fa-solid fa-pen"></i></button>
             </div>
             
-            <!-- STUDIO TOOLBAR -->
+            <!-- TOOLBAR WITH EXACT ICONS FROM IMAGE -->
             <div class="design-toolbar">
-                <div class="tool-btn" title="Undo" onclick="executeAction('Undo')">↶</div>
-                <div class="tool-btn" title="Redo" onclick="executeAction('Redo')">↷</div>
-                <div class="tool-divider"></div>
+                <!-- Undo / Redo -->
+                <div class="tool-group">
+                    <button class="tool-btn" title="Undo" onclick="executeAction('Undo')"><i class="fa-solid fa-rotate-left"></i></button>
+                    <button class="tool-btn" title="Redo" onclick="executeAction('Redo')"><i class="fa-solid fa-rotate-right"></i></button>
+                </div>
+                <div class="tool-spacer"></div>
 
-                <div class="tool-btn" title="Copy" onclick="executeAction('Copy')">📋</div>
-                <div class="tool-btn" title="Cut" onclick="executeAction('Cut')">✂</div>
-                <div class="tool-btn" title="Paste" onclick="executeAction('Paste')">📄</div>
-                <div class="tool-divider"></div>
+                <!-- Duplicate / Cut / Paste -->
+                <div class="tool-group">
+                    <button class="tool-btn" title="Duplicate" onclick="executeAction('Duplicate')"><i class="fa-regular fa-clone"></i></button>
+                    <button class="tool-btn" title="Cut" onclick="executeAction('Cut')"><i class="fa-solid fa-scissors"></i></button>
+                    <button class="tool-btn" title="Paste" onclick="executeAction('Paste')"><i class="fa-regular fa-paste"></i></button>
+                </div>
+                <div class="tool-spacer"></div>
 
-                <div class="tool-btn" title="Static Text" onclick="executeAction('Add Static Text')"><b>T</b></div>
-                <div class="tool-btn" title="Dynamic Text" onclick="executeAction('Add Dynamic Text')"><b>T_</b></div>
-                <div class="tool-divider"></div>
+                <!-- Text Elements -->
+                <div class="tool-group">
+                    <button class="tool-btn" title="Static Text" onclick="executeAction('Add Static Text')"><i class="fa-solid fa-font"></i></button>
+                    <button class="tool-btn" title="Dynamic Text" onclick="executeAction('Add Dynamic Text')"><span style="font-weight: bold; font-size: 11px;">T_</span></button>
+                </div>
+                <div class="tool-spacer"></div>
 
-                <div class="tool-btn" title="Portrait Photo" onclick="executeAction('Add Photo Field')">👤</div>
-                <div class="tool-btn" title="Graphic Image" onclick="executeAction('Add Graphic')">🖼</div>
-                <div class="tool-btn" title="Barcode" onclick="executeAction('Add Barcode')">║▌</div>
-                <div class="tool-btn" title="QR Code" onclick="executeAction('Add QR Code')">🏁</div>
-                <div class="tool-divider"></div>
+                <!-- Photo & Image Elements -->
+                <div class="tool-group">
+                    <button class="tool-btn" title="Portrait Photo Field" onclick="executeAction('Add Photo Field')"><i class="fa-solid fa-id-badge"></i></button>
+                    <button class="tool-btn" title="Static Graphic Image" onclick="executeAction('Add Graphic')"><i class="fa-regular fa-image"></i></button>
+                    <button class="tool-btn" title="Dynamic Image Field" onclick="executeAction('Add Dynamic Image')"><i class="fa-solid fa-image"></i></button>
+                    <button class="tool-btn" title="Signature Field" onclick="executeAction('Add Signature')"><i class="fa-solid fa-signature"></i></button>
+                    <button class="tool-btn" title="Fingerprint Field" onclick="executeAction('Add Fingerprint')"><i class="fa-solid fa-fingerprint"></i></button>
+                </div>
+                <div class="tool-spacer"></div>
 
-                <div class="tool-btn" title="Rectangle" onclick="executeAction('Draw Rectangle')">▭</div>
-                <div class="tool-btn" title="Circle" onclick="executeAction('Draw Circle')">○</div>
+                <!-- Barcode & Card Elements -->
+                <div class="tool-group">
+                    <button class="tool-btn" title="1D/2D Barcode" onclick="executeAction('Add Barcode')"><i class="fa-solid fa-barcode"></i></button>
+                    <button class="tool-btn" title="Magnetic Stripe" onclick="executeAction('Add MagStripe')"><i class="fa-solid fa-credit-card"></i></button>
+                    <button class="tool-btn" title="Smart Card Chip" onclick="executeAction('Add SmartChip')"><i class="fa-solid fa-sim-card"></i></button>
+                </div>
+                <div class="tool-spacer"></div>
+
+                <!-- Shapes: Line / Rectangle / Circle -->
+                <div class="tool-group">
+                    <button class="tool-btn" title="Line" onclick="executeAction('Draw Line')"><i class="fa-solid fa-slash"></i></button>
+                    <button class="tool-btn" title="Rectangle" onclick="executeAction('Draw Rectangle')"><i class="fa-regular fa-square"></i></button>
+                    <button class="tool-btn" title="Circle / Ellipse" onclick="executeAction('Draw Circle')"><i class="fa-regular fa-circle"></i></button>
+                </div>
+                <div class="tool-spacer"></div>
+
+                <!-- Rulers & Grid -->
+                <div class="tool-group">
+                    <button class="tool-btn" title="Show/Hide Rulers" onclick="executeAction('Toggle Rulers')"><i class="fa-solid fa-ruler-combined"></i></button>
+                    <button class="tool-btn" title="Show/Hide Grid" onclick="executeAction('Toggle Grid')"><i class="fa-solid fa-border-all"></i></button>
+                </div>
+                <div class="tool-spacer"></div>
+
+                <!-- Zoom Controls -->
+                <div class="tool-group">
+                    <button class="tool-btn" title="Zoom Out" onclick="executeAction('Zoom Out')"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+                    <button class="tool-btn" title="Zoom In" onclick="executeAction('Zoom In')"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+                </div>
+                <div class="tool-spacer"></div>
+
+                <!-- Zoom Level Dropdown -->
+                <span style="font-size: 12px; color: #374151; margin-right: 4px;">Zoom</span>
+                <select class="zoom-dropdown">
+                    <option>100%</option>
+                    <option>150%</option>
+                    <option>200%</option>
+                    <option>50%</option>
+                </select>
+                <div class="tool-spacer"></div>
+
+                <!-- Layout Split View -->
+                <div class="tool-group">
+                    <button class="tool-btn" title="Switch Layout View" onclick="executeAction('Toggle Layout')"><i class="fa-solid fa-table-columns"></i></button>
+                </div>
+            </div>
+
+            <!-- CANVAS SUB-HEADER (AS SHOWN IN THE IMAGE) -->
+            <div class="canvas-subheader">
+                <span>Front Side</span>
+                <span>Active Design Layer: Color</span>
+                <span>Back Side</span>
             </div>
 
             <!-- CANVAS WORKSPACE -->
             <div class="studio-workspace">
                 <div class="canvas-area">
                     <div class="card-container-wrapper">
-                        <div class="card-title-header">Front Side Layer</div>
                         <div class="card-canvas-outer">
                             <div class="id-card" id="card-front"></div>
                         </div>
                     </div>
                     <div class="card-container-wrapper">
-                        <div class="card-title-header">Back Side Layer</div>
                         <div class="card-canvas-outer">
                             <div class="id-card" id="card-back"></div>
                         </div>
@@ -267,8 +358,8 @@
                         <div class="sidebar-tab">Layers</div>
                     </div>
                     <div class="sidebar-content">
-                        <b style="color: #374151;">Element Configuration</b>
-                        <div style="margin-top: 10px;">Select an element on the canvas to inspect and modify properties.</div>
+                        <b style="color: #374151;">Element Properties</b>
+                        <div style="margin-top: 10px; color: #6b7280;">Select an element on the canvas to inspect settings.</div>
                     </div>
                 </div>
             </div>
@@ -314,6 +405,8 @@
                 textElem.style.color = "#1f2937";
                 textElem.style.cursor = "move";
                 frontCard.appendChild(textElem);
+            } else {
+                console.log("Action Triggered:", actionName);
             }
         }
 

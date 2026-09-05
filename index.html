@@ -34,19 +34,16 @@
             font-size: 12px;
             user-select: none;
             z-index: 2000000;
-            -webkit-app-region: drag; /* Dragging Area */
+            -webkit-app-region: drag;
         }
 
-        .app-title-text {
-            font-weight: 500;
-            color: #e5e7eb;
-        }
+        .app-title-text { font-weight: 500; color: #e5e7eb; }
 
         .global-window-controls {
             display: flex;
             align-items: center;
             gap: 2px;
-            -webkit-app-region: no-drag; /* Clickable Area */
+            -webkit-app-region: no-drag;
         }
 
         .win-control-btn {
@@ -151,9 +148,14 @@
             border-top-right-radius: 4px;
             margin-right: 4px;
             cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .tab-btn.active { background: #ffffff; color: #333333; font-weight: bold; }
+        .tab-btn.active { 
+            background: #ffffff; 
+            color: #333333; 
+            font-weight: bold; 
+        }
 
         /* ---------------- ACTION BAR ---------------- */
         #action-bar {
@@ -176,13 +178,24 @@
             height: 100%;
         }
 
-        .workspace-content {
+        .tab-content {
+            display: none;
             flex: 1;
+            width: 100%;
+            height: calc(100% - 122px);
+        }
+
+        .tab-content.active {
             display: flex;
+        }
+
+        /* Credentials Workspace View */
+        .credentials-view {
             gap: 10px;
             padding: 10px;
             background-color: #d1d5db;
             overflow: hidden;
+            width: 100%;
         }
 
         .left-form-area {
@@ -190,6 +203,7 @@
             background: #ece9d8;
             border: 1px solid #999;
             border-radius: 2px;
+            padding: 15px;
         }
 
         .right-card-area {
@@ -207,6 +221,44 @@
             justify-content: center;
             align-items: center;
             border-radius: 2px;
+        }
+
+        /* Reports Workspace View */
+        .reports-view {
+            padding: 20px;
+            background-color: #f3f4f6;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            overflow-y: auto;
+        }
+
+        .reports-header {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1f2937;
+            border-bottom: 2px solid #5c2483;
+            padding-bottom: 8px;
+        }
+
+        .reports-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .reports-table th, .reports-table td {
+            border: 1px solid #e5e7eb;
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .reports-table th {
+            background-color: #f9fafb;
+            color: #374151;
+            font-weight: 600;
         }
 
         canvas {
@@ -274,9 +326,10 @@
                 </div>
             </div>
 
+            <!-- TAB NAVIGATION BAR -->
             <div id="sub-navbar">
-                <button class="tab-btn active">Credentials</button>
-                <button class="tab-btn">Reports</button>
+                <button class="tab-btn active" id="tab-credentials-btn" onclick="switchTab('credentials')">Credentials</button>
+                <button class="tab-btn" id="tab-reports-btn" onclick="switchTab('reports')">Reports</button>
             </div>
 
             <div id="action-bar">
@@ -284,8 +337,12 @@
                 <button class="action-btn">☰</button>
             </div>
 
-            <div class="workspace-content">
-                <div class="left-form-area"></div>
+            <!-- CREDENTIALS TAB VIEW -->
+            <div id="credentials-tab" class="tab-content credentials-view active">
+                <div class="left-form-area">
+                    <h3 style="font-size: 14px; margin-bottom: 10px; color: #333;">Cardholder Details</h3>
+                    <p style="font-size: 12px; color: #666;">Credentials Data Entry Area</p>
+                </div>
                 <div class="right-card-area">
                     <div class="card-preview-box">
                         <canvas id="frontCanvas" width="320" height="190"></canvas>
@@ -295,10 +352,58 @@
                     </div>
                 </div>
             </div>
+
+            <!-- REPORTS TAB VIEW -->
+            <div id="reports-tab" class="tab-content reports-view">
+                <div class="reports-header">Issuance Reports Log</div>
+                <table class="reports-table">
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Issued By</th>
+                            <th>Cardholder ID</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2026-09-05 12:12</td>
+                            <td>admin</td>
+                            <td>ID-00192</td>
+                            <td style="color: green; font-weight: bold;">Success</td>
+                        </tr>
+                        <tr>
+                            <td>2026-09-05 11:45</td>
+                            <td>admin</td>
+                            <td>ID-00191</td>
+                            <td style="color: green; font-weight: bold;">Success</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
 
     <script>
+        // Tab Switcher Logic
+        function switchTab(tabName) {
+            // Remove active status from all tabs & contents
+            document.getElementById('tab-credentials-btn').classList.remove('active');
+            document.getElementById('tab-reports-btn').classList.remove('active');
+            document.getElementById('credentials-tab').classList.remove('active');
+            document.getElementById('reports-tab').classList.remove('active');
+
+            // Activate selected tab & content
+            if (tabName === 'credentials') {
+                document.getElementById('tab-credentials-btn').classList.add('active');
+                document.getElementById('credentials-tab').classList.add('active');
+            } else if (tabName === 'reports') {
+                document.getElementById('tab-reports-btn').classList.add('active');
+                document.getElementById('reports-tab').classList.add('active');
+            }
+        }
+
         // IPC Control Functions
         function appMinimize() {
             if (window.electronAPI && window.electronAPI.minimize) {
